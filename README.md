@@ -1,2 +1,2 @@
 # seii-dex-json
-Translating veekun's Pokedex data into JSON
+Translating veekun's (https://github.com/veekun/pokedex/) Pokedex data into JSON
