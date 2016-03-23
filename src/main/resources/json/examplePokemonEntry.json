@@ -1,0 +1,112 @@
+{
+  "001 - Something": {
+    "nationalDex": "001",
+    "name": "Something",
+    "mega": "no",
+    "types": {
+      "type1": "test1",
+      "type2": "test2"
+    },
+    "evolution": {
+      "evolves": "yes",
+      "evolutionMethod": "test",
+      "itemNeeded": "none"
+    },
+    "abilities" : {
+      "ability1": "test1",
+      "ability2": "test2",
+      "abilityHidden": "test"
+    },
+    "stats": {
+      "hp":"test",
+      "blah": "test"
+    },
+    "evs": {
+      "hp": "test",
+      "blah": "test"
+    },
+    "moves": {
+      "levelUp": {
+        "1": "blah",
+        "5": "blah"
+      },
+      "machines": [
+        "moveName1",
+        "moveName2"
+      ],
+      "egg": [
+        "moveName1",
+        "moveName2"
+      ],
+      "tutor": [
+        "moveName1",
+        "moveName2"
+      ]
+    },
+    "breeding": {
+      "eggGroup": [
+        "group1",
+        "group2"
+      ],
+      "baseSteps": "test"
+    },
+    "locations" : {
+      "game1": "blah",
+      "game2": "blah"
+    }
+  },
+  "001 - Something (Mega)": {
+    "nationalDex": "001",
+    "name": "Something",
+    "mega": "yes",
+    "types": {
+      "type1": "test1",
+      "type2": "test2"
+    },
+    "evolution": {
+      "evolves": "no",
+      "evolutionMethod": "none",
+      "itemNeeded": "none"
+    },
+    "abilities" : {
+      "ability1": "test1",
+      "ability2": "test2",
+      "abilityHidden": "test"
+    },
+    "stats": {
+      "hp":"test",
+      "blah": "test"
+    },
+    "evs": {
+      "hp": "test",
+      "blah": "test"
+    },
+    "moves": {
+      "levelUp": {
+        "1": "blah",
+        "5": "blah"
+      },
+      "machines": [
+        "moveName1",
+        "moveName2"
+      ],
+      "egg": [
+        "moveName1",
+        "moveName2"
+      ],
+      "tutor": [
+        "moveName1",
+        "moveName2"
+      ]
+    },
+    "breeding": {
+      "eggGroup": [
+        "unknown"
+      ],
+      "baseSteps": "unknown"
+    },
+    "locations" : {
+      "game1": "unknown"
+    }
+  }
+}
