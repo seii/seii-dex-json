@@ -18,70 +18,76 @@ import org.apache.commons.lang3.StringUtils;
 import com.opencsv.CSVReader;
 
 public class FileCreator {
+	private static final String DIRECTORY_LOCATION = "/csv";
+	private static final String PACKAGE_NAME = "net.jiyuu_ni.seiidex.dto";
+	private static final String DTO_DIRECTORY = "src\\main\\java\\net\\jiyuu_ni\\seiidex\\dto\\";
+	private static final String CSV_FILE_SUFFIX = ".csv";
+	
 	public static void main(String args[]) {
 	    File[] files = null;
 	    
 		try {
-			files = new File(Placeholder.class.getResource("/csv").toURI()).listFiles();
+			files = new File(Placeholder.class.getResource(DIRECTORY_LOCATION).toURI()).listFiles();
 			
 			if(files != null) {
 				//showFiles(files);
 				
 				for(int i = 0; i < files.length; i++) {
-				/*for(int i = 0; i < 3; i++) {*/
 					File inputFile = files[i];
-			        String outputClass = inputFile.getName().replace(".csv", "");
-			        String outputFileName = "src\\main\\java\\net\\jiyuu_ni" +
-			        		"\\seiidex\\dto\\" +
-			        		convertToCamelCase(outputClass) + ".java";
-			        System.out.println("Output File: " + outputFileName);
 			        
-			        File outputFile = new File(outputFileName);
-			        PrintWriter out = new PrintWriter(new OutputStreamWriter(
-			        		new FileOutputStream(outputFile), StandardCharsets.UTF_8));
-			        out.println("package net.jiyuu_ni.seiidex.dto;\n");
-			        out.println("public class " + convertToCamelCase(outputClass) + " {");
-			        createFile(inputFile, out);
-			        out.println("}");
-			        out.close();
+			        createJavaFileFromCSV(inputFile, PACKAGE_NAME);
 				}
 			}
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
-	public static void showFiles(File[] files) {
+	public static void listFiles(File[] files) {
 	    for (File file : files) {
 	        if (file.isDirectory()) {
 	            System.out.println("Directory: " + file.getName());
-	            showFiles(file.listFiles()); // Calls same method again.
+	            listFiles(file.listFiles()); // Calls same method again.
 	        } else {
 	            System.out.println("File: " + file.getName());
 	        }
 	    }
 	}
 	
-	public static void createFile(File file, PrintWriter out) {
-		String fileName = file.getName();
+	public static void createJavaFileFromCSV(File csvFile, String packageName) {
+		String fileName = csvFile.getName();
 		
-		try(CSVReader reader = new CSVReader(new FileReader(file.getAbsoluteFile()))) {
+		try(CSVReader reader = new CSVReader(new FileReader(csvFile.getAbsoluteFile()))) {
 			String[] header = reader.readNext();
 			
 			if(header != null && header.length > 0) {
 				
 				String[] dataTypes = reader.readNext();
 				
-				for (int i = 0; i < header.length; i++) {
-					if(StringUtils.isNumeric(dataTypes[i])) {
-						out.println("\t\tprivate int " + header[i] + ";");
-					}else {
-						out.println("\t\tprivate String " + header[i] + ";");
+				String outputClass = csvFile.getName().replace(CSV_FILE_SUFFIX, "");
+		        String outputFileName = DTO_DIRECTORY +
+		        		convertFileNameToCamelCase(outputClass) + ".java";
+		        System.out.println("Output File: " + outputFileName);
+		        
+		        File outputFile = new File(outputFileName);
+				
+				try(PrintWriter out = new PrintWriter(new OutputStreamWriter(
+		        		new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
+					out.println("package " + packageName + ";\n");
+			        out.println("public class " + convertFileNameToCamelCase(outputClass) + " {");
+					
+					for (int i = 0; i < header.length; i++) {
+						if(StringUtils.isNumeric(dataTypes[i])) {
+							out.println("\t\tprivate int " + header[i] + ";");
+						}else {
+							out.println("\t\tprivate String " + header[i] + ";");
+						}
 					}
+					
+					out.println("}");
+				}catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}catch (Exception e) {
@@ -89,7 +95,7 @@ public class FileCreator {
 		}
 	}
 	
-	public static String convertToCamelCase(String inputString) {
+	public static String convertFileNameToCamelCase(String inputString) {
 		StringBuilder s = new StringBuilder(inputString.length());
 		
 		CharacterIterator it = new StringCharacterIterator(inputString);
