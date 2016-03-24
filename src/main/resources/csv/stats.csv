@@ -5,5 +5,5 @@ id,damage_class_id,identifier,is_battle_only,game_index
 4,3,special-attack,0,5
 5,3,special-defense,0,6
 6,,speed,0,4
-7,,accuracy,1,
-8,,evasion,1,
+7,,accuracy,1,-1
+8,,evasion,1,-1

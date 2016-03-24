@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.opencsv.CSVReader;
 
-public class FileCreator {
+public class FileOperations {
 	private static final String DIRECTORY_LOCATION = "/csv";
 	private static final String PACKAGE_NAME = "net.jiyuu_ni.seiidex.dto";
 	private static final String DTO_DIRECTORY = "src\\main\\java\\net\\jiyuu_ni\\seiidex\\dto\\csv\\";
@@ -24,7 +24,7 @@ public class FileCreator {
 	    File[] files = null;
 	    
 		try {
-			files = new File(FileCreator.class.getResource(DIRECTORY_LOCATION).toURI()).listFiles();
+			files = new File(FileOperations.class.getResource(DIRECTORY_LOCATION).toURI()).listFiles();
 			
 			if(files != null) {
 				//showFiles(files);

@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
-
-import net.jiyuu_ni.seiidex.dto.csv.Abilities;
 
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
+
+import net.jiyuu_ni.seiidex.dto.csv.Abilities;
 
 public class CSVToDTO {
 	
@@ -30,7 +29,7 @@ public class CSVToDTO {
 			strategy.setType(classType);
 			CsvToBean<T> csvToBean = new CsvToBean<>();
 	        resultList = new ArrayList<T> (csvToBean.parse(strategy, reader));
-	        System.out.println(resultList.toString());
+	        System.out.println("Successfully read from " + result.getClass().getName());
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {

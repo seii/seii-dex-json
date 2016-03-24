@@ -5,12 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.jiyuu_ni.seiidex.util.CSVToDTO;
-import net.jiyuu_ni.seiidex.util.FileCreator;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 public class ObjectDB {
 	private static final String CSV_DIRECTORY = "/csv";
@@ -57,7 +60,7 @@ public class ObjectDB {
 						for(int i = 0; i < csvFileList.length; i++) {
 							//String className = csvFileList[i].getName().replace(CSV_EXTENSION, "");
 							String className = csvFileList[i].getName();
-							className = FileCreator.convertFileNameToCamelCase(className);
+							className = FileOperations.convertFileNameToCamelCase(className);
 							String test = className.replace(CSV_EXTENSION, CLASS_EXTENSION);
 							
 							if(dtoFileNames.contains(test)) {
@@ -94,20 +97,31 @@ public class ObjectDB {
 	}
 	
 	public static AggregateDTO fillAggregateDTO() {
-		AggregateDTO dbResult = null;
+		AggregateDTO dbResult = new AggregateDTO();
 		
 		try {
-			File[] fileList = new File(FileCreator.class.getResource(CSV_DIRECTORY).toURI()).listFiles();
+			File[] fileList = new File(ObjectDB.class.getResource(CSV_DIRECTORY).toURI()).listFiles();
 			
 			if(fileList != null) {
+				Method[] allMethods = AggregateDTO.class.getMethods();
+				HashMap<String, Method> setterMethodsMap = new HashMap<String, Method>();
+				
+				for(int i = 0; i < allMethods.length; i++) {
+					if(allMethods[i].getName().startsWith("set")) {
+						setterMethodsMap.put(allMethods[i].getName(), allMethods[i]);
+					}
+				}
 				
 				for(int i = 0; i < fileList.length; i++) {
 					File inputFile = fileList[i];
-					String fileName = inputFile.getName().replace(CSV_EXTENSION, "");
+					String fileName = FileOperations.convertFileNameToCamelCase(inputFile.getName().replace(CSV_EXTENSION, ""));
 			        
 					//TODO: Figure out generics
-			        /*Class<?> testClass = Class.forName(inputFile.getName());
-			        ArrayList<testClass> testList = CSVToDTO.parseCSVToDTOs(inputFile, testClass);*/
+			        Class<?> testClass = Class.forName(AGGREGATE_PACKAGE_NAME + CSV_EXTENSION + "." + fileName);
+			        ArrayList<?> testList = CSVToDTO.parseCSVToDTOs(inputFile, testClass);
+			        Method methodToInvoke = setterMethodsMap.get("set" + fileName + "List");
+			        methodToInvoke.invoke(dbResult, testList);
+			        System.out.println("Populated " + fileName);
 				}
 			}
 		} catch (URISyntaxException e) {
@@ -116,7 +130,19 @@ public class ObjectDB {
 		} /*catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}*/ catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return dbResult;
 	}
