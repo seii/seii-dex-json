@@ -3,10 +3,15 @@ package net.jiyuu_ni.seiidex.dto.json;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PokemonBreeding {
+	private Logger logger = LoggerFactory.getLogger(PokemonBreeding.class);
+	
 	//Egg groups
 	private ArrayList<String> eggGroups;
 	//How many base steps does it take to hatch this species' egg?
@@ -51,8 +56,7 @@ public class PokemonBreeding {
 			
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warn(e.getLocalizedMessage());
 		}
 		
 		return result;

@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PokemonMovesGen2Plus {
+	private Logger logger = LoggerFactory.getLogger(PokemonMovesGen2Plus.class);
+	
 	//Moves learned by leveling up
 	private LinkedHashMap<String, String> levelUpMoves;
 	//Moves learned by Technical or Hidden Machines
@@ -89,8 +94,7 @@ public class PokemonMovesGen2Plus {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;

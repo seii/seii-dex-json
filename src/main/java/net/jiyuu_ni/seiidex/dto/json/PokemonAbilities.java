@@ -1,9 +1,14 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PokemonAbilities {
+	private Logger logger = LoggerFactory.getLogger(PokemonAbilities.class);
+	
 	//First ability
 	private String ability1;
 	//Second ability, if one exists
@@ -60,8 +65,7 @@ public class PokemonAbilities {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;

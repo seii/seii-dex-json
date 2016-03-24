@@ -8,6 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
@@ -15,6 +18,7 @@ import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import net.jiyuu_ni.seiidex.dto.csv.Abilities;
 
 public class CSVToDTO {
+	private static Logger logger = LoggerFactory.getLogger(CSVToDTO.class);
 	
 	public static <T> ArrayList<T> parseCSVToDTOs(File fileToParse, Class<T> classType) {
 		T result = null;
@@ -23,44 +27,31 @@ public class CSVToDTO {
 		try {
 			CSVReader reader = new CSVReader(new FileReader(fileToParse.getAbsoluteFile()));
 			result = classType.getConstructor().newInstance();
-			System.out.println("Reading from file: " + result.getClass().getName());
+			logger.info("Reading from file: " + result.getClass().getName());
 			
 			HeaderColumnNameMappingStrategy<T> strategy = new HeaderColumnNameMappingStrategy <>();
 			strategy.setType(classType);
 			CsvToBean<T> csvToBean = new CsvToBean<>();
 	        resultList = new ArrayList<T> (csvToBean.parse(strategy, reader));
-	        System.out.println("Successfully read from " + result.getClass().getName());
+	        logger.info("Successfully read from " + result.getClass().getName());
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return resultList;
-	}
-	
-	public static void main(String args[]) throws URISyntaxException {
-		File tempFile = new File(CSVToDTO.class.getResource("/csv/abilities.csv").toURI());
-		
-		parseCSVToDTOs(tempFile, Abilities.class);
 	}
 }

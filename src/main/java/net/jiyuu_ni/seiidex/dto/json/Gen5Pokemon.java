@@ -2,10 +2,15 @@ package net.jiyuu_ni.seiidex.dto.json;
 
 import java.util.LinkedHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Gen5Pokemon {
+	private Logger logger = LoggerFactory.getLogger(Gen5Pokemon.class);
+	
 	//National Dex number in three-digit format (e.g. "001" instead of "1")
 	private String nationalDex;
 	//Pokemon name
@@ -204,8 +209,7 @@ public class Gen5Pokemon {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;

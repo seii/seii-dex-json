@@ -12,11 +12,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.jiyuu_ni.seiidex.dto.AggregateDTO;
 
 public class ObjectDB {
+	private static Logger logger = LoggerFactory.getLogger(ObjectDB.class);
 	
 	public static void createAggregateDTO() {
+		String logName = "createAggregateDTO";
+		logger.info("Entering " + logName);
+		
 		try {
 			File[] csvFileList = new File(ObjectDB.class.getResource(DexProperties.CSV_DIRECTORY).toURI()).listFiles();
 			File[] dtoFileList = new File(ObjectDB.class.getResource(DexProperties.CSV_DTO_DIRECTORY).toURI()).listFiles();
@@ -32,12 +39,12 @@ public class ObjectDB {
 				
 				if(csvFileList.length == dtoFileList.length) {
 					File outputFile = new File(DexProperties.DTO_DIRECTORY + DexProperties.AGGREGATE_DTO_FILE_NAME);
-					System.out.println("Output file name: " +
+					logger.info("Output file name: " +
 							outputFile.getAbsolutePath().toString());
 					
 					try(PrintWriter out = new PrintWriter(new OutputStreamWriter(
 			        		new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
-						System.out.println("Beginning to write file");
+						logger.info("Beginning to write file");
 						
 						out.println("package " + DexProperties.AGGREGATE_DTO_PACKAGE_NAME + ";\n");
 						out.println("import java.util.ArrayList;");
@@ -54,38 +61,41 @@ public class ObjectDB {
 							
 							if(dtoFileNames.contains(test)) {
 								className = className.replace(DexProperties.CSV_EXTENSION, "");
-								System.out.println("Class name: " + className);
+								logger.info("Class name: " + className);
 						        String classNameAsVar = className.substring(0, 1).toLowerCase() +
 						        		className.substring(1) + "List";
-						        System.out.println("Class name as var: " + classNameAsVar);
+						        logger.info("Class name as var: " + classNameAsVar);
 								
 						        out.println("\tprivate ArrayList<" + className + "> " +
 						        		classNameAsVar + ";");
 							}else {
-								System.out.println("Skipped " + className + " due to mismatch");
+								logger.info("Skipped " + className + " due to mismatch");
 							}
 						}
 						
 						out.println("}");
 						out.flush();
-						System.out.println("Finished writing file");
+						logger.info("Finished writing file");
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error(e.getLocalizedMessage());
 					}
 				}else {
-					System.out.println("File lists did not match in length");
+					logger.error("File lists did not match in length");
 				}
 			}else {
-				System.out.println("No files found in the specified directory");
+				logger.error("No files found in the specified directory");
 			}
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());;
 		}
+		
+		logger.info("Exiting " + logName);
 	}
 	
 	public static AggregateDTO fillAggregateDTO() {
+		String logName = "fillAggregateDTO";
+		logger.info("Entering " + logName);
+		
 		AggregateDTO dbResult = new AggregateDTO();
 		
 		try {
@@ -105,33 +115,26 @@ public class ObjectDB {
 					File inputFile = fileList[i];
 					String fileName = FileOperations.convertFileNameToCamelCase(inputFile.getName().replace(DexProperties.CSV_EXTENSION, ""));
 			        
-					//TODO: Figure out generics
 			        Class<?> testClass = Class.forName(DexProperties.AGGREGATE_DTO_PACKAGE_NAME + DexProperties.CSV_EXTENSION + "." + fileName);
 			        ArrayList<?> testList = CSVToDTO.parseCSVToDTOs(inputFile, testClass);
 			        Method methodToInvoke = setterMethodsMap.get("set" + fileName + "List");
 			        methodToInvoke.invoke(dbResult, testList);
-			        System.out.println("Populated " + fileName);
+			        logger.info("Populated " + fileName);
 				}
 			}
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} /*catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/ catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		} catch (ClassNotFoundException e) {
+			logger.error(e.getLocalizedMessage());
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.info("Exiting " + logName);
 		
 		return dbResult;
 	}

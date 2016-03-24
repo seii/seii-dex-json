@@ -10,23 +10,38 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 
+import net.jiyuu_ni.seiidex.dto.json.PokemonAbilities;
+
 public class FileOperations {
+	
+	private static Logger logger = LoggerFactory.getLogger(FileOperations.class);
 
 	public static void listFiles(File[] files) {
+		String logName = "listFiles";
+		logger.info("Entering " + logName);
+		
 	    for (File file : files) {
 	        if (file.isDirectory()) {
-	            System.out.println("Directory: " + file.getName());
+	            logger.info("Directory: " + file.getName());
 	            listFiles(file.listFiles()); // Calls same method again.
 	        } else {
-	            System.out.println("File: " + file.getName());
+	            logger.info("File: " + file.getName());
 	        }
 	    }
+	    
+	    logger.info("Exiting " + logName);
 	}
 	
 	public static void createJavaFileFromCSV(File csvFile, String packageName) {
+		String logName = "createJavaFileFromCSV";
+		logger.info("Entering " + logName);
 		
 		try(CSVReader reader = new CSVReader(new FileReader(csvFile.getAbsoluteFile()))) {
 			String[] header = reader.readNext();
@@ -38,14 +53,20 @@ public class FileOperations {
 				String outputClass = csvFile.getName().replace(DexProperties.CSV_EXTENSION, "");
 		        String outputFileName = DexProperties.CSV_DTO_DIRECTORY +
 		        		convertFileNameToCamelCase(outputClass) + ".java";
-		        System.out.println("Output File: " + outputFileName);
+		        logger.info("Output File: " + outputFileName);
 		        
 		        File outputFile = new File(outputFileName);
 				
 				try(PrintWriter out = new PrintWriter(new OutputStreamWriter(
 		        		new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
 					out.println("package " + packageName + ";\n");
+					out.println("import org.slf4j.Logger;");
+					out.println("import org.slf4j.LoggerFactory;\n");
+					out.println("import com.fasterxml.jackson.core.JsonProcessingException;");
+					out.println("import com.fasterxml.jackson.databind.ObjectMapper;\n");
 			        out.println("public class " + convertFileNameToCamelCase(outputClass) + " {");
+			        out.println("Logger logger = LoggerFactory.getLogger(" +
+			        		convertFileNameToCamelCase(outputClass) + ".class);");
 					
 					for (int i = 0; i < header.length; i++) {
 						if(StringUtils.isNumeric(dataTypes[i])) {
@@ -55,17 +76,33 @@ public class FileOperations {
 						}
 					}
 					
+					out.println("\tpublic String toJsonString() {");
+					out.println("\t\tObjectMapper mapper = new ObjectMapper();");
+					out.println("\t\tString result = null;\n");
+					out.println("\t\ttry {");
+					out.println("\t\t\tresult = mapper.writeValueAsString(this);");
+					out.println("\t\t\t} catch (JsonProcessingException e) {");
+					out.println("\t\t\t\tlogger.error(e.getLocalizedMessage());");
+					out.println("\t\t\t}");
+					out.println("\t\treturn result;");
+					out.println("\t}");
+					
 					out.println("}");
 				}catch (Exception e) {
-					e.printStackTrace();
+					logger.error(e.getLocalizedMessage());
 				}
 			}
 		}catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.info("Exiting " + logName);
 	}
 	
 	public static String convertFileNameToCamelCase(String inputString) {
+		String logName = "convertFileNameToCamelCase";
+		logger.info("Entering " + logName);
+		
 		StringBuilder s = new StringBuilder(inputString.length());
 		
 		CharacterIterator it = new StringCharacterIterator(inputString);
@@ -86,6 +123,8 @@ public class FileOperations {
 		            break;
 		    }
 		}
+		
+		logger.info("Exiting " + logName);
 		
 		return s.toString();
 		

@@ -1,9 +1,14 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PokemonType {
+	private Logger logger = LoggerFactory.getLogger(PokemonType.class);
+	
 	//Primary type
 	private String type1;
 	//Secondary type
@@ -44,8 +49,7 @@ public class PokemonType {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;

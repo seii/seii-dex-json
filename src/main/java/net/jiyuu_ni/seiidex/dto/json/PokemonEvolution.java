@@ -1,9 +1,14 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PokemonEvolution {
+	private Logger logger = LoggerFactory.getLogger(PokemonEvolution.class);
+	
 	//A misnomer, this is really "does this pokemon have a further evolution?"
 	private boolean evolvable;
 	//Method by which Pokemon evolves
@@ -76,8 +81,7 @@ public class PokemonEvolution {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;

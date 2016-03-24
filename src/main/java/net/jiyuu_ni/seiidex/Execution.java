@@ -3,12 +3,17 @@ package net.jiyuu_ni.seiidex;
 import java.io.File;
 import java.net.URISyntaxException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.jiyuu_ni.seiidex.dto.AggregateDTO;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
 import net.jiyuu_ni.seiidex.util.ObjectDB;
 
 public class Execution {
+	
+	private static Logger logger = LoggerFactory.getLogger(Execution.class);
 	
 	public static void main(String args[]) {
 		
@@ -23,7 +28,7 @@ public class Execution {
 			System.out.println("Made it");*/
 			
 			AggregateDTO otherTest = ObjectDB.fillAggregateDTO();
-			System.out.println("Finished");
+			logger.info("Finished");
 			
 			//JsonFactory jsonFactory = new JsonFactory();
 			//JsonParser jsonParser = jsonFactory.createParser(tempFile);
@@ -90,8 +95,7 @@ public class Execution {
 				}
 			}
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 	}
 	

@@ -2,12 +2,17 @@ package net.jiyuu_ni.seiidex.dto;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.jiyuu_ni.seiidex.dto.csv.*;
 
 public class AggregateDTO {
+	Logger logger = LoggerFactory.getLogger(AggregateDTO.class);
+	
 	private ArrayList<Abilities> abilitiesList;
 	private ArrayList<AbilityChangelog> abilityChangelogList;
 	private ArrayList<AbilityChangelogProse> abilityChangelogProseList;
@@ -2141,8 +2146,7 @@ public class AggregateDTO {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;

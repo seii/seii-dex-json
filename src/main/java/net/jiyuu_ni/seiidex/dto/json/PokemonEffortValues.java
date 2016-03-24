@@ -1,9 +1,14 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PokemonEffortValues {
+	private Logger logger = LoggerFactory.getLogger(PokemonEffortValues.class);
+	
 	//All EV stats are as named
 	private String hp;
 	private String attack;
@@ -103,8 +108,7 @@ public class PokemonEffortValues {
 		try {
 			result = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
 		}
 		
 		return result;
