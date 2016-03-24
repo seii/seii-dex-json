@@ -1,4 +1,4 @@
-package net.jiyuu_ni.seiidex.dto;
+package net.jiyuu_ni.seiidex.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,25 +12,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.jiyuu_ni.seiidex.util.CSVToDTO;
-import net.jiyuu_ni.seiidex.util.FileOperations;
+import net.jiyuu_ni.seiidex.dto.AggregateDTO;
 
 public class ObjectDB {
-	private static final String CSV_DIRECTORY = "/csv";
-	private static final String CSV_EXTENSION = ".csv";
-	private static final String CLASS_EXTENSION = ".class";
-	private static final String CSV_DTO_DIRECTORY =
-			"/net/jiyuu_ni/seiidex/dto/csv/";
 	
-	private static final String DTO_DIRECTORY =
-			"src\\main\\java\\net\\jiyuu_ni\\seiidex\\dto\\";
-	private static final String AGGREGATE_DTO_FILE_NAME = "AggregateDTO.java";
-	private static final String AGGREGATE_PACKAGE_NAME = "net.jiyuu_ni.seiidex.dto";
-	
-	public void createAggregateDTO() {
+	public static void createAggregateDTO() {
 		try {
-			File[] csvFileList = new File(ObjectDB.class.getResource(CSV_DIRECTORY).toURI()).listFiles();
-			File[] dtoFileList = new File(ObjectDB.class.getResource(CSV_DTO_DIRECTORY).toURI()).listFiles();
+			File[] csvFileList = new File(ObjectDB.class.getResource(DexProperties.CSV_DIRECTORY).toURI()).listFiles();
+			File[] dtoFileList = new File(ObjectDB.class.getResource(DexProperties.CSV_DTO_DIRECTORY).toURI()).listFiles();
 			
 			ArrayList<String> dtoFileNames = new ArrayList<String>();
 			
@@ -42,7 +31,7 @@ public class ObjectDB {
 					csvFileList.length > 0 && dtoFileList.length > 0) {
 				
 				if(csvFileList.length == dtoFileList.length) {
-					File outputFile = new File(DTO_DIRECTORY + AGGREGATE_DTO_FILE_NAME);
+					File outputFile = new File(DexProperties.DTO_DIRECTORY + DexProperties.AGGREGATE_DTO_FILE_NAME);
 					System.out.println("Output file name: " +
 							outputFile.getAbsolutePath().toString());
 					
@@ -50,21 +39,21 @@ public class ObjectDB {
 			        		new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
 						System.out.println("Beginning to write file");
 						
-						out.println("package " + AGGREGATE_PACKAGE_NAME + ";\n");
+						out.println("package " + DexProperties.AGGREGATE_DTO_PACKAGE_NAME + ";\n");
 						out.println("import java.util.ArrayList;");
-						out.println("import " + AGGREGATE_PACKAGE_NAME +
-								CSV_EXTENSION + ".*;\n");
+						out.println("import " + DexProperties.AGGREGATE_DTO_PACKAGE_NAME +
+								DexProperties.CSV_EXTENSION + ".*;\n");
 						out.println("public class " +
-								AGGREGATE_DTO_FILE_NAME.replace(".java", "") + " {");
+								DexProperties.AGGREGATE_DTO_FILE_NAME.replace(".java", "") + " {");
 						
 						for(int i = 0; i < csvFileList.length; i++) {
-							//String className = csvFileList[i].getName().replace(CSV_EXTENSION, "");
+							//String className = csvFileList[i].getName().replace(DexProperties.CSV_EXTENSION, "");
 							String className = csvFileList[i].getName();
 							className = FileOperations.convertFileNameToCamelCase(className);
-							String test = className.replace(CSV_EXTENSION, CLASS_EXTENSION);
+							String test = className.replace(DexProperties.CSV_EXTENSION, DexProperties.CLASS_EXTENSION);
 							
 							if(dtoFileNames.contains(test)) {
-								className = className.replace(CSV_EXTENSION, "");
+								className = className.replace(DexProperties.CSV_EXTENSION, "");
 								System.out.println("Class name: " + className);
 						        String classNameAsVar = className.substring(0, 1).toLowerCase() +
 						        		className.substring(1) + "List";
@@ -100,7 +89,7 @@ public class ObjectDB {
 		AggregateDTO dbResult = new AggregateDTO();
 		
 		try {
-			File[] fileList = new File(ObjectDB.class.getResource(CSV_DIRECTORY).toURI()).listFiles();
+			File[] fileList = new File(ObjectDB.class.getResource(DexProperties.CSV_DIRECTORY).toURI()).listFiles();
 			
 			if(fileList != null) {
 				Method[] allMethods = AggregateDTO.class.getMethods();
@@ -114,10 +103,10 @@ public class ObjectDB {
 				
 				for(int i = 0; i < fileList.length; i++) {
 					File inputFile = fileList[i];
-					String fileName = FileOperations.convertFileNameToCamelCase(inputFile.getName().replace(CSV_EXTENSION, ""));
+					String fileName = FileOperations.convertFileNameToCamelCase(inputFile.getName().replace(DexProperties.CSV_EXTENSION, ""));
 			        
 					//TODO: Figure out generics
-			        Class<?> testClass = Class.forName(AGGREGATE_PACKAGE_NAME + CSV_EXTENSION + "." + fileName);
+			        Class<?> testClass = Class.forName(DexProperties.AGGREGATE_DTO_PACKAGE_NAME + DexProperties.CSV_EXTENSION + "." + fileName);
 			        ArrayList<?> testList = CSVToDTO.parseCSVToDTOs(inputFile, testClass);
 			        Method methodToInvoke = setterMethodsMap.get("set" + fileName + "List");
 			        methodToInvoke.invoke(dbResult, testList);

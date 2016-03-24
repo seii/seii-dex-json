@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -15,31 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.opencsv.CSVReader;
 
 public class FileOperations {
-	private static final String DIRECTORY_LOCATION = "/csv";
-	private static final String PACKAGE_NAME = "net.jiyuu_ni.seiidex.dto";
-	private static final String DTO_DIRECTORY = "src\\main\\java\\net\\jiyuu_ni\\seiidex\\dto\\csv\\";
-	private static final String CSV_FILE_SUFFIX = ".csv";
-	
-	public static void main(String args[]) {
-	    File[] files = null;
-	    
-		try {
-			files = new File(FileOperations.class.getResource(DIRECTORY_LOCATION).toURI()).listFiles();
-			
-			if(files != null) {
-				//showFiles(files);
-				
-				for(int i = 0; i < files.length; i++) {
-					File inputFile = files[i];
-			        
-			        createJavaFileFromCSV(inputFile, PACKAGE_NAME);
-				}
-			}
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	public static void listFiles(File[] files) {
 	    for (File file : files) {
@@ -61,8 +35,8 @@ public class FileOperations {
 				
 				String[] dataTypes = reader.readNext();
 				
-				String outputClass = csvFile.getName().replace(CSV_FILE_SUFFIX, "");
-		        String outputFileName = DTO_DIRECTORY +
+				String outputClass = csvFile.getName().replace(DexProperties.CSV_EXTENSION, "");
+		        String outputFileName = DexProperties.CSV_DTO_DIRECTORY +
 		        		convertFileNameToCamelCase(outputClass) + ".java";
 		        System.out.println("Output File: " + outputFileName);
 		        

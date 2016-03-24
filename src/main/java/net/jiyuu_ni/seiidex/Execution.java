@@ -1,9 +1,14 @@
 package net.jiyuu_ni.seiidex;
 
-import net.jiyuu_ni.seiidex.dto.AggregateDTO;
-import net.jiyuu_ni.seiidex.dto.ObjectDB;
+import java.io.File;
+import java.net.URISyntaxException;
 
-public class Placeholder {
+import net.jiyuu_ni.seiidex.dto.AggregateDTO;
+import net.jiyuu_ni.seiidex.util.DexProperties;
+import net.jiyuu_ni.seiidex.util.FileOperations;
+import net.jiyuu_ni.seiidex.util.ObjectDB;
+
+public class Execution {
 	
 	public static void main(String args[]) {
 		
@@ -16,8 +21,6 @@ public class Placeholder {
 			
 			List<Abilities> testList = CSVToDTO.parseCSVToDTOs(tempFile, testFile, Abilities.class);
 			System.out.println("Made it");*/
-			/*ObjectDB test = new ObjectDB();
-			test.createAggregateDTO();*/
 			
 			AggregateDTO otherTest = ObjectDB.fillAggregateDTO();
 			System.out.println("Finished");
@@ -64,5 +67,40 @@ public class Placeholder {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+	}
+	
+	//TODO: Automate this from example JSON files
+	/*public static void createJSONDTOs() {
+		
+	}*/
+	
+	public static void createCSVDTOs() {
+		File[] files = null;
+	    
+		try {
+			files = new File(FileOperations.class.getResource(DexProperties.CSV_DIRECTORY).toURI()).listFiles();
+			
+			if(files != null) {
+				//showFiles(files);
+				
+				for(int i = 0; i < files.length; i++) {
+					File inputFile = files[i];
+			        
+			        FileOperations.createJavaFileFromCSV(inputFile, DexProperties.DTO_PACKAGE_NAME);
+				}
+			}
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void createAggregateDTO() {
+		ObjectDB.createAggregateDTO();
+	}
+	
+	public static void createAllFiles() {
+		createCSVDTOs();
+		createAggregateDTO();
 	}
 }
