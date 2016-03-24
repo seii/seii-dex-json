@@ -27,8 +27,10 @@ public class Execution {
 			List<Abilities> testList = CSVToDTO.parseCSVToDTOs(tempFile, testFile, Abilities.class);
 			System.out.println("Made it");*/
 			
-			AggregateDTO otherTest = ObjectDB.fillAggregateDTO();
-			logger.info("Finished");
+			/*AggregateDTO otherTest = ObjectDB.fillAggregateDTO();
+			logger.info("Finished");*/
+			
+			createCSVDTOs();
 			
 			//JsonFactory jsonFactory = new JsonFactory();
 			//JsonParser jsonParser = jsonFactory.createParser(tempFile);
@@ -91,7 +93,7 @@ public class Execution {
 				for(int i = 0; i < files.length; i++) {
 					File inputFile = files[i];
 			        
-			        FileOperations.createJavaFileFromCSV(inputFile, DexProperties.DTO_PACKAGE_NAME);
+			        FileOperations.createJavaFileFromCSV(inputFile, DexProperties.CSV_DTO_PACKAGE_NAME);
 				}
 			}
 		} catch (URISyntaxException e) {

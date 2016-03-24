@@ -64,19 +64,19 @@ public class FileOperations {
 					out.println("import org.slf4j.LoggerFactory;\n");
 					out.println("import com.fasterxml.jackson.core.JsonProcessingException;");
 					out.println("import com.fasterxml.jackson.databind.ObjectMapper;\n");
-			        out.println("public class " + convertFileNameToCamelCase(outputClass) + " {");
-			        out.println("Logger logger = LoggerFactory.getLogger(" +
-			        		convertFileNameToCamelCase(outputClass) + ".class);");
+			        out.println("public class " + convertFileNameToCamelCase(outputClass) + " {\n");
+			        out.println("\tLogger logger = LoggerFactory.getLogger(" +
+			        		convertFileNameToCamelCase(outputClass) + ".class);\n");
 					
 					for (int i = 0; i < header.length; i++) {
 						if(StringUtils.isNumeric(dataTypes[i])) {
-							out.println("\t\tprivate int " + header[i] + ";");
+							out.println("\tprivate int " + header[i] + ";");
 						}else {
-							out.println("\t\tprivate String " + header[i] + ";");
+							out.println("\tprivate String " + header[i] + ";");
 						}
 					}
 					
-					out.println("\tpublic String toJsonString() {");
+					out.println("\n\tpublic String toJsonString() {");
 					out.println("\t\tObjectMapper mapper = new ObjectMapper();");
 					out.println("\t\tString result = null;\n");
 					out.println("\t\ttry {");
