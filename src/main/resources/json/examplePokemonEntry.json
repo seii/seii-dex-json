@@ -3,6 +3,7 @@
     "nationalDex": "001",
     "name": "Something",
     "mega": "no",
+    "form": "none",
     "types": {
       "type1": "test1",
       "type2": "test2"
@@ -10,7 +11,8 @@
     "evolution": {
       "evolves": "yes",
       "evolutionMethod": "test",
-      "itemNeeded": "none"
+      "itemNeeded": "none",
+      "itemUtilization": "none"
     },
     "abilities" : {
       "ability1": "test1",
@@ -59,6 +61,7 @@
     "nationalDex": "001",
     "name": "Something",
     "mega": "yes",
+    "form": "none",
     "types": {
       "type1": "test1",
       "type2": "test2"
@@ -66,7 +69,8 @@
     "evolution": {
       "evolves": "no",
       "evolutionMethod": "none",
-      "itemNeeded": "none"
+      "itemNeeded": "none",
+      "itemUtilization": "none"
     },
     "abilities" : {
       "ability1": "test1",
