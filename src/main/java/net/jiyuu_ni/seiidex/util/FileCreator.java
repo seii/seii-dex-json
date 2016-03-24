@@ -1,7 +1,6 @@
 package net.jiyuu_ni.seiidex.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
@@ -11,8 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 
-import net.jiyuu_ni.seiidex.Placeholder;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.opencsv.CSVReader;
@@ -20,14 +17,14 @@ import com.opencsv.CSVReader;
 public class FileCreator {
 	private static final String DIRECTORY_LOCATION = "/csv";
 	private static final String PACKAGE_NAME = "net.jiyuu_ni.seiidex.dto";
-	private static final String DTO_DIRECTORY = "src\\main\\java\\net\\jiyuu_ni\\seiidex\\dto\\";
+	private static final String DTO_DIRECTORY = "src\\main\\java\\net\\jiyuu_ni\\seiidex\\dto\\csv\\";
 	private static final String CSV_FILE_SUFFIX = ".csv";
 	
 	public static void main(String args[]) {
 	    File[] files = null;
 	    
 		try {
-			files = new File(Placeholder.class.getResource(DIRECTORY_LOCATION).toURI()).listFiles();
+			files = new File(FileCreator.class.getResource(DIRECTORY_LOCATION).toURI()).listFiles();
 			
 			if(files != null) {
 				//showFiles(files);
@@ -56,7 +53,6 @@ public class FileCreator {
 	}
 	
 	public static void createJavaFileFromCSV(File csvFile, String packageName) {
-		String fileName = csvFile.getName();
 		
 		try(CSVReader reader = new CSVReader(new FileReader(csvFile.getAbsoluteFile()))) {
 			String[] header = reader.readNext();

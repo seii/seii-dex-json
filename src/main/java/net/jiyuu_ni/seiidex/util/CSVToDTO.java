@@ -6,19 +6,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+
+import net.jiyuu_ni.seiidex.dto.csv.Abilities;
 
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 
-import net.jiyuu_ni.seiidex.dto.Abilities;
-
 public class CSVToDTO {
 	
-	public static <T> List<T> parseCSVToDTOs(File fileToParse, File dtoFile, Class<T> classType) {
+	public static <T> ArrayList<T> parseCSVToDTOs(File fileToParse, Class<T> classType) {
 		T result = null;
-		List<T> resultList = null;
+		ArrayList<T> resultList = null;
 		
 		try {
 			CSVReader reader = new CSVReader(new FileReader(fileToParse.getAbsoluteFile()));
@@ -28,7 +29,7 @@ public class CSVToDTO {
 			HeaderColumnNameMappingStrategy<T> strategy = new HeaderColumnNameMappingStrategy <>();
 			strategy.setType(classType);
 			CsvToBean<T> csvToBean = new CsvToBean<>();
-	        resultList = csvToBean.parse(strategy, reader);
+	        resultList = new ArrayList<T> (csvToBean.parse(strategy, reader));
 	        System.out.println(resultList.toString());
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
@@ -60,8 +61,7 @@ public class CSVToDTO {
 	
 	public static void main(String args[]) throws URISyntaxException {
 		File tempFile = new File(CSVToDTO.class.getResource("/csv/abilities.csv").toURI());
-		File testFile = new File("src\\main\\java\\net\\jiyuu_ni" +
-			        		"\\seiidex\\util\\test.java");
-		parseCSVToDTOs(tempFile, testFile, Abilities.class);
+		
+		parseCSVToDTOs(tempFile, Abilities.class);
 	}
 }

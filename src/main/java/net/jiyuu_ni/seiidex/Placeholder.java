@@ -1,25 +1,26 @@
 package net.jiyuu_ni.seiidex;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.List;
-
-import net.jiyuu_ni.seiidex.dto.Abilities;
-import net.jiyuu_ni.seiidex.util.CSVToDTO;
+import net.jiyuu_ni.seiidex.dto.AggregateDTO;
+import net.jiyuu_ni.seiidex.dto.ObjectDB;
 
 public class Placeholder {
 	
 	public static void main(String args[]) {
 		
 		try {
-			File tempFile = new File(Placeholder.class.getResource("/csv/abilities.csv").toURI());
+			/*File tempFile = new File(Placeholder.class.getResource("/csv/abilities.csv").toURI());
 			System.out.println(tempFile.getAbsolutePath());
 			File testFile = new File("src\\main\\java\\net\\jiyuu_ni" +
 	        		"\\seiidex\\util\\test.java");
 			System.out.println("Test File: " + testFile);
 			
 			List<Abilities> testList = CSVToDTO.parseCSVToDTOs(tempFile, testFile, Abilities.class);
-			System.out.println("Made it");
+			System.out.println("Made it");*/
+			/*ObjectDB test = new ObjectDB();
+			test.createAggregateDTO();*/
+			
+			AggregateDTO otherTest = ObjectDB.fillAggregateDTO();
+			System.out.println("Finished");
 			
 			//JsonFactory jsonFactory = new JsonFactory();
 			//JsonParser jsonParser = jsonFactory.createParser(tempFile);
@@ -54,7 +55,7 @@ public class Placeholder {
 			
 			//System.out.println(abilitiesList.get(0).toString());
 		}
-		catch(URISyntaxException e) {
+		catch(Exception e) {
 			e.printStackTrace();
 		} /*catch (JsonParseException e) {
 			// TODO Auto-generated catch block
