@@ -2,35 +2,36 @@ package net.jiyuu_ni.seiidex;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+
+import net.jiyuu_ni.seiidex.util.DexProperties;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.jiyuu_ni.seiidex.dto.AggregateDTO;
-import net.jiyuu_ni.seiidex.util.DexProperties;
-import net.jiyuu_ni.seiidex.util.FileOperations;
-import net.jiyuu_ni.seiidex.util.ObjectDB;
-
 public class Execution {
 	
 	private static Logger logger = LoggerFactory.getLogger(Execution.class);
+	private static boolean generateFiles = false;
 	
 	public static void main(String args[]) {
 		
 		try {
-			/*File tempFile = new File(Placeholder.class.getResource("/csv/abilities.csv").toURI());
-			System.out.println(tempFile.getAbsolutePath());
-			File testFile = new File("src\\main\\java\\net\\jiyuu_ni" +
-	        		"\\seiidex\\util\\test.java");
-			System.out.println("Test File: " + testFile);
+			if(generateFiles) {
+				createAllFiles();
+			}
 			
-			List<Abilities> testList = CSVToDTO.parseCSVToDTOs(tempFile, testFile, Abilities.class);
-			System.out.println("Made it");*/
+			ArrayList<File> jsonFileList = new ArrayList<File>(1);
 			
-			/*AggregateDTO otherTest = ObjectDB.fillAggregateDTO();
-			logger.info("Finished");*/
+			for(int i = 0; i < DexProperties.TOTAL_POKEMON_GENERATIONS; i++) {
+				String outputFileName = DexProperties.JSON_DIRECTORY +
+		        		DexProperties.JSON_POKEMON_FILE_NAME + String.valueOf(i) +
+		        		DexProperties.JSON_EXTENSION;
+				File pokemonJsonFile = new File(outputFileName);
+				jsonFileList.add(pokemonJsonFile);
+			}
 			
-			createCSVDTOs();
 			
 			//JsonFactory jsonFactory = new JsonFactory();
 			//JsonParser jsonParser = jsonFactory.createParser(tempFile);
@@ -85,7 +86,7 @@ public class Execution {
 		File[] files = null;
 	    
 		try {
-			files = new File(FileOperations.class.getResource(DexProperties.CSV_DIRECTORY).toURI()).listFiles();
+			files = new File(Execution.class.getResource(DexProperties.CSV_DIRECTORY).toURI()).listFiles();
 			
 			if(files != null) {
 				//showFiles(files);
@@ -102,7 +103,7 @@ public class Execution {
 	}
 	
 	public static void createAggregateDTO() {
-		ObjectDB.createAggregateDTO();
+		FileOperations.createAggregateDTO();
 	}
 	
 	public static void createAllFiles() {
