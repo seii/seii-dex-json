@@ -14,14 +14,6 @@ public class BerryFlavors {
 	private int contest_type_id;
 	private int flavor;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getBerry_id() {
 		return berry_id;
 	}
@@ -45,6 +37,7 @@ public class BerryFlavors {
 	public void setFlavor(int flavor) {
 		this.flavor = flavor;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

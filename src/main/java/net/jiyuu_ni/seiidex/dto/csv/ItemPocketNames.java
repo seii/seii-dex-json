@@ -14,14 +14,6 @@ public class ItemPocketNames {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getItem_pocket_id() {
 		return item_pocket_id;
 	}
@@ -45,6 +37,7 @@ public class ItemPocketNames {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

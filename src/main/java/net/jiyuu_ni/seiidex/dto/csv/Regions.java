@@ -13,14 +13,6 @@ public class Regions {
 	private int id;
 	private String identifier;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -36,6 +28,7 @@ public class Regions {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -17,14 +17,6 @@ public class Items {
 	private String fling_power;
 	private String fling_effect_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -72,6 +64,7 @@ public class Items {
 	public void setFling_effect_id(String fling_effect_id) {
 		this.fling_effect_id = fling_effect_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

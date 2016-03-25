@@ -15,14 +15,6 @@ public class MoveDamageClassProse {
 	private String name;
 	private String description;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_damage_class_id() {
 		return move_damage_class_id;
 	}
@@ -54,6 +46,7 @@ public class MoveDamageClassProse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

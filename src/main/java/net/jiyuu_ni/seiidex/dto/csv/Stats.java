@@ -16,14 +16,6 @@ public class Stats {
 	private int is_battle_only;
 	private int game_index;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -63,6 +55,7 @@ public class Stats {
 	public void setGame_index(int game_index) {
 		this.game_index = game_index;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

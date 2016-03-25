@@ -15,14 +15,6 @@ public class PokemonAbilities {
 	private int is_hidden;
 	private int slot;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_id() {
 		return pokemon_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonAbilities {
 	public void setSlot(int slot) {
 		this.slot = slot;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -14,14 +14,6 @@ public class EggGroupProse {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getEgg_group_id() {
 		return egg_group_id;
 	}
@@ -45,6 +37,7 @@ public class EggGroupProse {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

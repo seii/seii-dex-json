@@ -14,14 +14,6 @@ public class PokemonGameIndices {
 	private int version_id;
 	private int game_index;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_id() {
 		return pokemon_id;
 	}
@@ -45,6 +37,7 @@ public class PokemonGameIndices {
 	public void setGame_index(int game_index) {
 		this.game_index = game_index;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

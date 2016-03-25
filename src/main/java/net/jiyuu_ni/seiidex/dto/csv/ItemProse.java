@@ -15,14 +15,6 @@ public class ItemProse {
 	private String short_effect;
 	private String effect;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getItem_id() {
 		return item_id;
 	}
@@ -54,6 +46,7 @@ public class ItemProse {
 	public void setEffect(String effect) {
 		this.effect = effect;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -13,14 +13,6 @@ public class PokedexVersionGroups {
 	private int pokedex_id;
 	private int version_group_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokedex_id() {
 		return pokedex_id;
 	}
@@ -36,6 +28,7 @@ public class PokedexVersionGroups {
 	public void setVersion_group_id(int version_group_id) {
 		this.version_group_id = version_group_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

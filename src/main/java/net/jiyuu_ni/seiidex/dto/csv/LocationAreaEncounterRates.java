@@ -15,14 +15,6 @@ public class LocationAreaEncounterRates {
 	private int version_id;
 	private int rate;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getLocation_area_id() {
 		return location_area_id;
 	}
@@ -54,6 +46,7 @@ public class LocationAreaEncounterRates {
 	public void setRate(int rate) {
 		this.rate = rate;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

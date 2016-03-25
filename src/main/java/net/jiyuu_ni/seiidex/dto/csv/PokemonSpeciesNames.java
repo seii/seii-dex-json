@@ -15,14 +15,6 @@ public class PokemonSpeciesNames {
 	private String name;
 	private String genus;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_species_id() {
 		return pokemon_species_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonSpeciesNames {
 	public void setGenus(String genus) {
 		this.genus = genus;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

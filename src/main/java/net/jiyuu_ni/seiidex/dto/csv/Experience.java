@@ -14,14 +14,6 @@ public class Experience {
 	private int level;
 	private int experience;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getGrowth_rate_id() {
 		return growth_rate_id;
 	}
@@ -45,6 +37,7 @@ public class Experience {
 	public void setExperience(int experience) {
 		this.experience = experience;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

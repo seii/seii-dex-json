@@ -15,14 +15,6 @@ public class Machines {
 	private int item_id;
 	private int move_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMachine_number() {
 		return machine_number;
 	}
@@ -54,6 +46,7 @@ public class Machines {
 	public void setMove_id(int move_id) {
 		this.move_id = move_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

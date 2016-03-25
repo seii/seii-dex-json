@@ -15,14 +15,6 @@ public class MoveEffectProse {
 	private String short_effect;
 	private String effect;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_effect_id() {
 		return move_effect_id;
 	}
@@ -54,6 +46,7 @@ public class MoveEffectProse {
 	public void setEffect(String effect) {
 		this.effect = effect;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

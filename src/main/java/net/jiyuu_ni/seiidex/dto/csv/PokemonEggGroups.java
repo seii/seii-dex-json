@@ -13,14 +13,6 @@ public class PokemonEggGroups {
 	private int species_id;
 	private int egg_group_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getSpecies_id() {
 		return species_id;
 	}
@@ -36,6 +28,7 @@ public class PokemonEggGroups {
 	public void setEgg_group_id(int egg_group_id) {
 		this.egg_group_id = egg_group_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

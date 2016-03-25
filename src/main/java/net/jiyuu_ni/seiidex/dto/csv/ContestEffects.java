@@ -14,14 +14,6 @@ public class ContestEffects {
 	private int appeal;
 	private int jam;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -45,6 +37,7 @@ public class ContestEffects {
 	public void setJam(int jam) {
 		this.jam = jam;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

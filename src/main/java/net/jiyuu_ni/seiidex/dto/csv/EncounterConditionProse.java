@@ -14,14 +14,6 @@ public class EncounterConditionProse {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getEncounter_condition_id() {
 		return encounter_condition_id;
 	}
@@ -45,6 +37,7 @@ public class EncounterConditionProse {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -15,14 +15,6 @@ public class AbilityProse {
 	private String short_effect;
 	private String effect;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getAbility_id() {
 		return ability_id;
 	}
@@ -54,6 +46,7 @@ public class AbilityProse {
 	public void setEffect(String effect) {
 		this.effect = effect;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

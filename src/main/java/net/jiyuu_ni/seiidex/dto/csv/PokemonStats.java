@@ -15,14 +15,6 @@ public class PokemonStats {
 	private int base_stat;
 	private int effort;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_id() {
 		return pokemon_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonStats {
 	public void setEffort(int effort) {
 		this.effort = effort;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

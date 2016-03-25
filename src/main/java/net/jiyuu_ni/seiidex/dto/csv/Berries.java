@@ -21,14 +21,6 @@ public class Berries {
 	private int soil_dryness;
 	private int smoothness;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -108,6 +100,7 @@ public class Berries {
 	public void setSmoothness(int smoothness) {
 		this.smoothness = smoothness;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

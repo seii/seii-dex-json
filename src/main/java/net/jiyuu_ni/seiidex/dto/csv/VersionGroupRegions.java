@@ -13,14 +13,6 @@ public class VersionGroupRegions {
 	private int version_group_id;
 	private int region_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getVersion_group_id() {
 		return version_group_id;
 	}
@@ -36,6 +28,7 @@ public class VersionGroupRegions {
 	public void setRegion_id(int region_id) {
 		this.region_id = region_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

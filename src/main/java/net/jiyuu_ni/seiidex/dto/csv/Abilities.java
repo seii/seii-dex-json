@@ -15,14 +15,6 @@ public class Abilities {
 	private int generation_id;
 	private int is_main_series;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -54,6 +46,7 @@ public class Abilities {
 	public void setIs_main_series(int is_main_series) {
 		this.is_main_series = is_main_series;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

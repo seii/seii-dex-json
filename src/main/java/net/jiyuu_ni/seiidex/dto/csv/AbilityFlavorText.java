@@ -15,14 +15,6 @@ public class AbilityFlavorText {
 	private int language_id;
 	private String flavor_text;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getAbility_id() {
 		return ability_id;
 	}
@@ -54,6 +46,7 @@ public class AbilityFlavorText {
 	public void setFlavor_text(String flavor_text) {
 		this.flavor_text = flavor_text;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

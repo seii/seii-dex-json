@@ -14,14 +14,6 @@ public class SuperContestEffectProse {
 	private int local_language_id;
 	private String flavor_text;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getSuper_contest_effect_id() {
 		return super_contest_effect_id;
 	}
@@ -45,6 +37,7 @@ public class SuperContestEffectProse {
 	public void setFlavor_text(String flavor_text) {
 		this.flavor_text = flavor_text;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -13,14 +13,6 @@ public class SuperContestEffects {
 	private int id;
 	private int appeal;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -36,6 +28,7 @@ public class SuperContestEffects {
 	public void setAppeal(int appeal) {
 		this.appeal = appeal;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

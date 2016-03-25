@@ -13,14 +13,6 @@ public class SuperContestCombos {
 	private int first_move_id;
 	private int second_move_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getFirst_move_id() {
 		return first_move_id;
 	}
@@ -36,6 +28,7 @@ public class SuperContestCombos {
 	public void setSecond_move_id(int second_move_id) {
 		this.second_move_id = second_move_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -14,14 +14,6 @@ public class AbilityChangelog {
 	private int ability_id;
 	private int changed_in_version_group_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -45,6 +37,7 @@ public class AbilityChangelog {
 	public void setChanged_in_version_group_id(int changed_in_version_group_id) {
 		this.changed_in_version_group_id = changed_in_version_group_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

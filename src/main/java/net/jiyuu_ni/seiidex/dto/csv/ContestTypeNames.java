@@ -16,14 +16,6 @@ public class ContestTypeNames {
 	private String flavor;
 	private String color;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getContest_type_id() {
 		return contest_type_id;
 	}
@@ -63,6 +55,7 @@ public class ContestTypeNames {
 	public void setColor(String color) {
 		this.color = color;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

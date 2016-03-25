@@ -14,14 +14,6 @@ public class MoveMetaStatChanges {
 	private int stat_id;
 	private int change;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_id() {
 		return move_id;
 	}
@@ -45,6 +37,7 @@ public class MoveMetaStatChanges {
 	public void setChange(int change) {
 		this.change = change;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

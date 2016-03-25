@@ -14,14 +14,6 @@ public class Characteristics {
 	private int stat_id;
 	private int gene_mod_5;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -45,6 +37,7 @@ public class Characteristics {
 	public void setGene_mod_5(int gene_mod_5) {
 		this.gene_mod_5 = gene_mod_5;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

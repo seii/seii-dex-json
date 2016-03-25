@@ -13,14 +13,6 @@ public class EncounterConditionValueMap {
 	private int encounter_id;
 	private int encounter_condition_value_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getEncounter_id() {
 		return encounter_id;
 	}
@@ -36,6 +28,7 @@ public class EncounterConditionValueMap {
 	public void setEncounter_condition_value_id(int encounter_condition_value_id) {
 		this.encounter_condition_value_id = encounter_condition_value_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

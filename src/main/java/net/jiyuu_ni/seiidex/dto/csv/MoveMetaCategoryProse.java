@@ -14,14 +14,6 @@ public class MoveMetaCategoryProse {
 	private int local_language_id;
 	private String description;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_meta_category_id() {
 		return move_meta_category_id;
 	}
@@ -45,6 +37,7 @@ public class MoveMetaCategoryProse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

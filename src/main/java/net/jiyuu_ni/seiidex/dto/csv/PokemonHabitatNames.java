@@ -14,14 +14,6 @@ public class PokemonHabitatNames {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_habitat_id() {
 		return pokemon_habitat_id;
 	}
@@ -45,6 +37,7 @@ public class PokemonHabitatNames {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

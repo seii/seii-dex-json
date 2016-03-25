@@ -16,14 +16,6 @@ public class PokemonFormPokeathlonStats {
 	private int base_stat;
 	private int maximum_stat;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_form_id() {
 		return pokemon_form_id;
 	}
@@ -63,6 +55,7 @@ public class PokemonFormPokeathlonStats {
 	public void setMaximum_stat(int maximum_stat) {
 		this.maximum_stat = maximum_stat;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

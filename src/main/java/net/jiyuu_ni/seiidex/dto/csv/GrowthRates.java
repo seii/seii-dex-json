@@ -14,14 +14,6 @@ public class GrowthRates {
 	private String identifier;
 	private String formula;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -45,6 +37,7 @@ public class GrowthRates {
 	public void setFormula(String formula) {
 		this.formula = formula;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

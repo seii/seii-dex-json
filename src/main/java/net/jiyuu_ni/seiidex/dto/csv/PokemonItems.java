@@ -15,14 +15,6 @@ public class PokemonItems {
 	private int item_id;
 	private int rarity;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_id() {
 		return pokemon_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonItems {
 	public void setRarity(int rarity) {
 		this.rarity = rarity;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

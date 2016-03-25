@@ -14,14 +14,6 @@ public class CharacteristicText {
 	private int local_language_id;
 	private String message;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getCharacteristic_id() {
 		return characteristic_id;
 	}
@@ -45,6 +37,7 @@ public class CharacteristicText {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

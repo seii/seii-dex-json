@@ -10,13 +10,13 @@ public class Encounters {
 
 	Logger logger = LoggerFactory.getLogger(Encounters.class);
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
+	private int id;
+	private int version_id;
+	private int location_area_id;
+	private int encounter_slot_id;
+	private int pokemon_id;
+	private int min_level;
+	private int max_level;
 
 	public int getId() {
 		return id;
@@ -74,13 +74,6 @@ public class Encounters {
 		this.max_level = max_level;
 	}
 
-	private int id;
-	private int version_id;
-	private int location_area_id;
-	private int encounter_slot_id;
-	private int pokemon_id;
-	private int min_level;
-	private int max_level;
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

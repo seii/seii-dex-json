@@ -13,14 +13,6 @@ public class VersionGroupPokemonMoveMethods {
 	private int version_group_id;
 	private int pokemon_move_method_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getVersion_group_id() {
 		return version_group_id;
 	}
@@ -36,6 +28,7 @@ public class VersionGroupPokemonMoveMethods {
 	public void setPokemon_move_method_id(int pokemon_move_method_id) {
 		this.pokemon_move_method_id = pokemon_move_method_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

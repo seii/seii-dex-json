@@ -15,14 +15,6 @@ public class PokemonFormNames {
 	private String form_name;
 	private String pokemon_name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_form_id() {
 		return pokemon_form_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonFormNames {
 	public void setPokemon_name(String pokemon_name) {
 		this.pokemon_name = pokemon_name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

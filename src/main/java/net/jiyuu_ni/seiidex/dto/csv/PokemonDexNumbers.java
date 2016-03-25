@@ -14,14 +14,6 @@ public class PokemonDexNumbers {
 	private int pokedex_id;
 	private int pokedex_number;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getSpecies_id() {
 		return species_id;
 	}
@@ -45,6 +37,7 @@ public class PokemonDexNumbers {
 	public void setPokedex_number(int pokedex_number) {
 		this.pokedex_number = pokedex_number;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

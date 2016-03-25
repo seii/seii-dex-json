@@ -14,14 +14,6 @@ public class EvolutionTriggerProse {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getEvolution_trigger_id() {
 		return evolution_trigger_id;
 	}
@@ -45,6 +37,7 @@ public class EvolutionTriggerProse {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

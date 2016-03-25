@@ -17,14 +17,6 @@ public class PokemonMoves {
 	private int level;
 	private String order;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_id() {
 		return pokemon_id;
 	}
@@ -72,6 +64,7 @@ public class PokemonMoves {
 	public void setOrder(String order) {
 		this.order = order;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

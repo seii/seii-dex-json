@@ -24,14 +24,6 @@ public class MoveMeta {
 	private int flinch_chance;
 	private int stat_chance;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_id() {
 		return move_id;
 	}
@@ -135,6 +127,7 @@ public class MoveMeta {
 	public void setStat_chance(int stat_chance) {
 		this.stat_chance = stat_chance;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

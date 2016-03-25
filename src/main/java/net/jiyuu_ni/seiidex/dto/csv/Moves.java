@@ -26,14 +26,6 @@ public class Moves {
 	private int contest_effect_id;
 	private int super_contest_effect_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -153,6 +145,7 @@ public class Moves {
 	public void setSuper_contest_effect_id(int super_contest_effect_id) {
 		this.super_contest_effect_id = super_contest_effect_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

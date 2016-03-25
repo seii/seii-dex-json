@@ -18,14 +18,6 @@ public class Natures {
 	private int likes_flavor_id;
 	private int game_index;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -81,6 +73,7 @@ public class Natures {
 	public void setGame_index(int game_index) {
 		this.game_index = game_index;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

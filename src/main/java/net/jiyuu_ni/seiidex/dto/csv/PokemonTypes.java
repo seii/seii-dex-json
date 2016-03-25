@@ -14,14 +14,6 @@ public class PokemonTypes {
 	private int type_id;
 	private int slot;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_id() {
 		return pokemon_id;
 	}
@@ -45,6 +37,7 @@ public class PokemonTypes {
 	public void setSlot(int slot) {
 		this.slot = slot;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

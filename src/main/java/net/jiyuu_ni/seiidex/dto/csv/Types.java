@@ -15,14 +15,6 @@ public class Types {
 	private int generation_id;
 	private int damage_class_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -54,6 +46,7 @@ public class Types {
 	public void setDamage_class_id(int damage_class_id) {
 		this.damage_class_id = damage_class_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

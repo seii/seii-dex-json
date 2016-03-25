@@ -14,14 +14,6 @@ public class TypeGameIndices {
 	private int generation_id;
 	private int game_index;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getType_id() {
 		return type_id;
 	}
@@ -45,6 +37,7 @@ public class TypeGameIndices {
 	public void setGame_index(int game_index) {
 		this.game_index = game_index;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

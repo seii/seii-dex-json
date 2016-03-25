@@ -31,14 +31,6 @@ public class PokemonEvolution {
 	private int needs_overworld_rain;
 	private int turn_upside_down;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -198,6 +190,7 @@ public class PokemonEvolution {
 	public void setTurn_upside_down(int turn_upside_down) {
 		this.turn_upside_down = turn_upside_down;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

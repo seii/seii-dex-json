@@ -8,16 +8,13 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
-
-import net.jiyuu_ni.seiidex.dto.json.PokemonAbilities;
 
 public class FileOperations {
 	
@@ -68,12 +65,41 @@ public class FileOperations {
 			        out.println("\tLogger logger = LoggerFactory.getLogger(" +
 			        		convertFileNameToCamelCase(outputClass) + ".class);\n");
 					
+			        ArrayList<String> getterSetterList = new ArrayList<String>();
+			        
 					for (int i = 0; i < header.length; i++) {
+						String alteredHeader = header[i].substring(0,1).toUpperCase() +
+								header[i].substring(1);
+						
 						if(StringUtils.isNumeric(dataTypes[i])) {
 							out.println("\tprivate int " + header[i] + ";");
+							
+							getterSetterList.add("\tpublic int get" + alteredHeader +
+									"() {\n" + "\t\treturn " + header[i] +
+									";\n" + "\t}\n");
+							
+							getterSetterList.add("\tpublic void set" + alteredHeader +
+									"(" + "int " + header[i] + ") {\n" +
+									"\t\tthis." + header[i] + " = " + header[i] +
+									";\n" + "\t}\n");
 						}else {
 							out.println("\tprivate String " + header[i] + ";");
+							
+							getterSetterList.add("\tpublic String get" + alteredHeader +
+									"() {\n" + "\t\treturn " + header[i] +
+									";\n" + "\t}\n");
+							
+							getterSetterList.add("\tpublic void set" + alteredHeader +
+									"(" + "String " + header[i] + ") {\n" +
+									"\t\tthis." + header[i] + " = " + header[i] +
+									";\n" + "\t}\n");
 						}
+					}
+					
+					out.println("");
+					
+					for (String obj : getterSetterList) {
+						out.println(obj);
 					}
 					
 					out.println("\n\tpublic String toJsonString() {");

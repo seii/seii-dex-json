@@ -12,14 +12,6 @@ public class MoveEffects {
 
 	private int id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -27,6 +19,7 @@ public class MoveEffects {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

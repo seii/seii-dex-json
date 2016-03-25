@@ -15,14 +15,6 @@ public class MoveFlagProse {
 	private String name;
 	private String description;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_flag_id() {
 		return move_flag_id;
 	}
@@ -54,6 +46,7 @@ public class MoveFlagProse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

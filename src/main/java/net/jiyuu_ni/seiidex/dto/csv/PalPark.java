@@ -15,14 +15,6 @@ public class PalPark {
 	private int base_score;
 	private int rate;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getSpecies_id() {
 		return species_id;
 	}
@@ -54,6 +46,7 @@ public class PalPark {
 	public void setRate(int rate) {
 		this.rate = rate;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

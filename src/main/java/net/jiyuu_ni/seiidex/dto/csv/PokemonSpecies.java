@@ -29,14 +29,6 @@ public class PokemonSpecies {
 	private int order;
 	private String conquest_order;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -180,6 +172,7 @@ public class PokemonSpecies {
 	public void setConquest_order(String conquest_order) {
 		this.conquest_order = conquest_order;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

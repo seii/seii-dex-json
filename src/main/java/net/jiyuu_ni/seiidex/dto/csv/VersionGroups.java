@@ -15,14 +15,6 @@ public class VersionGroups {
 	private int generation_id;
 	private int order;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -54,6 +46,7 @@ public class VersionGroups {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

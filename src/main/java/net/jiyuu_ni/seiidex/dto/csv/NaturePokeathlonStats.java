@@ -14,14 +14,6 @@ public class NaturePokeathlonStats {
 	private int pokeathlon_stat_id;
 	private String max_change;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getNature_id() {
 		return nature_id;
 	}
@@ -45,6 +37,7 @@ public class NaturePokeathlonStats {
 	public void setMax_change(String max_change) {
 		this.max_change = max_change;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -14,14 +14,6 @@ public class MoveBattleStyleProse {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_battle_style_id() {
 		return move_battle_style_id;
 	}
@@ -45,6 +37,7 @@ public class MoveBattleStyleProse {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

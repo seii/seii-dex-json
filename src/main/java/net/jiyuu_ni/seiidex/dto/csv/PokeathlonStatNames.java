@@ -14,14 +14,6 @@ public class PokeathlonStatNames {
 	private int local_language_id;
 	private String name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokeathlon_stat_id() {
 		return pokeathlon_stat_id;
 	}
@@ -45,6 +37,7 @@ public class PokeathlonStatNames {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

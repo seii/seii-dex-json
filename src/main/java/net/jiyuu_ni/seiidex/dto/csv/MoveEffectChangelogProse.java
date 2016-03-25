@@ -14,14 +14,6 @@ public class MoveEffectChangelogProse {
 	private int local_language_id;
 	private String effect;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_effect_changelog_id() {
 		return move_effect_changelog_id;
 	}
@@ -45,6 +37,7 @@ public class MoveEffectChangelogProse {
 	public void setEffect(String effect) {
 		this.effect = effect;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

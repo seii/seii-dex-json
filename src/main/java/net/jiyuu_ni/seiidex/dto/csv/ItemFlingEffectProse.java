@@ -14,14 +14,6 @@ public class ItemFlingEffectProse {
 	private int local_language_id;
 	private String effect;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getItem_fling_effect_id() {
 		return item_fling_effect_id;
 	}
@@ -45,6 +37,7 @@ public class ItemFlingEffectProse {
 	public void setEffect(String effect) {
 		this.effect = effect;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

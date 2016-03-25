@@ -19,14 +19,6 @@ public class Pokemon {
 	private int order;
 	private int is_default;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -90,6 +82,7 @@ public class Pokemon {
 	public void setIs_default(int is_default) {
 		this.is_default = is_default;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

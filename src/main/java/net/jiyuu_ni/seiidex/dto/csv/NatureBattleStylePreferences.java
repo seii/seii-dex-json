@@ -15,14 +15,6 @@ public class NatureBattleStylePreferences {
 	private int low_hp_preference;
 	private int high_hp_preference;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getNature_id() {
 		return nature_id;
 	}
@@ -54,6 +46,7 @@ public class NatureBattleStylePreferences {
 	public void setHigh_hp_preference(int high_hp_preference) {
 		this.high_hp_preference = high_hp_preference;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -15,14 +15,6 @@ public class ContestEffectProse {
 	private String flavor_text;
 	private String effect;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getContest_effect_id() {
 		return contest_effect_id;
 	}
@@ -54,6 +46,7 @@ public class ContestEffectProse {
 	public void setEffect(String effect) {
 		this.effect = effect;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

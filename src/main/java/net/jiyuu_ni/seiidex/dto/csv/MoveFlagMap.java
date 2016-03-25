@@ -13,14 +13,6 @@ public class MoveFlagMap {
 	private int move_id;
 	private int move_flag_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_id() {
 		return move_id;
 	}
@@ -36,6 +28,7 @@ public class MoveFlagMap {
 	public void setMove_flag_id(int move_flag_id) {
 		this.move_flag_id = move_flag_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

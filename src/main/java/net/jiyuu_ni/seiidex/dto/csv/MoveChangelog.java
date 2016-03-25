@@ -19,14 +19,6 @@ public class MoveChangelog {
 	private String effect_id;
 	private String effect_chance;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getMove_id() {
 		return move_id;
 	}
@@ -90,6 +82,7 @@ public class MoveChangelog {
 	public void setEffect_chance(String effect_chance) {
 		this.effect_chance = effect_chance;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

@@ -14,14 +14,6 @@ public class PokemonSpeciesProse {
 	private int local_language_id;
 	private String form_description;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_species_id() {
 		return pokemon_species_id;
 	}
@@ -45,6 +37,7 @@ public class PokemonSpeciesProse {
 	public void setForm_description(String form_description) {
 		this.form_description = form_description;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

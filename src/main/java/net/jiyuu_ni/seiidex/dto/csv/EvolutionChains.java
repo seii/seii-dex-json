@@ -13,14 +13,6 @@ public class EvolutionChains {
 	private int id;
 	private String baby_trigger_item_id;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getId() {
 		return id;
 	}
@@ -36,6 +28,7 @@ public class EvolutionChains {
 	public void setBaby_trigger_item_id(String baby_trigger_item_id) {
 		this.baby_trigger_item_id = baby_trigger_item_id;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

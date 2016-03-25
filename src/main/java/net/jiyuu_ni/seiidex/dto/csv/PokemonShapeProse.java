@@ -15,14 +15,6 @@ public class PokemonShapeProse {
 	private String name;
 	private String awesome_name;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_shape_id() {
 		return pokemon_shape_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonShapeProse {
 	public void setAwesome_name(String awesome_name) {
 		this.awesome_name = awesome_name;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

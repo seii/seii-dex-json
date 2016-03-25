@@ -15,14 +15,6 @@ public class PokemonMoveMethodProse {
 	private String name;
 	private String description;
 
-	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
 	public int getPokemon_move_method_id() {
 		return pokemon_move_method_id;
 	}
@@ -54,6 +46,7 @@ public class PokemonMoveMethodProse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();
