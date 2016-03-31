@@ -2,13 +2,22 @@ package net.jiyuu_ni.seiidex;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
-import net.jiyuu_ni.seiidex.util.DexProperties;
-import net.jiyuu_ni.seiidex.util.FileOperations;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.jiyuu_ni.seiidex.dto.json.Gen6Pokemon;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.util.DexProperties;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 public class Execution {
 	
@@ -22,7 +31,8 @@ public class Execution {
 				createAllFiles();
 			}
 			
-			ArrayList<File> jsonFileList = new ArrayList<File>(1);
+			//Using LinkedList guarantees that the order will be respected
+			LinkedList<File> jsonFileList = new LinkedList<File>();
 			
 			for(int i = 0; i < DexProperties.TOTAL_POKEMON_GENERATIONS; i++) {
 				String outputFileName = DexProperties.JSON_DIRECTORY +
@@ -30,6 +40,55 @@ public class Execution {
 		        		DexProperties.JSON_EXTENSION;
 				File pokemonJsonFile = new File(outputFileName);
 				jsonFileList.add(pokemonJsonFile);
+			}
+			
+			if(jsonFileList != null && !jsonFileList.isEmpty()) {
+				
+				EntityManagerFactory entityManagerFactory =  Persistence.createEntityManagerFactory("seii-dex-json");
+			    EntityManager em = entityManagerFactory.createEntityManager();
+			
+				for(int i = 1; i < jsonFileList.size() + 1; i++) {
+				    
+				    /*Query query1 = em.createNamedQuery("Generation.findByGenId").setParameter("genId", 6);
+				    Generation genResult = (Generation) query1.getSingleResult();*/
+				    
+				    Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+				    		.setParameter("genId", i);
+				    List<PokemonFormGeneration> stuffList = pokeQuery.getResultList();
+				    
+				    PokemonFormGeneration onePoke = stuffList.get(0);
+				    System.out.println(onePoke.getPokemonForm().getPokemon().getPokemonAbilities().get(0).getAbility().getIdentifier());
+				    
+				    logger.info("Generation " + i + " detected!");
+				    
+				    switch(i) {
+				    	case 1: {
+				    		
+				    		break;
+				    	}
+				    	
+				    	case 6: {
+				    		Gen6Pokemon gen6Pokemon = new Gen6Pokemon();
+				    		
+				    		gen6Pokemon.setNationalDex(String.valueOf(
+				    				onePoke.getPokemonForm().getPokemon().getPokemonSpecy().getId()));
+				    		
+				    		gen6Pokemon.setName(formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier()));
+				    		
+				    		
+				    		
+				    		break;
+				    	}
+				    	
+				    	default: {
+				    		logger.info("What generation are we in, again?");
+				    		break;
+				    	}
+				    }
+				}
+				
+				em.close();
+			    entityManagerFactory.close();
 			}
 			
 			
@@ -109,5 +168,20 @@ public class Execution {
 	public static void createAllFiles() {
 		createCSVDTOs();
 		createAggregateDTO();
+	}
+	
+	private static String formatPokemonFormsIdentifier(String identifier) {
+		String transformedString = null;
+		
+		StringTokenizer tokenize = new StringTokenizer(identifier, "-");
+		
+		while(tokenize.hasMoreTokens()) {
+			String tempToken = tokenize.nextToken();
+			transformedString = tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + " ";
+		}
+		
+		transformedString = transformedString.trim();
+		
+		return transformedString;
 	}
 }

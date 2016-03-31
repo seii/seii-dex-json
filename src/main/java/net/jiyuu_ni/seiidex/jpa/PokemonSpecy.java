@@ -28,13 +28,13 @@ public class PokemonSpecy implements Serializable {
 	private int conquestOrder;
 
 	@Column(name="forms_switchable")
-	private byte formsSwitchable;
+	private boolean formsSwitchable;
 
 	@Column(name="gender_rate")
 	private int genderRate;
 
 	@Column(name="has_gender_differences")
-	private byte hasGenderDifferences;
+	private boolean hasGenderDifferences;
 
 	@Column(name="hatch_counter")
 	private int hatchCounter;
@@ -42,7 +42,7 @@ public class PokemonSpecy implements Serializable {
 	private String identifier;
 
 	@Column(name="is_baby")
-	private byte isBaby;
+	private boolean isBaby;
 
 	@Column(name="`order`")
 	private int order;
@@ -164,11 +164,11 @@ public class PokemonSpecy implements Serializable {
 		this.conquestOrder = conquestOrder;
 	}
 
-	public byte getFormsSwitchable() {
+	public boolean getFormsSwitchable() {
 		return this.formsSwitchable;
 	}
 
-	public void setFormsSwitchable(byte formsSwitchable) {
+	public void setFormsSwitchable(boolean formsSwitchable) {
 		this.formsSwitchable = formsSwitchable;
 	}
 
@@ -180,11 +180,11 @@ public class PokemonSpecy implements Serializable {
 		this.genderRate = genderRate;
 	}
 
-	public byte getHasGenderDifferences() {
+	public boolean getHasGenderDifferences() {
 		return this.hasGenderDifferences;
 	}
 
-	public void setHasGenderDifferences(byte hasGenderDifferences) {
+	public void setHasGenderDifferences(boolean hasGenderDifferences) {
 		this.hasGenderDifferences = hasGenderDifferences;
 	}
 
@@ -204,11 +204,11 @@ public class PokemonSpecy implements Serializable {
 		this.identifier = identifier;
 	}
 
-	public byte getIsBaby() {
+	public boolean getIsBaby() {
 		return this.isBaby;
 	}
 
-	public void setIsBaby(byte isBaby) {
+	public void setIsBaby(boolean isBaby) {
 		this.isBaby = isBaby;
 	}
 

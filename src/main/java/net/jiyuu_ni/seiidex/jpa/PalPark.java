@@ -15,7 +15,7 @@ public class PalPark implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="species_id")
+	@Column(name="species_id", insertable=false, updatable=false)
 	private int speciesId;
 
 	@Column(name="base_score")

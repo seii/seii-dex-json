@@ -15,7 +15,7 @@ public class MoveMeta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="move_id")
+	@Column(name="move_id", insertable=false, updatable=false)
 	private int moveId;
 
 	@Column(name="ailment_chance")

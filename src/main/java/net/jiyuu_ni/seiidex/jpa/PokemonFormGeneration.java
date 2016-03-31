@@ -10,7 +10,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="pokemon_form_generations")
-@NamedQuery(name="PokemonFormGeneration.findAll", query="SELECT p FROM PokemonFormGeneration p")
+@NamedQueries({
+	@NamedQuery(name="PokemonFormGeneration.findAll", query="SELECT p FROM PokemonFormGeneration p"),
+	@NamedQuery(name="PokemonFormGeneration.findAllByGenerationId", query="SELECT p FROM PokemonFormGeneration p WHERE p.generation.id = :genId")
+})
 public class PokemonFormGeneration implements Serializable {
 	private static final long serialVersionUID = 1L;
 

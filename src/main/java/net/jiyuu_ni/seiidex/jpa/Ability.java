@@ -21,7 +21,7 @@ public class Ability implements Serializable {
 	private String identifier;
 
 	@Column(name="is_main_series")
-	private byte isMainSeries;
+	private boolean isMainSeries;
 
 	//bi-directional many-to-one association to Generation
 	@ManyToOne
@@ -66,11 +66,11 @@ public class Ability implements Serializable {
 		this.identifier = identifier;
 	}
 
-	public byte getIsMainSeries() {
+	public boolean getIsMainSeries() {
 		return this.isMainSeries;
 	}
 
-	public void setIsMainSeries(byte isMainSeries) {
+	public void setIsMainSeries(boolean isMainSeries) {
 		this.isMainSeries = isMainSeries;
 	}
 

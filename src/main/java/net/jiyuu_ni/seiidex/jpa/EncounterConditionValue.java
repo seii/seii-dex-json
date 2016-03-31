@@ -21,7 +21,7 @@ public class EncounterConditionValue implements Serializable {
 	private String identifier;
 
 	@Column(name="is_default")
-	private byte isDefault;
+	private boolean isDefault;
 
 	//bi-directional many-to-many association to Encounter
 	@ManyToMany
@@ -64,11 +64,11 @@ public class EncounterConditionValue implements Serializable {
 		this.identifier = identifier;
 	}
 
-	public byte getIsDefault() {
+	public boolean getIsDefault() {
 		return this.isDefault;
 	}
 
-	public void setIsDefault(byte isDefault) {
+	public void setIsDefault(boolean isDefault) {
 		this.isDefault = isDefault;
 	}
 

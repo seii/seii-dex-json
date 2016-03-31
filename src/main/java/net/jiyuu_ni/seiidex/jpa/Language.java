@@ -24,7 +24,7 @@ public class Language implements Serializable {
 
 	private String iso639;
 
-	private byte official;
+	private boolean official;
 
 	@Column(name="`order`")
 	private int order;
@@ -288,11 +288,11 @@ public class Language implements Serializable {
 		this.iso639 = iso639;
 	}
 
-	public byte getOfficial() {
+	public boolean getOfficial() {
 		return this.official;
 	}
 
-	public void setOfficial(byte official) {
+	public void setOfficial(boolean official) {
 		this.official = official;
 	}
 

@@ -18,7 +18,7 @@ public class PokemonAbility implements Serializable {
 	private PokemonAbilityPK id;
 
 	@Column(name="is_hidden")
-	private byte isHidden;
+	private boolean isHidden;
 
 	//bi-directional many-to-one association to Pokemon
 	@ManyToOne
@@ -39,11 +39,11 @@ public class PokemonAbility implements Serializable {
 		this.id = id;
 	}
 
-	public byte getIsHidden() {
+	public boolean getIsHidden() {
 		return this.isHidden;
 	}
 
-	public void setIsHidden(byte isHidden) {
+	public void setIsHidden(boolean isHidden) {
 		this.isHidden = isHidden;
 	}
 

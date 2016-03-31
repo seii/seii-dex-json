@@ -30,7 +30,7 @@ public class PokemonEvolution implements Serializable {
 	private int minimumLevel;
 
 	@Column(name="needs_overworld_rain")
-	private byte needsOverworldRain;
+	private boolean needsOverworldRain;
 
 	@Column(name="relative_physical_stats")
 	private int relativePhysicalStats;
@@ -39,7 +39,7 @@ public class PokemonEvolution implements Serializable {
 	private String timeOfDay;
 
 	@Column(name="turn_upside_down")
-	private byte turnUpsideDown;
+	private boolean turnUpsideDown;
 
 	//bi-directional many-to-one association to PokemonSpecy
 	@ManyToOne
@@ -137,11 +137,11 @@ public class PokemonEvolution implements Serializable {
 		this.minimumLevel = minimumLevel;
 	}
 
-	public byte getNeedsOverworldRain() {
+	public boolean getNeedsOverworldRain() {
 		return this.needsOverworldRain;
 	}
 
-	public void setNeedsOverworldRain(byte needsOverworldRain) {
+	public void setNeedsOverworldRain(boolean needsOverworldRain) {
 		this.needsOverworldRain = needsOverworldRain;
 	}
 
@@ -161,11 +161,11 @@ public class PokemonEvolution implements Serializable {
 		this.timeOfDay = timeOfDay;
 	}
 
-	public byte getTurnUpsideDown() {
+	public boolean getTurnUpsideDown() {
 		return this.turnUpsideDown;
 	}
 
-	public void setTurnUpsideDown(byte turnUpsideDown) {
+	public void setTurnUpsideDown(boolean turnUpsideDown) {
 		this.turnUpsideDown = turnUpsideDown;
 	}
 

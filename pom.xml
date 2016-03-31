@@ -9,6 +9,7 @@
   	<jdk.version>1.8</jdk.version>
   	<slf4j.version>1.7.19</slf4j.version>
   	<log4j.version>2.5</log4j.version>
+  	<eclipselink.jpa.version>2.5.2</eclipselink.jpa.version>
   </properties>
   
   <dependencies>
@@ -41,6 +42,11 @@
 		<groupId>org.apache.logging.log4j</groupId>
 		<artifactId>log4j-core</artifactId>
 		<version>${log4j.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.eclipse.persistence</groupId>
+		<artifactId>org.eclipse.persistence.jpa</artifactId>
+		<version>${eclipselink.jpa.version}</version>
 	</dependency>
   </dependencies>
   

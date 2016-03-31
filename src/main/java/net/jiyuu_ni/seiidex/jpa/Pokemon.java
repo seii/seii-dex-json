@@ -26,7 +26,7 @@ public class Pokemon implements Serializable {
 	private String identifier;
 
 	@Column(name="is_default")
-	private byte isDefault;
+	private boolean isDefault;
 
 	@Column(name="`order`")
 	private int order;
@@ -105,11 +105,11 @@ public class Pokemon implements Serializable {
 		this.identifier = identifier;
 	}
 
-	public byte getIsDefault() {
+	public boolean getIsDefault() {
 		return this.isDefault;
 	}
 
-	public void setIsDefault(byte isDefault) {
+	public void setIsDefault(boolean isDefault) {
 		this.isDefault = isDefault;
 	}
 

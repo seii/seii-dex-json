@@ -24,7 +24,7 @@ public class Stat implements Serializable {
 	private String identifier;
 
 	@Column(name="is_battle_only")
-	private byte isBattleOnly;
+	private boolean isBattleOnly;
 
 	//bi-directional many-to-one association to Characteristic
 	@OneToMany(mappedBy="stat")
@@ -82,11 +82,11 @@ public class Stat implements Serializable {
 		this.identifier = identifier;
 	}
 
-	public byte getIsBattleOnly() {
+	public boolean getIsBattleOnly() {
 		return this.isBattleOnly;
 	}
 
-	public void setIsBattleOnly(byte isBattleOnly) {
+	public void setIsBattleOnly(boolean isBattleOnly) {
 		this.isBattleOnly = isBattleOnly;
 	}
 

@@ -27,13 +27,13 @@ public class PokemonForm implements Serializable {
 	private String identifier;
 
 	@Column(name="is_battle_only")
-	private byte isBattleOnly;
+	private boolean isBattleOnly;
 
 	@Column(name="is_default")
-	private byte isDefault;
+	private boolean isDefault;
 
 	@Column(name="is_mega")
-	private byte isMega;
+	private boolean isMega;
 
 	@Column(name="`order`")
 	private int order;
@@ -94,27 +94,27 @@ public class PokemonForm implements Serializable {
 		this.identifier = identifier;
 	}
 
-	public byte getIsBattleOnly() {
+	public boolean getIsBattleOnly() {
 		return this.isBattleOnly;
 	}
 
-	public void setIsBattleOnly(byte isBattleOnly) {
+	public void setIsBattleOnly(boolean isBattleOnly) {
 		this.isBattleOnly = isBattleOnly;
 	}
 
-	public byte getIsDefault() {
+	public boolean getIsDefault() {
 		return this.isDefault;
 	}
 
-	public void setIsDefault(byte isDefault) {
+	public void setIsDefault(boolean isDefault) {
 		this.isDefault = isDefault;
 	}
 
-	public byte getIsMega() {
+	public boolean getIsMega() {
 		return this.isMega;
 	}
 
-	public void setIsMega(byte isMega) {
+	public void setIsMega(boolean isMega) {
 		this.isMega = isMega;
 	}
 
