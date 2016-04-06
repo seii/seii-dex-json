@@ -109,42 +109,43 @@ public class Execution {
 
 	private static void populateJSONDTOs(EntityManager em, int generationNumber, LinkedList<File> jsonFileList) {
 
-		try {
-			//Iterate over each generation
-			for(int i = 1; i < jsonFileList.size() + 1; i++) {
-				ArrayList<T> test = createListOfType(Class.forName(jsonFileList.get(i - 1).getName().replace(".json", "")));
+		ArrayList<Gen6Pokemon> gen6PokeList = new ArrayList<Gen6Pokemon>(1);
+		
+		//Iterate over each generation
+		for(int i = 1; i < jsonFileList.size() + 1; i++) {
+		
+			/*Query query1 = em.createNamedQuery("Generation.findByGenId").setParameter("genId", 6);
+			Generation genResult = (Generation) query1.getSingleResult();*/
 			
-				/*Query query1 = em.createNamedQuery("Generation.findByGenId").setParameter("genId", 6);
-				Generation genResult = (Generation) query1.getSingleResult();*/
-				
-				//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
-				//	use it as a starting query for obtaining information
-				Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
-						.setParameter("genId", generationNumber);
-				List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
-				
-				//Populate each Pokemon within this single generation
-				for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					//Use iteration as generation ID to trigger correct population method
-					switch(i) {
-						case 6: {
-							logger.info("Populating Pokemon from Generation " + i);
-							
-							Gen6Pokemon gen6Poke = new Gen6Pokemon();
-							populateOnePoke(onePoke, gen6Poke);
-							currentIterationList.add(gen6Poke);
-							
-							logger.info("Finished populating Pokemon from Generation " + i);
-						}
+			//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+			//	use it as a starting query for obtaining information
+			Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+					.setParameter("genId", generationNumber);
+			List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+			
+			//Populate each Pokemon within this single generation
+			for(PokemonFormGeneration onePoke : singleGenPokeList) {
+				//Use iteration as generation ID to trigger correct population method
+				switch(i) {
+					case 6: {
+						logger.info("Populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+									+ " from Generation " + i);
 						
-						default: {
-							break;
-						}
+						Gen6Pokemon gen6Poke = new Gen6Pokemon();
+						populateOnePoke(onePoke, gen6Poke);
+						gen6PokeList.add(gen6Poke);
+						
+						logger.info("Finished populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+								+ " from Generation " + i);
+					}
+					
+					default: {
+						break;
 					}
 				}
 			}
-		}catch (ClassNotFoundException e) {
-			logger.error(e.getLocalizedMessage());
 		}
 	}
 
@@ -153,13 +154,16 @@ public class Execution {
 	}
 	
 	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen6Pokemon parsedPoke) {
-		
+		parsedPoke.setName(
+				formatPokemonFormsIdentifier(queryResult.getPokemonForm().getIdentifier()));
+		parsedPoke.setNationalDex(String.valueOf(queryResult.getPokemonForm().getId()));
+		logger.info(parsedPoke.getNationalDex());
 	}
 	
 	//TODO: Automate this from example JSON files
-	/*public static void createJSONDTOs() {
+	public static void createJSONDTOs() {
 		
-	}*/
+	}
 	
 	public static void createCSVDTOs() {
 		File[] files = null;
@@ -188,6 +192,7 @@ public class Execution {
 	public static void createAllFiles() {
 		createCSVDTOs();
 		createAggregateDTO();
+		createJSONDTOs();
 	}
 	
 	private static String formatPokemonFormsIdentifier(String identifier) {
@@ -195,18 +200,22 @@ public class Execution {
 		
 		StringTokenizer tokenize = new StringTokenizer(identifier, "-");
 		
+		int counter = 0;
+		
 		while(tokenize.hasMoreTokens()) {
 			String tempToken = tokenize.nextToken();
-			transformedString = tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + " ";
+			
+			if(counter == 0) {
+				transformedString = tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + " ";
+			}else {
+				transformedString += "(" + tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + ")";
+			}
+			
+			counter++;
 		}
 		
 		transformedString = transformedString.trim();
 		
 		return transformedString;
-	}
-	
-	//Gleaned from http://stackoverflow.com/a/4818465
-	private static <T> ArrayList<T> createListOfType(Class<T> type) {
-	    return new ArrayList<T>();
 	}
 }

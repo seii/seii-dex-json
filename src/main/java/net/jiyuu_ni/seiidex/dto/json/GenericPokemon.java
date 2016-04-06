@@ -33,6 +33,104 @@ public class GenericPokemon {
 	protected LinkedHashMap<String, String> locations;
 	//Is one of the games in this generation different from the rest of the generation?
 	protected HashMap<String, String> gameDifferenceList;
+	
+	/**
+	 * @return the nationalDex
+	 */
+	public String getNationalDex() {
+		return nationalDex;
+	}
+
+	/**
+	 * @param nationalDex the nationalDex to set
+	 */
+	public void setNationalDex(String nationalDex) {
+		this.nationalDex = nationalDex;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the form
+	 */
+	public String getForm() {
+		return form;
+	}
+
+	/**
+	 * @param form the form to set
+	 */
+	public void setForm(String form) {
+		this.form = form;
+	}
+
+	/**
+	 * @return the types
+	 */
+	public PokemonType getTypes() {
+		return types;
+	}
+
+	/**
+	 * @param types the types to set
+	 */
+	public void setTypes(PokemonType types) {
+		this.types = types;
+	}
+
+	/**
+	 * @return the evolution
+	 */
+	public PokemonEvolution getEvolution() {
+		return evolution;
+	}
+
+	/**
+	 * @param evolution the evolution to set
+	 */
+	public void setEvolution(PokemonEvolution evolution) {
+		this.evolution = evolution;
+	}
+
+	/**
+	 * @return the locations
+	 */
+	public LinkedHashMap<String, String> getLocations() {
+		return locations;
+	}
+
+	/**
+	 * @param locations the locations to set
+	 */
+	public void setLocations(LinkedHashMap<String, String> locations) {
+		this.locations = locations;
+	}
+
+	/**
+	 * @return the gameDifferenceList
+	 */
+	public HashMap<String, String> getGameDifferenceList() {
+		return gameDifferenceList;
+	}
+
+	/**
+	 * @param gameDifferenceList the gameDifferenceList to set
+	 */
+	public void setGameDifferenceList(HashMap<String, String> gameDifferenceList) {
+		this.gameDifferenceList = gameDifferenceList;
+	}
 
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();
