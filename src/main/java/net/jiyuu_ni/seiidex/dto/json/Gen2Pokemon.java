@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Gen5Pokemon extends GenericPokemon {
-	private Logger logger = LoggerFactory.getLogger(Gen5Pokemon.class);
+public class Gen2Pokemon extends GenericPokemon {
+	private Logger logger = LoggerFactory.getLogger(Gen2Pokemon.class);
 	
 	//Is this a Mega Evolution?
 	private boolean isMega = false;
@@ -29,7 +29,7 @@ public class Gen5Pokemon extends GenericPokemon {
 	 * - Pokemon isn't a Mega Evolution
 	 * - Pokemon is not in a special form
 	 */
-	public Gen5Pokemon() {
+	public Gen2Pokemon() {
 		isMega = false;
 		form = "none";
 	}
