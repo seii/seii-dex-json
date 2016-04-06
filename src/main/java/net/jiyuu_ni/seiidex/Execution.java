@@ -2,6 +2,7 @@ package net.jiyuu_ni.seiidex;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -14,7 +15,9 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.jiyuu_ni.seiidex.dto.json.Gen5Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen6Pokemon;
+import net.jiyuu_ni.seiidex.dto.json.GenericPokemon;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
@@ -34,58 +37,16 @@ public class Execution {
 			//Using LinkedList guarantees that the order will be respected
 			LinkedList<File> jsonFileList = new LinkedList<File>();
 			
-			for(int i = 0; i < DexProperties.TOTAL_POKEMON_GENERATIONS; i++) {
-				String outputFileName = DexProperties.JSON_DIRECTORY +
-		        		DexProperties.JSON_POKEMON_FILE_NAME + String.valueOf(i) +
-		        		DexProperties.JSON_EXTENSION;
-				File pokemonJsonFile = new File(outputFileName);
-				jsonFileList.add(pokemonJsonFile);
-			}
+			populateJSONFileList(jsonFileList);
 			
 			if(jsonFileList != null && !jsonFileList.isEmpty()) {
 				
 				EntityManagerFactory entityManagerFactory =  Persistence.createEntityManagerFactory("seii-dex-json");
 			    EntityManager em = entityManagerFactory.createEntityManager();
 			
-				for(int i = 1; i < jsonFileList.size() + 1; i++) {
-				    
-				    /*Query query1 = em.createNamedQuery("Generation.findByGenId").setParameter("genId", 6);
-				    Generation genResult = (Generation) query1.getSingleResult();*/
-				    
-				    Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
-				    		.setParameter("genId", i);
-				    List<PokemonFormGeneration> stuffList = pokeQuery.getResultList();
-				    
-				    PokemonFormGeneration onePoke = stuffList.get(0);
-				    System.out.println(onePoke.getPokemonForm().getPokemon().getPokemonAbilities().get(0).getAbility().getIdentifier());
-				    
-				    logger.info("Generation " + i + " detected!");
-				    
-				    switch(i) {
-				    	case 1: {
-				    		
-				    		break;
-				    	}
-				    	
-				    	case 6: {
-				    		Gen6Pokemon gen6Pokemon = new Gen6Pokemon();
-				    		
-				    		gen6Pokemon.setNationalDex(String.valueOf(
-				    				onePoke.getPokemonForm().getPokemon().getPokemonSpecy().getId()));
-				    		
-				    		gen6Pokemon.setName(formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier()));
-				    		
-				    		
-				    		
-				    		break;
-				    	}
-				    	
-				    	default: {
-				    		logger.info("What generation are we in, again?");
-				    		break;
-				    	}
-				    }
-				}
+			    //The size of the file list is used as the number of generations, because generating the list itself
+			    //	uses the DexProperties constant for how many generations exist
+				populateJSONDTOs(em, jsonFileList.size(), jsonFileList);
 				
 				em.close();
 			    entityManagerFactory.close();
@@ -135,6 +96,65 @@ public class Execution {
 			e.printStackTrace();
 		}*/
 	}
+
+	private static void populateJSONFileList(LinkedList<File> jsonFileList) {
+		for(int i = 0; i < DexProperties.TOTAL_POKEMON_GENERATIONS; i++) {
+			String outputFileName = DexProperties.JSON_DIRECTORY +
+		    		DexProperties.JSON_POKEMON_FILE_NAME + String.valueOf(i) +
+		    		DexProperties.JSON_EXTENSION;
+			File pokemonJsonFile = new File(outputFileName);
+			jsonFileList.add(pokemonJsonFile);
+		}
+	}
+
+	private static void populateJSONDTOs(EntityManager em, int generationNumber, LinkedList<File> jsonFileList) {
+
+		try {
+			//Iterate over each generation
+			for(int i = 1; i < jsonFileList.size() + 1; i++) {
+				ArrayList<T> test = createListOfType(Class.forName(jsonFileList.get(i - 1).getName().replace(".json", "")));
+			
+				/*Query query1 = em.createNamedQuery("Generation.findByGenId").setParameter("genId", 6);
+				Generation genResult = (Generation) query1.getSingleResult();*/
+				
+				//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+				//	use it as a starting query for obtaining information
+				Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+						.setParameter("genId", generationNumber);
+				List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+				
+				//Populate each Pokemon within this single generation
+				for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					//Use iteration as generation ID to trigger correct population method
+					switch(i) {
+						case 6: {
+							logger.info("Populating Pokemon from Generation " + i);
+							
+							Gen6Pokemon gen6Poke = new Gen6Pokemon();
+							populateOnePoke(onePoke, gen6Poke);
+							currentIterationList.add(gen6Poke);
+							
+							logger.info("Finished populating Pokemon from Generation " + i);
+						}
+						
+						default: {
+							break;
+						}
+					}
+				}
+			}
+		}catch (ClassNotFoundException e) {
+			logger.error(e.getLocalizedMessage());
+		}
+	}
+
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen5Pokemon parsedPoke) {
+		//TODO: Populate method
+	}
+	
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen6Pokemon parsedPoke) {
+		
+	}
 	
 	//TODO: Automate this from example JSON files
 	/*public static void createJSONDTOs() {
@@ -183,5 +203,10 @@ public class Execution {
 		transformedString = transformedString.trim();
 		
 		return transformedString;
+	}
+	
+	//Gleaned from http://stackoverflow.com/a/4818465
+	private static <T> ArrayList<T> createListOfType(Class<T> type) {
+	    return new ArrayList<T>();
 	}
 }
