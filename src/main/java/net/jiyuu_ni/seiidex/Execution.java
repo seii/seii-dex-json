@@ -108,6 +108,7 @@ public class Execution {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
 					ArrayList<Gen1Pokemon> gen1PokeList = new ArrayList<Gen1Pokemon>(1);
+					//TODO: Populate
 					generationList.add(gen1PokeList);
 					
 					logger.info("Finished populating Pokemon " + " from Generation " + i);
@@ -117,6 +118,7 @@ public class Execution {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
 					ArrayList<Gen2Pokemon> gen2PokeList = new ArrayList<Gen2Pokemon>(1);
+					//TODO: Populate
 					generationList.add(gen2PokeList);
 					
 					logger.info("Finished populating Pokemon " + " from Generation " + i);
@@ -126,6 +128,7 @@ public class Execution {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
 					ArrayList<Gen3Pokemon> gen3PokeList = new ArrayList<Gen3Pokemon>(1);
+					//TODO: Populate
 					generationList.add(gen3PokeList);
 					
 					logger.info("Finished populating Pokemon " + " from Generation " + i);
@@ -135,6 +138,7 @@ public class Execution {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
 					ArrayList<Gen4Pokemon> gen4PokeList = new ArrayList<Gen4Pokemon>(1);
+					//TODO: Populate
 					generationList.add(gen4PokeList);
 					
 					logger.info("Finished populating Pokemon " + " from Generation " + i);
@@ -144,6 +148,7 @@ public class Execution {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
 					ArrayList<Gen5Pokemon> gen5PokeList = new ArrayList<Gen5Pokemon>(1);
+					//TODO: Populate
 					generationList.add(gen5PokeList);
 					
 					logger.info("Finished populating Pokemon " + " from Generation " + i);
@@ -159,7 +164,7 @@ public class Execution {
 									+ " from Generation " + i);
 						
 						Gen6Pokemon gen6Poke = new Gen6Pokemon();
-						populateOnePoke(onePoke, gen6Poke);
+						populateOnePoke(onePoke, gen6Poke, em);
 						gen6PokeList.add(gen6Poke);
 						
 						logger.info("Finished populating Pokemon " +
@@ -180,82 +185,46 @@ public class Execution {
 		logger.info("Exiting method " + methodName);
 	}
 
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen1Pokemon parsedPoke) {
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen1Pokemon parsedPoke, EntityManager em) {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 1)");
 		//TODO: Populate method
 		logger.info("Exitingn method " + methodName + " (Gen 1)");
 	}
 	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen2Pokemon parsedPoke) {
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen2Pokemon parsedPoke, EntityManager em) {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 2)");
 		//TODO: Populate method
 		logger.info("Exitingn method " + methodName + " (Gen 2)");
 	}
 	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen3Pokemon parsedPoke) {
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen3Pokemon parsedPoke, EntityManager em) {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 3)");
 		//TODO: Populate method
 		logger.info("Exitingn method " + methodName + " (Gen 3)");
 	}
 	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen4Pokemon parsedPoke) {
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen4Pokemon parsedPoke, EntityManager em) {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 4)");
 		//TODO: Populate method
 		logger.info("Exitingn method " + methodName + " (Gen 4)");
 	}
 	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen5Pokemon parsedPoke) {
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen5Pokemon parsedPoke, EntityManager em) {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 5)");
 		//TODO: Populate method
 		logger.info("Exitingn method " + methodName + " (Gen 5)");
 	}
 	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen6Pokemon parsedPoke) {
+	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen6Pokemon parsedPoke, EntityManager em) {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 6)");
 		
-		parsedPoke.setName(
-				formatPokemonFormsIdentifier(queryResult.getPokemonForm().getIdentifier()));
-		//TODO: Separate any IDs >= 10000 and set as actual National Dex ID after processing finishes
-		parsedPoke.setNationalDex(String.valueOf(queryResult.getPokemonForm().getId()));
-		
-		if(queryResult.getPokemonForm().getFormIdentifier() != null) {
-			parsedPoke.setForm(formatPokemonFormsIdentifier(
-					queryResult.getPokemonForm().getFormIdentifier()).replace("(", "").replace(")", ""));
-		}else {
-			parsedPoke.setForm("None");
-		}
-		
-		PokemonType pokeType = new PokemonType();
-		//Check whether there's one or two types to this Pokemon
-		if(queryResult.getPokemonForm().getPokemon().getPokemonTypes().size() > 1) {
-			pokeType.setType1(queryResult.getPokemonForm().getPokemon().getPokemonTypes()
-					.get(0).getType().getTypeNames().get(6).getName());
-			pokeType.setType2(queryResult.getPokemonForm().getPokemon().getPokemonTypes()
-					.get(1).getType().getTypeNames().get(6).getName());
-		}else {
-			pokeType.setType1(queryResult.getPokemonForm().getPokemon().getPokemonTypes()
-					.get(0).getType().getTypeNames().get(6).getName());
-		}
-		
-		parsedPoke.setTypes(pokeType);
-		
-		//TODO: Populate this correctly
-		PokemonEvolution pokeEvolution = new PokemonEvolution();
-		parsedPoke.setEvolution(pokeEvolution);
-		
-		//TODO: Populate this correctly
-		LinkedHashMap<String, String> pokeLocations = new LinkedHashMap<String, String>();
-		parsedPoke.setLocations(pokeLocations);
-		
-		//TODO: Populate this correctly
-		HashMap<String, String> pokeGameDifferences = new HashMap<String, String>();
-		parsedPoke.setGameDifferenceList(pokeGameDifferences);
+		parsedPoke.populateAllFields(queryResult, em);
 		
 		//TODO: Populate this correctly
 		boolean pokeIsMega = false;
@@ -292,7 +261,7 @@ public class Execution {
 		}
 	}*/
 	
-	private static String formatPokemonFormsIdentifier(String identifier) {
+	public static String formatPokemonFormsIdentifier(String identifier) {
 		String methodName = "formatPokemonFormsIdentifier";
 		logger.info("Entering method " + methodName);
 		

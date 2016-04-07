@@ -10,7 +10,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="pokemon_evolution")
-@NamedQuery(name="PokemonEvolution.findAll", query="SELECT p FROM PokemonEvolution p")
+@NamedQueries({
+	@NamedQuery(name="PokemonEvolution.findAll", query="SELECT p FROM PokemonEvolution p"),
+	@NamedQuery(name="PokemonEvolution.findAllById", query="SELECT p FROM PokemonEvolution p WHERE p.id = :evolveId")
+})
 public class PokemonEvolution implements Serializable {
 	private static final long serialVersionUID = 1L;
 

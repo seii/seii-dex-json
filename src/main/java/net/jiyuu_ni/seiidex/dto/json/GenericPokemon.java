@@ -2,12 +2,19 @@ package net.jiyuu_ni.seiidex.dto.json;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.jiyuu_ni.seiidex.Execution;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 
 /**
  * Class to depict the basic shared Pokemon structure. This means the class is somewhat sparse, as some foundational
@@ -130,6 +137,58 @@ public class GenericPokemon {
 	 */
 	public void setGameDifferenceList(HashMap<String, String> gameDifferenceList) {
 		this.gameDifferenceList = gameDifferenceList;
+	}
+	
+	public void populateAllFields(PokemonFormGeneration generationResult, EntityManager em) {
+		populateNameFromQuery(generationResult);
+		
+		populateFormFromQuery(generationResult);
+		
+		populateTypesFromQuery(generationResult);
+		
+		//TODO: Populate this correctly
+		PokemonEvolution pokeEvolution = new PokemonEvolution();
+		Query evolveQuery = em.createNamedQuery("PokemonEvolution.findAllById")
+				.setParameter("evolveId", Integer.parseInt(this.getNationalDex()));
+		List<PokemonEvolution> evolveList = evolveQuery.getResultList();
+		
+		if(evolveQuery != null && !evolveList.isEmpty()) {
+			pokeEvolution.setEvolvable(true);
+		}else {
+			pokeEvolution.setEvolvable(false);
+		}
+		
+		this.setEvolution(pokeEvolution);
+		
+		//TODO: Populate this correctly
+		LinkedHashMap<String, String> pokeLocations = new LinkedHashMap<String, String>();
+		this.setLocations(pokeLocations);
+		
+		//TODO: Populate this correctly
+		HashMap<String, String> pokeGameDifferences = new HashMap<String, String>();
+		this.setGameDifferenceList(pokeGameDifferences);
+	}
+
+	private void populateTypesFromQuery(PokemonFormGeneration generationResult) {
+		PokemonType pokeType = new PokemonType();
+		pokeType.populateAllFields(generationResult);
+		this.setTypes(pokeType);
+	}
+
+	private void populateFormFromQuery(PokemonFormGeneration generationResult) {
+		if(generationResult.getPokemonForm().getFormIdentifier() != null) {
+			this.setForm(Execution.formatPokemonFormsIdentifier(
+					generationResult.getPokemonForm().getFormIdentifier()).replace("(", "").replace(")", ""));
+		}else {
+			this.setForm("None");
+		}
+	}
+
+	private void populateNameFromQuery(PokemonFormGeneration generationResult) {
+		this.setName(
+				Execution.formatPokemonFormsIdentifier(generationResult.getPokemonForm().getIdentifier()));
+		//TODO: Separate any IDs >= 10000 and set as actual National Dex ID after processing
+		this.setNationalDex(String.valueOf(generationResult.getPokemonForm().getId()));
 	}
 
 	public String toJsonString() {

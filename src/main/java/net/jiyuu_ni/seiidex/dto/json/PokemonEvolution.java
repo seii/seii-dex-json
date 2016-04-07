@@ -1,5 +1,8 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,12 +14,12 @@ public class PokemonEvolution {
 	
 	//A misnomer, this is really "does this pokemon have a further evolution?"
 	private boolean evolvable;
+	//If evolvable, what Pokemon does this one evolve into? (Multiple evolutions possible)
+	private HashMap<String, String> evolvesInto;
 	//Method by which Pokemon evolves
 	private String method;
-	//Does the Pokemon need an item to evolve?
-	private String itemNeeded;
-	//If the Pokemon needs an item, how is it used?
-	private String itemUtilization;
+	//Details of evolution method
+	private String methodExplanation;
 	
 	/**
 	 * @return the evolvable
@@ -30,6 +33,14 @@ public class PokemonEvolution {
 	 */
 	public void setEvolvable(boolean evolvable) {
 		this.evolvable = evolvable;
+	}
+
+	public HashMap<String, String> getEvolvesInto() {
+		return evolvesInto;
+	}
+
+	public void setEvolvesInto(HashMap<String, String> evolvesInto) {
+		this.evolvesInto = evolvesInto;
 	}
 
 	/**
@@ -46,32 +57,12 @@ public class PokemonEvolution {
 		this.method = method;
 	}
 
-	/**
-	 * @return the itemNeeded
-	 */
-	public String getItemNeeded() {
-		return itemNeeded;
+	public String getMethodExplanation() {
+		return methodExplanation;
 	}
 
-	/**
-	 * @param itemNeeded the itemNeeded to set
-	 */
-	public void setItemNeeded(String itemNeeded) {
-		this.itemNeeded = itemNeeded;
-	}
-
-	/**
-	 * @return the itemUtilization
-	 */
-	public String getItemUtilization() {
-		return itemUtilization;
-	}
-
-	/**
-	 * @param itemUtilization the itemUtilization to set
-	 */
-	public void setItemUtilization(String itemUtilization) {
-		this.itemUtilization = itemUtilization;
+	public void setMethodExplanation(String methodExplanation) {
+		this.methodExplanation = methodExplanation;
 	}
 
 	public String toJsonString() {

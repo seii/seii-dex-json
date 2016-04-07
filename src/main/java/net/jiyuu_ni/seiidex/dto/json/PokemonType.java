@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+
 public class PokemonType {
 	private Logger logger = LoggerFactory.getLogger(PokemonType.class);
 	
@@ -40,6 +42,19 @@ public class PokemonType {
 	 */
 	public void setType2(String type2) {
 		this.type2 = type2;
+	}
+	
+	public void populateAllFields(PokemonFormGeneration generationResult) {
+		//Check whether there's one or two types to this Pokemon
+		if(generationResult.getPokemonForm().getPokemon().getPokemonTypes().size() > 1) {
+			this.setType1(generationResult.getPokemonForm().getPokemon().getPokemonTypes()
+					.get(0).getType().getTypeNames().get(6).getName());
+			this.setType2(generationResult.getPokemonForm().getPokemon().getPokemonTypes()
+					.get(1).getType().getTypeNames().get(6).getName());
+		}else {
+			this.setType1(generationResult.getPokemonForm().getPokemon().getPokemonTypes()
+					.get(0).getType().getTypeNames().get(6).getName());
+		}
 	}
 	
 	public String toJsonString() {
