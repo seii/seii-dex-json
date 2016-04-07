@@ -2,21 +2,23 @@ package net.jiyuu_ni.seiidex.dto.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
-import net.jiyuu_ni.seiidex.Execution;
-import net.jiyuu_ni.seiidex.jpa.PokemonEvolution;
-import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.jiyuu_ni.seiidex.Execution;
+import net.jiyuu_ni.seiidex.jpa.PokemonEvolution;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.Version;
+import net.jiyuu_ni.seiidex.jpa.VersionGroup;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 /**
  * Class to depict the basic shared Pokemon structure. This means the class is somewhat sparse, as some foundational
@@ -40,8 +42,8 @@ public class GenericPokemon {
 	protected boolean isEvolvable;
 	//Evolution details [multiple evolutions possible!]
 	protected ArrayList<PokemonEvolutionDTO> evolution;
-	//Where can this Pokemon be found?
-	protected LinkedHashMap<String, String> locations;
+	//Where can this Pokemon be found? (in "Game" : "list of locations" format)
+	protected ArrayList<PokemonLocationDTO> locations;
 	//Is one of the games in this generation different from the rest of the generation?
 	protected HashMap<String, String> gameDifferenceList;
 	
@@ -132,14 +134,14 @@ public class GenericPokemon {
 	/**
 	 * @return the locations
 	 */
-	public LinkedHashMap<String, String> getLocations() {
+	public ArrayList<PokemonLocationDTO> getLocations() {
 		return locations;
 	}
 
 	/**
 	 * @param locations the locations to set
 	 */
-	public void setLocations(LinkedHashMap<String, String> locations) {
+	public void setLocations(ArrayList<PokemonLocationDTO> locations) {
 		this.locations = locations;
 	}
 
@@ -175,26 +177,42 @@ public class GenericPokemon {
 			populateEvolutionsFromQuery(em, evolveResultList);
 		}
 		
-		populateLocationsFromQuery();
+		populateLocationsFromQuery(em, generationResult);
 		
 		populateGameDifferencesFromQuery();
 	}
 
 	private void populateGameDifferencesFromQuery() {
 		//TODO: Populate this correctly
-		HashMap<String, String> pokeGameDifferences = new HashMap<String, String>();
+		HashMap<String, String> pokeGameDifferences = new HashMap<String, String>(1);
 		this.setGameDifferenceList(pokeGameDifferences);
 	}
 
-	private void populateLocationsFromQuery() {
+	private void populateLocationsFromQuery(EntityManager em, PokemonFormGeneration generationResult) {
 		//TODO: Populate this correctly
-		LinkedHashMap<String, String> pokeLocations = new LinkedHashMap<String, String>();
-		this.setLocations(pokeLocations);
+		ArrayList<PokemonLocationDTO> pokeLocationList = new ArrayList<PokemonLocationDTO>(1);
+		
+		List<VersionGroup> versionGroupList = generationResult.getGeneration().getVersionGroups();
+		
+		for(VersionGroup obj : versionGroupList) {
+			List<Version> gameList = obj.getVersions();
+			
+			for(Version obj2 : gameList) {
+				PokemonLocationDTO pokeLocation = new PokemonLocationDTO();
+				pokeLocation.populateAllFields(em, obj2);
+				
+				if(!pokeLocationList.contains(pokeLocation)) {
+					pokeLocationList.add(pokeLocation);
+				}
+			}
+		}
+		
+		this.setLocations(pokeLocationList);
 	}
 
 	private void populateEvolutionsFromQuery(EntityManager em,
 			List<PokemonEvolution> evolveResultList) {
-		ArrayList<PokemonEvolutionDTO> evolveList = new ArrayList<PokemonEvolutionDTO>();
+		ArrayList<PokemonEvolutionDTO> evolveList = new ArrayList<PokemonEvolutionDTO>(1);
 		
 		for(PokemonEvolution obj : evolveResultList) {
 			PokemonEvolutionDTO pokeEvolve = new PokemonEvolutionDTO();

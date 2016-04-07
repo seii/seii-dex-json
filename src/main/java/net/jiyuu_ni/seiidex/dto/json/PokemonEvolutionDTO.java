@@ -1,9 +1,14 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 import javax.persistence.EntityManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.jiyuu_ni.seiidex.jpa.Gender;
 import net.jiyuu_ni.seiidex.jpa.Item;
@@ -12,12 +17,7 @@ import net.jiyuu_ni.seiidex.jpa.Move;
 import net.jiyuu_ni.seiidex.jpa.PokemonEvolution;
 import net.jiyuu_ni.seiidex.jpa.PokemonSpecy;
 import net.jiyuu_ni.seiidex.jpa.Type;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 public class PokemonEvolutionDTO {
 	private Logger logger = LoggerFactory.getLogger(PokemonEvolutionDTO.class);
@@ -60,31 +60,44 @@ public class PokemonEvolutionDTO {
 	}
 	
 	public void populateAllFields(EntityManager em, PokemonEvolution queryResult) {
-		this.setMethod(parseDashSeparatedString(queryResult.getEvolutionTrigger().getIdentifier()));
+		String methodName = "populateAllFields";
+		logger.info("Entering method " + methodName);
+		
+		this.setMethod(FileOperations.parseDashSeparatedString(queryResult.getEvolutionTrigger().getIdentifier()));
 		
 		this.setMethodExplanation(parseLevelUpReason(queryResult));
 		
 		this.setEvolvesInto(parseEvolvesInto(queryResult));
+		
+		logger.info("Exiting method " + methodName);
 	}
 	
 	private HashMap<String, String> parseEvolvesInto(PokemonEvolution evolution) {
+		String methodName = "parseEvolvesInto";
+		logger.info("Entering method " + methodName);
+		
 		HashMap<String, String> result = null;
 		
 		if(evolution != null) {
 			result = new HashMap<String, String>(1);
 			
 			String nationalDexId = String.valueOf(evolution.getPokemonSpecy1().getId());
-			String pokemonSpecies = parseDashSeparatedString(
+			String pokemonSpecies = FileOperations.parseDashSeparatedString(
 					evolution.getPokemonSpecy1().getIdentifier());
 			
 			result.put("id", nationalDexId);
 			result.put("name", pokemonSpecies);
 		}
 		
+		logger.info("Exiting method " + methodName);
+		
 		return result;
 	}
 
 	private String parseLevelUpReason(PokemonEvolution evolution) {
+		String methodName = "parseLevelUpReasons";
+		logger.info("Entering method " + methodName);
+		
 		String result = null;
 		
 		if(evolution.getEvolutionTrigger().getId() == 1) {
@@ -112,26 +125,26 @@ public class PokemonEvolutionDTO {
 			}
 			
 			if(pokeLocation != null) {
-				result += " when in " + parseDashSeparatedString(pokeLocation.getIdentifier());
+				result += " when in " + FileOperations.parseDashSeparatedString(pokeLocation.getIdentifier());
 			}
 			
 			if(pokeHeldItem != null) {
 				result += " while holding an " +
-						parseDashSeparatedString(pokeHeldItem.getIdentifier());
+						FileOperations.parseDashSeparatedString(pokeHeldItem.getIdentifier());
 			}
 			
 			if(pokeTimeOfDay != null) {
-				result += " during the " + parseDashSeparatedString(pokeTimeOfDay);
+				result += " during the " + FileOperations.parseDashSeparatedString(pokeTimeOfDay);
 			}
 			
 			if(pokeKnownMove != null) {
 				result += " if it knows " +
-						parseDashSeparatedString(pokeKnownMove.getIdentifier());
+						FileOperations.parseDashSeparatedString(pokeKnownMove.getIdentifier());
 			}
 			
 			if(pokeKnownMoveType != null) {
 				result += " if a move of the " +
-						parseDashSeparatedString(pokeKnownMoveType.getIdentifier()) +
+						FileOperations.parseDashSeparatedString(pokeKnownMoveType.getIdentifier()) +
 						" type is known";
 			}
 			
@@ -164,13 +177,13 @@ public class PokemonEvolutionDTO {
 			
 			if(pokeSpeciesInParty != null) {
 				result += " while a " +
-						parseDashSeparatedString(pokeSpeciesInParty.getIdentifier()) +
+						FileOperations.parseDashSeparatedString(pokeSpeciesInParty.getIdentifier()) +
 						" is in the party";
 			}
 			
 			if(pokeTypeInParty != null) {
 				result += " while a Pokemon of the " +
-						parseDashSeparatedString(pokeTypeInParty.getIdentifier()) +
+						FileOperations.parseDashSeparatedString(pokeTypeInParty.getIdentifier()) +
 						" type is in the party";
 			}
 			
@@ -183,7 +196,7 @@ public class PokemonEvolutionDTO {
 			}
 			
 			if(pokeGender != null) {
-				result += " (" + parseDashSeparatedString(pokeGender.getIdentifier()) + " only)";
+				result += " (" + FileOperations.parseDashSeparatedString(pokeGender.getIdentifier()) + " only)";
 			}
 		}else if(evolution.getEvolutionTrigger().getId() == 2) {
 			//Trade of one kind or another
@@ -195,16 +208,16 @@ public class PokemonEvolutionDTO {
 			
 			if(pokeSpecy != null) {
 				result += " for " +
-						parseDashSeparatedString(pokeSpecy.getIdentifier());
+						FileOperations.parseDashSeparatedString(pokeSpecy.getIdentifier());
 			}
 			
 			if(pokeItem2 != null) {
 				result += " when holding an " +
-						parseDashSeparatedString(pokeItem2.getIdentifier());
+						FileOperations.parseDashSeparatedString(pokeItem2.getIdentifier());
 			}
 			
 			if(pokeGender != null) {
-				result += " (" + parseDashSeparatedString(pokeGender.getIdentifier()) + " only)";
+				result += " (" + FileOperations.parseDashSeparatedString(pokeGender.getIdentifier()) + " only)";
 			}
 		}else if(evolution.getEvolutionTrigger().getId() == 3) {
 			//Using an item (i.e. Stones)
@@ -212,7 +225,7 @@ public class PokemonEvolutionDTO {
 			
 			//At least one Pokemon uses item + gender
 			if(evolution.getGender() != null) {
-				result += " (" + parseDashSeparatedString(
+				result += " (" + FileOperations.parseDashSeparatedString(
 						evolution.getGender().getIdentifier()) + " only)";
 			}
 		}else if(evolution.getEvolutionTrigger().getId() == 4) {
@@ -222,30 +235,15 @@ public class PokemonEvolutionDTO {
 					" (less than 6 Pokemon) while evolving Nincada";
 		}
 		
+		logger.info("Exiting method " + methodName);
+		
 		return result;
 	}
 	
-	private String parseDashSeparatedString(String method) {
-		String methodName = "parseEvolutionMethod";
-		logger.info("Entering method " + methodName);
-		
-		String transformedString = "";
-		
-		StringTokenizer tokenize = new StringTokenizer(method, "-");
-		
-		while(tokenize.hasMoreTokens()) {
-			String tempToken = tokenize.nextToken();
-			
-			transformedString += tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + " ";
-		}
-		
-		transformedString = transformedString.trim();
-		
-		logger.info("Exiting method" + methodName);
-		return transformedString;
-	}
-	
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering method " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -254,6 +252,8 @@ public class PokemonEvolutionDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting method " + methodName);
 		
 		return result;
 	}

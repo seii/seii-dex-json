@@ -154,7 +154,8 @@ public class Execution {
 					ArrayList<Gen6Pokemon> gen6PokeList = new ArrayList<Gen6Pokemon>(1);
 					
 					//Populate each Pokemon within this single generation
-					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					//for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					PokemonFormGeneration onePoke = singleGenPokeList.get(0);
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
 									+ " from Generation " + i);
@@ -166,7 +167,7 @@ public class Execution {
 						logger.info("Finished populating Pokemon " +
 								gen6Poke.getName()
 								+ " from Generation " + i);
-					}
+					//}
 					
 					generationList.add(gen6PokeList);
 					break;
@@ -282,7 +283,10 @@ public class Execution {
 		}
 		
 		transformedString = transformedString.trim();
-		transformedString += ")";
+		
+		if(counter > 0) {
+			transformedString += ")";
+		}
 		
 		logger.info("Exiting method " + methodName);
 		

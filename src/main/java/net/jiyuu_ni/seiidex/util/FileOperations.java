@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class FileOperations {
 	public static void listFiles(File[] files) {
 		
 		String methodName = "listFiles";
-		logger.info("Entering " + methodName);
+		logger.debug("Entering " + methodName);
 		
 	    for (File file : files) {
 	        if (file.isDirectory()) {
@@ -37,12 +38,12 @@ public class FileOperations {
 	        }
 	    }
 	    
-	    logger.info("Exiting " + methodName);
+	    logger.debug("Exiting " + methodName);
 	}
 	
 	public static <T extends GenericPokemon> void createJSONFileFromDTOList(File fileToCreate, ArrayList<T> dtoFile) {
 		String methodName = "createJSONFileFromDTOList";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		try {
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(
@@ -58,12 +59,12 @@ public class FileOperations {
 			logger.info(e.getLocalizedMessage());
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 	}
 	
 	public static String convertFileNameToCamelCase(String inputString) {
 		String methodName = "convertFileNameToCamelCase";
-		logger.info("Entering " + methodName);
+		logger.debug("Entering " + methodName);
 		
 		StringBuilder s = new StringBuilder(inputString.length());
 		
@@ -86,8 +87,32 @@ public class FileOperations {
 		    }
 		}
 		
-		logger.info("Exiting " + methodName);
+		logger.debug("Exiting " + methodName);
 		
 		return s.toString();
+	}
+	
+	public static String parseDashSeparatedString(String method) {
+		String methodName = "parseDashSeparatedString";
+		logger.debug("Entering method " + methodName);
+		
+		String transformedString = "";
+		
+		StringTokenizer tokenize = new StringTokenizer(method, "-");
+		
+		while(tokenize.hasMoreTokens()) {
+			String tempToken = tokenize.nextToken();
+			
+			if(Character.isDigit(tempToken.charAt(0))) {
+				transformedString = tempToken;
+			}else {
+				transformedString += tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + " ";
+			}
+		}
+		
+		transformedString = transformedString.trim();
+		
+		logger.debug("Exiting method" + methodName);
+		return transformedString;
 	}
 }

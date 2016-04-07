@@ -45,6 +45,9 @@ public class PokemonTypeDTO {
 	}
 	
 	public void populateAllFields(PokemonFormGeneration generationResult) {
+		String methodName = "populateAllFields";
+		logger.info("Entering method " + methodName);
+		
 		//Check whether there's one or two types to this Pokemon
 		if(generationResult.getPokemonForm().getPokemon().getPokemonTypes().size() > 1) {
 			this.setType1(generationResult.getPokemonForm().getPokemon().getPokemonTypes()
@@ -55,9 +58,14 @@ public class PokemonTypeDTO {
 			this.setType1(generationResult.getPokemonForm().getPokemon().getPokemonTypes()
 					.get(0).getType().getTypeNames().get(6).getName());
 		}
+		
+		logger.info("Exiting method " + methodName);
 	}
 	
 	public String toJsonString() {
+		String methodName = "populateAllFields";
+		logger.debug("Entering method " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -66,6 +74,8 @@ public class PokemonTypeDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting method " + methodName);
 		
 		return result;
 	}
