@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PokemonEffortValues {
-	private Logger logger = LoggerFactory.getLogger(PokemonEffortValues.class);
+public class PokemonStatsGen2PlusDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonStatsGen2PlusDTO.class);
 	
-	//All EV stats are as named
+	//All stats are as named
 	private String hp;
 	private String attack;
 	private String defense;

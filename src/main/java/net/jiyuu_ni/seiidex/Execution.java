@@ -2,8 +2,6 @@ package net.jiyuu_ni.seiidex;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -13,9 +11,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.jiyuu_ni.seiidex.dto.json.Gen1Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen2Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen3Pokemon;
@@ -23,16 +18,17 @@ import net.jiyuu_ni.seiidex.dto.json.Gen4Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen5Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen6Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.GenericPokemon;
-import net.jiyuu_ni.seiidex.dto.json.PokemonAbilities;
-import net.jiyuu_ni.seiidex.dto.json.PokemonBreeding;
-import net.jiyuu_ni.seiidex.dto.json.PokemonEffortValues;
-import net.jiyuu_ni.seiidex.dto.json.PokemonEvolution;
-import net.jiyuu_ni.seiidex.dto.json.PokemonMovesGen2Plus;
-import net.jiyuu_ni.seiidex.dto.json.PokemonStatsGen2Plus;
-import net.jiyuu_ni.seiidex.dto.json.PokemonType;
+import net.jiyuu_ni.seiidex.dto.json.PokemonAbilitiesDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonBreedingDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonEffortValuesDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonMovesGen2PlusDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonStatsGen2PlusDTO;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Execution {
 	
@@ -231,23 +227,23 @@ public class Execution {
 		parsedPoke.setMega(pokeIsMega);
 		
 		//TODO: Populate this correctly
-		PokemonAbilities pokeAbilities = new PokemonAbilities();
+		PokemonAbilitiesDTO pokeAbilities = new PokemonAbilitiesDTO();
 		parsedPoke.setAbilities(pokeAbilities);
 		
 		//TODO: Populate this correctly
-		PokemonStatsGen2Plus pokeStats = new PokemonStatsGen2Plus();
+		PokemonStatsGen2PlusDTO pokeStats = new PokemonStatsGen2PlusDTO();
 		parsedPoke.setStats(pokeStats);
 		
 		//TODO: Populate this correctly
-		PokemonEffortValues pokeEV = new PokemonEffortValues();
+		PokemonEffortValuesDTO pokeEV = new PokemonEffortValuesDTO();
 		parsedPoke.setEffortValues(pokeEV);
 		
 		//TODO: Populate this correctly
-		PokemonMovesGen2Plus pokeMoves = new PokemonMovesGen2Plus();
+		PokemonMovesGen2PlusDTO pokeMoves = new PokemonMovesGen2PlusDTO();
 		parsedPoke.setMoves(pokeMoves);
 		
 		//TODO: Populate this correctly
-		PokemonBreeding pokeBreeding = new PokemonBreeding();
+		PokemonBreedingDTO pokeBreeding = new PokemonBreedingDTO();
 		parsedPoke.setBreeding(pokeBreeding);
 		
 		logger.info("Entering method " + methodName + " (Gen 6)");
@@ -288,7 +284,7 @@ public class Execution {
 		transformedString = transformedString.trim();
 		transformedString += ")";
 		
-		logger.info("Entering method " + methodName);
+		logger.info("Exiting method " + methodName);
 		
 		return transformedString;
 	}

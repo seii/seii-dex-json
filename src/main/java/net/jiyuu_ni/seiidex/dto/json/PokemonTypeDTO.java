@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 
-public class PokemonType {
-	private Logger logger = LoggerFactory.getLogger(PokemonType.class);
+public class PokemonTypeDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonTypeDTO.class);
 	
 	//Primary type
 	private String type1;

@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PokemonBreeding {
-	private Logger logger = LoggerFactory.getLogger(PokemonBreeding.class);
+public class PokemonBreedingDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonBreedingDTO.class);
 	
 	//Egg groups
 	private ArrayList<String> eggGroups;

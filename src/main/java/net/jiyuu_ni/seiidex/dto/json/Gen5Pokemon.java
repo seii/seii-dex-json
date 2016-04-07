@@ -12,15 +12,15 @@ public class Gen5Pokemon extends GenericPokemon {
 	//Is this a Mega Evolution?
 	private boolean isMega = false;
 	//Abilities (including hidden ability, if one exists)
-	private PokemonAbilities abilities;
+	private PokemonAbilitiesDTO abilities;
 	//Stats (using Generation 2+ system)
-	private PokemonStatsGen2Plus stats;
+	private PokemonStatsGen2PlusDTO stats;
 	//Effort Values (EVs)
-	private PokemonEffortValues effortValues;
+	private PokemonEffortValuesDTO effortValues;
 	//Move set (for Generation 2 and later)
-	private PokemonMovesGen2Plus moves;
+	private PokemonMovesGen2PlusDTO moves;
 	//Breeding statistics
-	private PokemonBreeding breeding;
+	private PokemonBreedingDTO breeding;
 	
 	/*
 	 * Default constructor

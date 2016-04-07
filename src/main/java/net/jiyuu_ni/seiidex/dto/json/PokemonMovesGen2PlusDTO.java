@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PokemonMovesGen2Plus {
-	private Logger logger = LoggerFactory.getLogger(PokemonMovesGen2Plus.class);
+public class PokemonMovesGen2PlusDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonMovesGen2PlusDTO.class);
 	
 	//Moves learned by leveling up
 	private LinkedHashMap<String, String> levelUpMoves;

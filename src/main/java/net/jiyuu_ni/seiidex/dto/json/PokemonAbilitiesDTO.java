@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class PokemonAbilities {
-	private Logger logger = LoggerFactory.getLogger(PokemonAbilities.class);
+public class PokemonAbilitiesDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonAbilitiesDTO.class);
 	
 	//First ability
 	private String ability1;

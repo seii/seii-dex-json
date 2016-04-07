@@ -1,5 +1,6 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,14 +8,15 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import net.jiyuu_ni.seiidex.Execution;
+import net.jiyuu_ni.seiidex.jpa.PokemonEvolution;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.jiyuu_ni.seiidex.Execution;
-import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 
 /**
  * Class to depict the basic shared Pokemon structure. This means the class is somewhat sparse, as some foundational
@@ -33,9 +35,11 @@ public class GenericPokemon {
 	//What form is this Pokemon in, if any? (e.g. Deoxys' different forms)
 	protected String form;
 	//Types (e.g. "Grass")
-	protected PokemonType types;
-	//Evolution details (can they evolve, how, etc.)
-	protected PokemonEvolution evolution;
+	protected PokemonTypeDTO types;
+	//Can this Pokemon evolve?
+	protected boolean isEvolvable;
+	//Evolution details [multiple evolutions possible!]
+	protected ArrayList<PokemonEvolutionDTO> evolution;
 	//Where can this Pokemon be found?
 	protected LinkedHashMap<String, String> locations;
 	//Is one of the games in this generation different from the rest of the generation?
@@ -86,28 +90,42 @@ public class GenericPokemon {
 	/**
 	 * @return the types
 	 */
-	public PokemonType getTypes() {
+	public PokemonTypeDTO getTypes() {
 		return types;
 	}
 
 	/**
 	 * @param types the types to set
 	 */
-	public void setTypes(PokemonType types) {
+	public void setTypes(PokemonTypeDTO types) {
 		this.types = types;
+	}
+
+	/**
+	 * @return the isEvolvable
+	 */
+	public boolean isEvolvable() {
+		return isEvolvable;
+	}
+
+	/**
+	 * @param isEvolvable the isEvolvable to set
+	 */
+	public void setEvolvable(boolean isEvolvable) {
+		this.isEvolvable = isEvolvable;
 	}
 
 	/**
 	 * @return the evolution
 	 */
-	public PokemonEvolution getEvolution() {
+	public ArrayList<PokemonEvolutionDTO> getEvolution() {
 		return evolution;
 	}
 
 	/**
 	 * @param evolution the evolution to set
 	 */
-	public void setEvolution(PokemonEvolution evolution) {
+	public void setEvolution(ArrayList<PokemonEvolutionDTO> evolution) {
 		this.evolution = evolution;
 	}
 
@@ -146,31 +164,49 @@ public class GenericPokemon {
 		
 		populateTypesFromQuery(generationResult);
 		
-		//TODO: Populate this correctly
-		PokemonEvolution pokeEvolution = new PokemonEvolution();
 		Query evolveQuery = em.createNamedQuery("PokemonEvolution.findAllById")
-				.setParameter("evolveId", Integer.parseInt(this.getNationalDex()));
-		List<PokemonEvolution> evolveList = evolveQuery.getResultList();
+				.setParameter("evolveId", Integer.parseInt(nationalDex));
+		List<PokemonEvolution> evolveResultList = evolveQuery.getResultList();
 		
-		if(evolveQuery != null && !evolveList.isEmpty()) {
-			pokeEvolution.setEvolvable(true);
+		if(evolveResultList == null || evolveResultList.isEmpty()) {
+			this.setEvolvable(false);
 		}else {
-			pokeEvolution.setEvolvable(false);
+			this.setEvolvable(true);
+			populateEvolutionsFromQuery(em, evolveResultList);
 		}
 		
-		this.setEvolution(pokeEvolution);
+		populateLocationsFromQuery();
 		
-		//TODO: Populate this correctly
-		LinkedHashMap<String, String> pokeLocations = new LinkedHashMap<String, String>();
-		this.setLocations(pokeLocations);
-		
+		populateGameDifferencesFromQuery();
+	}
+
+	private void populateGameDifferencesFromQuery() {
 		//TODO: Populate this correctly
 		HashMap<String, String> pokeGameDifferences = new HashMap<String, String>();
 		this.setGameDifferenceList(pokeGameDifferences);
 	}
 
+	private void populateLocationsFromQuery() {
+		//TODO: Populate this correctly
+		LinkedHashMap<String, String> pokeLocations = new LinkedHashMap<String, String>();
+		this.setLocations(pokeLocations);
+	}
+
+	private void populateEvolutionsFromQuery(EntityManager em,
+			List<PokemonEvolution> evolveResultList) {
+		ArrayList<PokemonEvolutionDTO> evolveList = new ArrayList<PokemonEvolutionDTO>();
+		
+		for(PokemonEvolution obj : evolveResultList) {
+			PokemonEvolutionDTO pokeEvolve = new PokemonEvolutionDTO();
+			pokeEvolve.populateAllFields(em, obj);
+			evolveList.add(pokeEvolve);
+		}
+		
+		this.setEvolution(evolveList);
+	}
+
 	private void populateTypesFromQuery(PokemonFormGeneration generationResult) {
-		PokemonType pokeType = new PokemonType();
+		PokemonTypeDTO pokeType = new PokemonTypeDTO();
 		pokeType.populateAllFields(generationResult);
 		this.setTypes(pokeType);
 	}
@@ -187,7 +223,9 @@ public class GenericPokemon {
 	private void populateNameFromQuery(PokemonFormGeneration generationResult) {
 		this.setName(
 				Execution.formatPokemonFormsIdentifier(generationResult.getPokemonForm().getIdentifier()));
-		//TODO: Separate any IDs >= 10000 and set as actual National Dex ID after processing
+		//TODO: IDs >= 10000 are different forms of the same Pokemon, including Mega Evolutions.
+		//			Figure out a way to match these with actual National Dex numbers, as in the
+		//			game Pokemon with different forms share the same National Dex number.
 		this.setNationalDex(String.valueOf(generationResult.getPokemonForm().getId()));
 	}
 

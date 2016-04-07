@@ -15,15 +15,15 @@ public class Gen6Pokemon extends GenericPokemon {
 	//Is this a Mega Evolution?
 	private boolean isMega = false;
 	//Abilities (including hidden ability, if one exists)
-	private PokemonAbilities abilities;
+	private PokemonAbilitiesDTO abilities;
 	//Stats (using Generation 2+ system)
-	private PokemonStatsGen2Plus stats;
+	private PokemonStatsGen2PlusDTO stats;
 	//Effort Values (EVs)
-	private PokemonEffortValues effortValues;
+	private PokemonEffortValuesDTO effortValues;
 	//Move set (for Generation 2 and later)
-	private PokemonMovesGen2Plus moves;
+	private PokemonMovesGen2PlusDTO moves;
 	//Breeding statistics
-	private PokemonBreeding breeding;
+	private PokemonBreedingDTO breeding;
 	
 	/*
 	 * Default constructor
@@ -46,43 +46,43 @@ public class Gen6Pokemon extends GenericPokemon {
 		this.isMega = isMega;
 	}
 
-	public PokemonAbilities getAbilities() {
+	public PokemonAbilitiesDTO getAbilities() {
 		return abilities;
 	}
 
-	public void setAbilities(PokemonAbilities abilities) {
+	public void setAbilities(PokemonAbilitiesDTO abilities) {
 		this.abilities = abilities;
 	}
 
-	public PokemonStatsGen2Plus getStats() {
+	public PokemonStatsGen2PlusDTO getStats() {
 		return stats;
 	}
 
-	public void setStats(PokemonStatsGen2Plus stats) {
+	public void setStats(PokemonStatsGen2PlusDTO stats) {
 		this.stats = stats;
 	}
 
-	public PokemonEffortValues getEffortValues() {
+	public PokemonEffortValuesDTO getEffortValues() {
 		return effortValues;
 	}
 
-	public void setEffortValues(PokemonEffortValues effortValues) {
+	public void setEffortValues(PokemonEffortValuesDTO effortValues) {
 		this.effortValues = effortValues;
 	}
 
-	public PokemonMovesGen2Plus getMoves() {
+	public PokemonMovesGen2PlusDTO getMoves() {
 		return moves;
 	}
 
-	public void setMoves(PokemonMovesGen2Plus moves) {
+	public void setMoves(PokemonMovesGen2PlusDTO moves) {
 		this.moves = moves;
 	}
 
-	public PokemonBreeding getBreeding() {
+	public PokemonBreedingDTO getBreeding() {
 		return breeding;
 	}
 
-	public void setBreeding(PokemonBreeding breeding) {
+	public void setBreeding(PokemonBreedingDTO breeding) {
 		this.breeding = breeding;
 	}
 
