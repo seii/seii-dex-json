@@ -1,14 +1,17 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.PokemonStat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 
 public class Gen6Pokemon extends GenericPokemon {
 	private Logger logger = LoggerFactory.getLogger(Gen6Pokemon.class);
@@ -89,6 +92,37 @@ public class Gen6Pokemon extends GenericPokemon {
 
 	public void populateAllFields(PokemonFormGeneration formGen, EntityManager em) {
 		super.populateAllFields(formGen, em);
+		
+		this.setMega(formGen.getPokemonForm().getIsMega());
+		
+		populateAbilitiesFromQuery(formGen);
+		
+		populateStatsFromQuery(formGen);
+		
+		populateEffortValuesFromQuery(formGen);
+		
+		
+	}
+
+	private void populateEffortValuesFromQuery(PokemonFormGeneration formGen) {
+		PokemonEffortValuesDTO pokeEVs = new PokemonEffortValuesDTO();
+		pokeEVs.populateAllFields(formGen);
+		
+		this.setEffortValues(pokeEVs);
+	}
+	
+	private void populateStatsFromQuery(PokemonFormGeneration formGen) {
+		PokemonStatsGen2PlusDTO pokeStats = new PokemonStatsGen2PlusDTO();
+		pokeStats.populateAllFields(formGen);
+		
+		this.setStats(pokeStats);
+	}
+
+	private void populateAbilitiesFromQuery(PokemonFormGeneration formGen) {
+		PokemonAbilitiesDTO pokeAbilities = new PokemonAbilitiesDTO();
+		pokeAbilities.populateAllFields(formGen);
+		
+		this.setAbilities(pokeAbilities);
 	}
 	
 	@Override

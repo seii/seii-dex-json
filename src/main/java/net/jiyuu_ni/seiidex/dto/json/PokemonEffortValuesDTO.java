@@ -1,5 +1,10 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import java.util.List;
+
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.PokemonStat;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +104,53 @@ public class PokemonEffortValuesDTO {
 	 */
 	public void setSpeed(String speed) {
 		this.speed = speed;
+	}
+	
+	public void populateAllFields(PokemonFormGeneration formGen) {
+		List<PokemonStat> pokeStatList = formGen.getPokemonForm().getPokemon().getPokemonStats();
+		
+		for(PokemonStat statObj : pokeStatList) {
+			int statId = statObj.getStat().getId();
+			
+			if(statObj.getEffort() > 0) {
+				switch(statId) {
+				case 1: {
+					//HP
+					this.setHp(String.valueOf(statObj.getEffort()));
+					break;
+				}
+				case 2: {
+					//Attack
+					this.setAttack(String.valueOf(statObj.getEffort()));
+					break;
+				}
+				case 3: {
+					//Defense
+					this.setDefense(String.valueOf(statObj.getEffort()));
+					break;
+				}
+				case 4: {
+					//Special Attack
+					this.setSpecialAttack(String.valueOf(statObj.getEffort()));
+					break;
+				}
+				case 5: {
+					//Special Defense
+					this.setSpecialDefense(String.valueOf(statObj.getEffort()));
+					break;
+				}
+				case 6: {
+					//Speed
+					this.setSpeed(String.valueOf(statObj.getEffort()));
+					break;
+				}
+				default: {
+					logger.error("Somehow a Pokemon effort value was outside the range of 1 - 6!");
+					break;
+				}
+			}
+			}
+		}
 	}
 
 	public String toJsonString() {

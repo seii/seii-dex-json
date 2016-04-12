@@ -79,7 +79,7 @@ public class PokemonEvolutionDTO {
 		
 		if(queryResult != null) {
 			
-			this.setNationalDex(String.valueOf(queryResult.getPokemonSpecy1().getId()));
+			this.setNationalDex(String.format("%03d", queryResult.getPokemonSpecy1().getId()));
 			this.setName(FileOperations.parseDashSeparatedString(
 					queryResult.getPokemonSpecy1().getIdentifier()));
 		}

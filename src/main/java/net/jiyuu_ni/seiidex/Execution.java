@@ -160,7 +160,7 @@ public class Execution {
 									+ " from Generation " + i);
 						
 						Gen6Pokemon gen6Poke = new Gen6Pokemon();
-						populateOnePoke(onePoke, gen6Poke, em);
+						gen6Poke.populateAllFields(onePoke, em);
 						
 						String headerFormat = gen6Poke.getNationalDex() + " - " + gen6Poke.getName();
 						
@@ -186,74 +186,6 @@ public class Execution {
 		}
 		
 		logger.info("Exiting method " + methodName);
-	}
-
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen1Pokemon parsedPoke, EntityManager em) {
-		String methodName = "populateOnePoke";
-		logger.info("Entering method " + methodName + " (Gen 1)");
-		//TODO: Populate method
-		logger.info("Exitingn method " + methodName + " (Gen 1)");
-	}
-	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen2Pokemon parsedPoke, EntityManager em) {
-		String methodName = "populateOnePoke";
-		logger.info("Entering method " + methodName + " (Gen 2)");
-		//TODO: Populate method
-		logger.info("Exitingn method " + methodName + " (Gen 2)");
-	}
-	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen3Pokemon parsedPoke, EntityManager em) {
-		String methodName = "populateOnePoke";
-		logger.info("Entering method " + methodName + " (Gen 3)");
-		//TODO: Populate method
-		logger.info("Exitingn method " + methodName + " (Gen 3)");
-	}
-	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen4Pokemon parsedPoke, EntityManager em) {
-		String methodName = "populateOnePoke";
-		logger.info("Entering method " + methodName + " (Gen 4)");
-		//TODO: Populate method
-		logger.info("Exitingn method " + methodName + " (Gen 4)");
-	}
-	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen5Pokemon parsedPoke, EntityManager em) {
-		String methodName = "populateOnePoke";
-		logger.info("Entering method " + methodName + " (Gen 5)");
-		//TODO: Populate method
-		logger.info("Exiting method " + methodName + " (Gen 5)");
-	}
-	
-	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen6Pokemon parsedPoke, EntityManager em) {
-		String methodName = "populateOnePoke";
-		logger.info("Entering method " + methodName + " (Gen 6)");
-		
-		parsedPoke.populateAllFields(queryResult, em);
-		
-		//TODO: Populate this correctly
-		boolean pokeIsMega = false;
-		parsedPoke.setMega(pokeIsMega);
-		
-		//TODO: Populate this correctly
-		PokemonAbilitiesDTO pokeAbilities = new PokemonAbilitiesDTO();
-		parsedPoke.setAbilities(pokeAbilities);
-		
-		//TODO: Populate this correctly
-		PokemonStatsGen2PlusDTO pokeStats = new PokemonStatsGen2PlusDTO();
-		parsedPoke.setStats(pokeStats);
-		
-		//TODO: Populate this correctly
-		PokemonEffortValuesDTO pokeEV = new PokemonEffortValuesDTO();
-		parsedPoke.setEffortValues(pokeEV);
-		
-		//TODO: Populate this correctly
-		PokemonMovesGen2PlusDTO pokeMoves = new PokemonMovesGen2PlusDTO();
-		parsedPoke.setMoves(pokeMoves);
-		
-		//TODO: Populate this correctly
-		PokemonBreedingDTO pokeBreeding = new PokemonBreedingDTO();
-		parsedPoke.setBreeding(pokeBreeding);
-		
-		logger.info("Entering method " + methodName + " (Gen 6)");
 	}
 	
 	//TODO: Automate this from example JSON files

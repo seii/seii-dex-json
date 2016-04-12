@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +55,8 @@ public class FileOperations {
 			JsonParser jsonParser = jsonFactory.createParser(fileToCreate);
 			
 			ObjectMapper mapper = new ObjectMapper();
+			//In order to produce cleaner JSON, don't include null properties
+			mapper.setSerializationInclusion(Include.NON_NULL);
 			mapper.writeValue(fileToCreate, dtoFile);
 		} catch (IOException e) {
 			logger.info(e.getLocalizedMessage());
@@ -104,7 +107,7 @@ public class FileOperations {
 			String tempToken = tokenize.nextToken();
 			
 			if(Character.isDigit(tempToken.charAt(0))) {
-				transformedString = tempToken;
+				transformedString += tempToken;
 			}else {
 				transformedString += tempToken.substring(0, 1).toUpperCase() + tempToken.substring(1) + " ";
 			}

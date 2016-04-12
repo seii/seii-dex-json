@@ -15,8 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.jiyuu_ni.seiidex.Execution;
 import net.jiyuu_ni.seiidex.jpa.Encounter;
+import net.jiyuu_ni.seiidex.jpa.EncounterConditionValue;
+import net.jiyuu_ni.seiidex.jpa.EncounterMethodProse;
 import net.jiyuu_ni.seiidex.jpa.PokemonEvolution;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.PokemonSpecy;
 import net.jiyuu_ni.seiidex.jpa.Version;
 import net.jiyuu_ni.seiidex.jpa.VersionGroup;
 import net.jiyuu_ni.seiidex.util.FileOperations;
@@ -42,7 +45,7 @@ public class GenericPokemon {
 	//Evolution details [multiple evolutions possible!]
 	protected ArrayList<PokemonEvolutionDTO> evolution;
 	//Where can this Pokemon be found? (in "Game" : { "area" : { PokemonEncounterDTO }} format)
-	protected HashMap<String, HashMap<String, PokemonEncounterDTO>> locations;
+	protected HashMap<String, HashMap<String, HashMap<String, String>>> locations;
 	//Is one of the games in this generation different from the rest of the generation?
 	protected HashMap<String, String> gameDifferenceList;
 	
@@ -86,11 +89,11 @@ public class GenericPokemon {
 		this.evolution = evolution;
 	}
 
-	public HashMap<String, HashMap<String, PokemonEncounterDTO>> getLocations() {
+	public HashMap<String, HashMap<String, HashMap<String, String>>> getLocations() {
 		return locations;
 	}
 
-	public void setLocations(HashMap<String, HashMap<String, PokemonEncounterDTO>> locations) {
+	public void setLocations(HashMap<String, HashMap<String, HashMap<String, String>>> locations) {
 		this.locations = locations;
 	}
 
@@ -114,13 +117,7 @@ public class GenericPokemon {
 		
 		populateTypesFromQuery(generationResult);
 		
-		Query evolveQuery = em.createNamedQuery("PokemonEvolution.findAllById")
-				.setParameter("evolveId", Integer.parseInt(nationalDex));
-		List<PokemonEvolution> evolveResultList = evolveQuery.getResultList();
-		
-		if(evolveResultList != null && !evolveResultList.isEmpty()) {
-			populateEvolutionsFromQuery(em, evolveResultList);
-		}
+		populateEvolutionsFromQuery(em, generationResult);
 		
 		populateLocationsFromQuery(em, generationResult);
 		
@@ -134,9 +131,9 @@ public class GenericPokemon {
 	}
 
 	private void populateLocationsFromQuery(EntityManager em, PokemonFormGeneration generationResult) {
-		//TODO: Populate this correctly
-		HashMap<String, HashMap<String, PokemonEncounterDTO>> pokeLocationList =
-				new HashMap<String, HashMap<String, PokemonEncounterDTO>>(1);
+		
+		HashMap<String, HashMap<String, HashMap<String, String>>> pokeLocationList =
+				new HashMap<String, HashMap<String, HashMap<String, String>>>(1);
 		
 		List<VersionGroup> versionGroupList = generationResult.getGeneration().getVersionGroups();
 		
@@ -146,7 +143,11 @@ public class GenericPokemon {
 			for(Version versionObj : gameList) {
 				
 				String gameName = versionObj.getIdentifier();
-			
+				
+				//Ensure that "x" becomes "X", etc.
+				if(gameName.length() == 1) {
+					gameName = gameName.toUpperCase();
+				}
 				
 				Query queryResult = em.createNamedQuery("Encounter.findAllByVersionIdAndPokeId")
 						.setParameter("versionId", versionObj.getId())
@@ -155,23 +156,8 @@ public class GenericPokemon {
 				
 				if(encounterList != null && !encounterList.isEmpty()) {
 					
-					HashMap<String, PokemonEncounterDTO> areaMap = new HashMap<String, PokemonEncounterDTO>(1);
-				
-					for(Encounter encounterObj : encounterList) {
-						String areaName = FileOperations.parseDashSeparatedString(
-								encounterObj.getLocationArea().getLocation().getIdentifier());
-						
-						String expandedAreaInfo = encounterObj.getLocationArea().getIdentifier();
-						
-						if(expandedAreaInfo != null) {
-							areaName += " - " + FileOperations.parseDashSeparatedString(expandedAreaInfo);
-						}	
-							
-						PokemonEncounterDTO pokeLocation = new PokemonEncounterDTO();
-						pokeLocation.populateAllFields(em, encounterObj);
-						
-						areaMap.put(areaName, pokeLocation);
-					}
+					HashMap<String, HashMap<String, String>> areaMap = populateAreaMap(
+							em, encounterList);
 					
 					pokeLocationList.put(gameName, areaMap);
 				}
@@ -181,13 +167,93 @@ public class GenericPokemon {
 		this.setLocations(pokeLocationList);
 	}
 
+	private HashMap<String, HashMap<String, String>> populateAreaMap(
+			EntityManager em, List<Encounter> encounterList) {
+		HashMap<String, HashMap<String, String>> areaMap =
+				new HashMap<String, HashMap<String, String>>(1);
+
+		for(Encounter encounterObj : encounterList) {
+			String areaName = encounterObj.getLocationArea()
+					.getLocation().getIdentifier();
+			
+			areaName = FileOperations.parseDashSeparatedString(areaName);
+			
+			String expandedAreaInfo = encounterObj.getLocationArea().getIdentifier();
+			
+			if(expandedAreaInfo != null) {
+				areaName += " - " + FileOperations.parseDashSeparatedString(expandedAreaInfo);
+			}
+			
+			HashMap<String, String> encounterMap;
+			
+			if(areaMap.get(areaName) != null) {
+				encounterMap = populateLocationMap(encounterObj, areaMap.get(areaName));
+			}else {
+				encounterMap = populateLocationMap(encounterObj, null);
+			}
+			
+			areaMap.put(areaName, encounterMap);
+		}
+		return areaMap;
+	}
+
+	private HashMap<String, String> populateLocationMap(Encounter encounterObj,
+									HashMap<String, String> dupeDetect) {
+		HashMap<String, String> encounterMap = new HashMap<String, String>(1);
+		
+		List<EncounterMethodProse> encounterMethodList = encounterObj.getEncounterSlot()
+				.getEncounterMethod().getEncounterMethodProses();
+		
+		String encounterCondition = encounterMethodList.get(1).getName();
+		
+		List<EncounterConditionValue> encounterValueList = encounterObj.getEncounterConditionValues();
+		
+		//The list should always be populated, but sometimes it will be all default values
+		for(EncounterConditionValue encounterObj2 : encounterValueList) {
+			//Values marked as "default" are conditions that are normally met without changing anything
+			if(!encounterObj2.getIsDefault()) {
+				
+				//TODO: This could stand to be formatted better in the future
+				encounterCondition += " + " + FileOperations.parseDashSeparatedString(encounterObj2.getIdentifier());
+			}
+		}
+		
+		encounterCondition = encounterCondition.trim();
+		
+		String encounterChance;
+		
+		//Duplicate detection is needed because Veekun's tables actually record
+		//	the percentage chance of an encounter _per the Pokemon's level_! That
+		//	means that if a Pokemon shows up 10% of the time at lvl 3 and 1% at
+		//	lvl 4, we need to add them together to say there's an 11% chance.
+		if(dupeDetect != null) {
+			encounterChance = dupeDetect.get(encounterCondition);
+			encounterChance = encounterChance.replace("%", "");
+			
+			int tempRarity = Integer.parseInt(encounterChance);
+			tempRarity += encounterObj.getEncounterSlot().getRarity();
+			encounterChance = tempRarity + "%";
+		}else {
+			encounterChance = encounterObj.getEncounterSlot().getRarity() + "%";
+		}
+		
+		encounterMap.put(encounterCondition, encounterChance);
+		return encounterMap;
+	}
+
 	private void populateEvolutionsFromQuery(EntityManager em,
-			List<PokemonEvolution> evolveResultList) {
+			PokemonFormGeneration formGen) {
 		ArrayList<PokemonEvolutionDTO> evolveList = new ArrayList<PokemonEvolutionDTO>(1);
 		
-		for(PokemonEvolution obj : evolveResultList) {
+		Query testEvolveQuery = em.createNamedQuery("PokemonSpecy.findAllByEvolvesFromId")
+				.setParameter("evolvesFrom", formGen.getPokemonForm().getPokemon().getId());
+		List<PokemonSpecy> speciesList = testEvolveQuery.getResultList();
+		
+		for(PokemonSpecy speciesObj : speciesList) {
+			List<PokemonEvolution> pokeEvolutionList = speciesObj.getPokemonEvolutions1();
+			
 			PokemonEvolutionDTO pokeEvolve = new PokemonEvolutionDTO();
-			pokeEvolve.populateAllFields(em, obj);
+			pokeEvolve.populateAllFields(em, pokeEvolutionList.get(0));
 			evolveList.add(pokeEvolve);
 		}
 		

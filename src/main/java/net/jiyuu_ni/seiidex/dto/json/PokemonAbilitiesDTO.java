@@ -1,5 +1,13 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import net.jiyuu_ni.seiidex.jpa.PokemonAbility;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.util.FileOperations;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +64,28 @@ public class PokemonAbilitiesDTO {
 	 */
 	public void setAbilityHidden(String abilityHidden) {
 		this.abilityHidden = abilityHidden;
+	}
+	
+	public void populateAllFields(PokemonFormGeneration formGen) {
+		List<PokemonAbility> abilitiesList = formGen.getPokemonForm()
+				.getPokemon().getPokemonAbilities();
+		
+		for(PokemonAbility abilityObj : abilitiesList) {
+			if(abilityObj.getIsHidden()) {
+				this.setAbilityHidden(FileOperations.parseDashSeparatedString(
+								abilityObj.getAbility().getIdentifier()));
+			}else {
+				if(abilityObj.getId().getSlot() == 1) {
+					this.setAbility1(FileOperations.parseDashSeparatedString(
+								abilityObj.getAbility().getIdentifier()));
+				}
+				
+				if(abilityObj.getId().getSlot() == 2) {
+					this.setAbility2(FileOperations.parseDashSeparatedString(
+							abilityObj.getAbility().getIdentifier()));
+				}
+			}
+		}
 	}
 	
 	public String toJsonString() {
