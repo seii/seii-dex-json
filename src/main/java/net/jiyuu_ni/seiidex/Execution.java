@@ -2,6 +2,8 @@ package net.jiyuu_ni.seiidex;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -10,6 +12,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.jiyuu_ni.seiidex.dto.json.Gen1Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen2Pokemon;
@@ -27,13 +32,9 @@ import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Execution {
 	
 	private static Logger logger = LoggerFactory.getLogger(Execution.class);
-	private static boolean generateFiles = false;
 	
 	public static void main(String args[]) {
 		
@@ -41,7 +42,7 @@ public class Execution {
 			
 			//Using LinkedList guarantees that the order will be respected
 			LinkedList<File> jsonFileList = new LinkedList<File>();
-			ArrayList<ArrayList<? extends GenericPokemon>> generationList = new ArrayList<>();
+			ArrayList<HashMap<String, ? extends GenericPokemon>> generationList = new ArrayList<>();
 			
 			populateJSONFileList(jsonFileList);
 			
@@ -82,15 +83,12 @@ public class Execution {
 		logger.info("Exiting method " + methodName);
 	}
 
-	private static void populateJSONDTOs(EntityManager em, int generationNumber, LinkedList<File> jsonFileList, ArrayList<ArrayList<? extends GenericPokemon>> generationList) {
+	private static void populateJSONDTOs(EntityManager em, int generationNumber, LinkedList<File> jsonFileList, ArrayList<HashMap<String, ? extends GenericPokemon>> generationList) {
 		String methodName = "populateJSONDTOs";
 		logger.info("Entering method " + methodName);
 		
 		//Iterate over each generation
 		for(int i = 1; i < jsonFileList.size() + 1; i++) {
-		
-			/*Query query1 = em.createNamedQuery("Generation.findByGenId").setParameter("genId", 6);
-			Generation genResult = (Generation) query1.getSingleResult();*/
 			
 			//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 			//	use it as a starting query for obtaining information
@@ -103,7 +101,7 @@ public class Execution {
 				case 1: {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
-					ArrayList<Gen1Pokemon> gen1PokeList = new ArrayList<Gen1Pokemon>(1);
+					HashMap<String, Gen1Pokemon> gen1PokeList = new HashMap<String, Gen1Pokemon>(1);
 					//TODO: Populate
 					generationList.add(gen1PokeList);
 					
@@ -113,7 +111,7 @@ public class Execution {
 				case 2: {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
-					ArrayList<Gen2Pokemon> gen2PokeList = new ArrayList<Gen2Pokemon>(1);
+					HashMap<String, Gen2Pokemon> gen2PokeList = new HashMap<String, Gen2Pokemon>(1);
 					//TODO: Populate
 					generationList.add(gen2PokeList);
 					
@@ -123,7 +121,7 @@ public class Execution {
 				case 3: {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
-					ArrayList<Gen3Pokemon> gen3PokeList = new ArrayList<Gen3Pokemon>(1);
+					HashMap<String, Gen3Pokemon> gen3PokeList = new HashMap<String, Gen3Pokemon>(1);
 					//TODO: Populate
 					generationList.add(gen3PokeList);
 					
@@ -133,7 +131,7 @@ public class Execution {
 				case 4: {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
-					ArrayList<Gen4Pokemon> gen4PokeList = new ArrayList<Gen4Pokemon>(1);
+					HashMap<String, Gen4Pokemon> gen4PokeList = new HashMap<String, Gen4Pokemon>(1);
 					//TODO: Populate
 					generationList.add(gen4PokeList);
 					
@@ -143,7 +141,7 @@ public class Execution {
 				case 5: {
 					logger.info("Populating Pokemon " + " from Generation " + i);
 					
-					ArrayList<Gen5Pokemon> gen5PokeList = new ArrayList<Gen5Pokemon>(1);
+					HashMap<String, Gen5Pokemon> gen5PokeList = new HashMap<String, Gen5Pokemon>(1);
 					//TODO: Populate
 					generationList.add(gen5PokeList);
 					
@@ -151,23 +149,31 @@ public class Execution {
 					break;
 				}
 				case 6: {
-					ArrayList<Gen6Pokemon> gen6PokeList = new ArrayList<Gen6Pokemon>(1);
+					LinkedHashMap<String, Gen6Pokemon> gen6PokeList = new LinkedHashMap<String, Gen6Pokemon>(1);
 					
 					//Populate each Pokemon within this single generation
 					//for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					PokemonFormGeneration onePoke = singleGenPokeList.get(0);
+					for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
 									+ " from Generation " + i);
 						
 						Gen6Pokemon gen6Poke = new Gen6Pokemon();
 						populateOnePoke(onePoke, gen6Poke, em);
-						gen6PokeList.add(gen6Poke);
+						
+						String headerFormat = gen6Poke.getNationalDex() + " - " + gen6Poke.getName();
+						
+						if(gen6Poke.getForm() == null || gen6Poke.getForm().equals("")) {
+							headerFormat = headerFormat.concat(" (" + gen6Poke.getForm() + ")");
+						}
+						
+						gen6PokeList.put(headerFormat , gen6Poke);
 						
 						logger.info("Finished populating Pokemon " +
 								gen6Poke.getName()
 								+ " from Generation " + i);
-					//}
+					}
 					
 					generationList.add(gen6PokeList);
 					break;
@@ -214,7 +220,7 @@ public class Execution {
 		String methodName = "populateOnePoke";
 		logger.info("Entering method " + methodName + " (Gen 5)");
 		//TODO: Populate method
-		logger.info("Exitingn method " + methodName + " (Gen 5)");
+		logger.info("Exiting method " + methodName + " (Gen 5)");
 	}
 	
 	private static void populateOnePoke(PokemonFormGeneration queryResult, Gen6Pokemon parsedPoke, EntityManager em) {
@@ -284,7 +290,7 @@ public class Execution {
 		
 		transformedString = transformedString.trim();
 		
-		if(counter > 0) {
+		if(counter > 1) {
 			transformedString += ")";
 		}
 		

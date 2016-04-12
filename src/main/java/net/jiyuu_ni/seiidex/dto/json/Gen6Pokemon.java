@@ -1,13 +1,14 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import javax.persistence.EntityManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 
 public class Gen6Pokemon extends GenericPokemon {
 	private Logger logger = LoggerFactory.getLogger(Gen6Pokemon.class);
@@ -86,6 +87,10 @@ public class Gen6Pokemon extends GenericPokemon {
 		this.breeding = breeding;
 	}
 
+	public void populateAllFields(PokemonFormGeneration formGen, EntityManager em) {
+		super.populateAllFields(formGen, em);
+	}
+	
 	@Override
 	public String toJsonString() {
 		ObjectMapper mapper = new ObjectMapper();

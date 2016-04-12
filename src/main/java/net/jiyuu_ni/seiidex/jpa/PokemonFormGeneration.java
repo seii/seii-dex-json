@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name="pokemon_form_generations")
 @NamedQueries({
 	@NamedQuery(name="PokemonFormGeneration.findAll", query="SELECT p FROM PokemonFormGeneration p"),
-	@NamedQuery(name="PokemonFormGeneration.findAllByGenerationId", query="SELECT p FROM PokemonFormGeneration p WHERE p.generation.id = :genId")
+	@NamedQuery(name="PokemonFormGeneration.findAllByGenerationId", query="SELECT p FROM PokemonFormGeneration p WHERE p.generation.id = :genId ORDER BY p.pokemonForm.id")
 })
 public class PokemonFormGeneration implements Serializable {
 	private static final long serialVersionUID = 1L;

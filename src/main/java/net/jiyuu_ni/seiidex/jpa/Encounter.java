@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="encounters")
 @NamedQueries({
+	@NamedQuery(name="Encounter.findAllByVersionIdAndPokeId", query="SELECT e FROM Encounter e WHERE e.version.id = :versionId AND e.pokemon.id = :pokeId"),
 	@NamedQuery(name="Encounter.findAllByVersionId", query="SELECT e FROM Encounter e WHERE e.version.id = :versionId"),
 	@NamedQuery(name="Encounter.findAll", query="SELECT e FROM Encounter e")
 })

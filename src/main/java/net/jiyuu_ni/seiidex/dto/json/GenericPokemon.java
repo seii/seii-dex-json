@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.jiyuu_ni.seiidex.Execution;
+import net.jiyuu_ni.seiidex.jpa.Encounter;
 import net.jiyuu_ni.seiidex.jpa.PokemonEvolution;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.jpa.Version;
@@ -38,129 +39,76 @@ public class GenericPokemon {
 	protected String form;
 	//Types (e.g. "Grass")
 	protected PokemonTypeDTO types;
-	//Can this Pokemon evolve?
-	protected boolean isEvolvable;
 	//Evolution details [multiple evolutions possible!]
 	protected ArrayList<PokemonEvolutionDTO> evolution;
-	//Where can this Pokemon be found? (in "Game" : "list of locations" format)
-	protected ArrayList<PokemonLocationDTO> locations;
+	//Where can this Pokemon be found? (in "Game" : { "area" : { PokemonEncounterDTO }} format)
+	protected HashMap<String, HashMap<String, PokemonEncounterDTO>> locations;
 	//Is one of the games in this generation different from the rest of the generation?
 	protected HashMap<String, String> gameDifferenceList;
 	
-	/**
-	 * @return the nationalDex
-	 */
 	public String getNationalDex() {
 		return nationalDex;
 	}
 
-	/**
-	 * @param nationalDex the nationalDex to set
-	 */
 	public void setNationalDex(String nationalDex) {
 		this.nationalDex = nationalDex;
 	}
 
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * @return the form
-	 */
 	public String getForm() {
 		return form;
 	}
 
-	/**
-	 * @param form the form to set
-	 */
 	public void setForm(String form) {
 		this.form = form;
 	}
 
-	/**
-	 * @return the types
-	 */
 	public PokemonTypeDTO getTypes() {
 		return types;
 	}
 
-	/**
-	 * @param types the types to set
-	 */
 	public void setTypes(PokemonTypeDTO types) {
 		this.types = types;
 	}
 
-	/**
-	 * @return the isEvolvable
-	 */
-	public boolean isEvolvable() {
-		return isEvolvable;
-	}
-
-	/**
-	 * @param isEvolvable the isEvolvable to set
-	 */
-	public void setEvolvable(boolean isEvolvable) {
-		this.isEvolvable = isEvolvable;
-	}
-
-	/**
-	 * @return the evolution
-	 */
 	public ArrayList<PokemonEvolutionDTO> getEvolution() {
 		return evolution;
 	}
 
-	/**
-	 * @param evolution the evolution to set
-	 */
 	public void setEvolution(ArrayList<PokemonEvolutionDTO> evolution) {
 		this.evolution = evolution;
 	}
 
-	/**
-	 * @return the locations
-	 */
-	public ArrayList<PokemonLocationDTO> getLocations() {
+	public HashMap<String, HashMap<String, PokemonEncounterDTO>> getLocations() {
 		return locations;
 	}
 
-	/**
-	 * @param locations the locations to set
-	 */
-	public void setLocations(ArrayList<PokemonLocationDTO> locations) {
+	public void setLocations(HashMap<String, HashMap<String, PokemonEncounterDTO>> locations) {
 		this.locations = locations;
 	}
 
-	/**
-	 * @return the gameDifferenceList
-	 */
 	public HashMap<String, String> getGameDifferenceList() {
 		return gameDifferenceList;
 	}
 
-	/**
-	 * @param gameDifferenceList the gameDifferenceList to set
-	 */
 	public void setGameDifferenceList(HashMap<String, String> gameDifferenceList) {
 		this.gameDifferenceList = gameDifferenceList;
 	}
-	
+
 	public void populateAllFields(PokemonFormGeneration generationResult, EntityManager em) {
-		populateNameFromQuery(generationResult);
+		this.setName(Execution.formatPokemonFormsIdentifier(generationResult.getPokemonForm().getIdentifier()));
+		
+		//TODO: IDs >= 10000 are different forms of the same Pokemon, including Mega Evolutions.
+		//			Figure out a way to match these with actual National Dex numbers, as in the
+		//			game Pokemon with different forms share the same National Dex number.
+		this.setNationalDex(String.format("%03d", generationResult.getPokemonForm().getId()));
 		
 		populateFormFromQuery(generationResult);
 		
@@ -170,10 +118,7 @@ public class GenericPokemon {
 				.setParameter("evolveId", Integer.parseInt(nationalDex));
 		List<PokemonEvolution> evolveResultList = evolveQuery.getResultList();
 		
-		if(evolveResultList == null || evolveResultList.isEmpty()) {
-			this.setEvolvable(false);
-		}else {
-			this.setEvolvable(true);
+		if(evolveResultList != null && !evolveResultList.isEmpty()) {
 			populateEvolutionsFromQuery(em, evolveResultList);
 		}
 		
@@ -190,19 +135,45 @@ public class GenericPokemon {
 
 	private void populateLocationsFromQuery(EntityManager em, PokemonFormGeneration generationResult) {
 		//TODO: Populate this correctly
-		ArrayList<PokemonLocationDTO> pokeLocationList = new ArrayList<PokemonLocationDTO>(1);
+		HashMap<String, HashMap<String, PokemonEncounterDTO>> pokeLocationList =
+				new HashMap<String, HashMap<String, PokemonEncounterDTO>>(1);
 		
 		List<VersionGroup> versionGroupList = generationResult.getGeneration().getVersionGroups();
 		
-		for(VersionGroup obj : versionGroupList) {
-			List<Version> gameList = obj.getVersions();
+		for(VersionGroup versionGroupObj : versionGroupList) {
+			List<Version> gameList = versionGroupObj.getVersions();
 			
-			for(Version obj2 : gameList) {
-				PokemonLocationDTO pokeLocation = new PokemonLocationDTO();
-				pokeLocation.populateAllFields(em, obj2);
+			for(Version versionObj : gameList) {
 				
-				if(!pokeLocationList.contains(pokeLocation)) {
-					pokeLocationList.add(pokeLocation);
+				String gameName = versionObj.getIdentifier();
+			
+				
+				Query queryResult = em.createNamedQuery("Encounter.findAllByVersionIdAndPokeId")
+						.setParameter("versionId", versionObj.getId())
+						.setParameter("pokeId", generationResult.getPokemonForm().getId());
+				List<Encounter> encounterList = queryResult.getResultList();
+				
+				if(encounterList != null && !encounterList.isEmpty()) {
+					
+					HashMap<String, PokemonEncounterDTO> areaMap = new HashMap<String, PokemonEncounterDTO>(1);
+				
+					for(Encounter encounterObj : encounterList) {
+						String areaName = FileOperations.parseDashSeparatedString(
+								encounterObj.getLocationArea().getLocation().getIdentifier());
+						
+						String expandedAreaInfo = encounterObj.getLocationArea().getIdentifier();
+						
+						if(expandedAreaInfo != null) {
+							areaName += " - " + FileOperations.parseDashSeparatedString(expandedAreaInfo);
+						}	
+							
+						PokemonEncounterDTO pokeLocation = new PokemonEncounterDTO();
+						pokeLocation.populateAllFields(em, encounterObj);
+						
+						areaMap.put(areaName, pokeLocation);
+					}
+					
+					pokeLocationList.put(gameName, areaMap);
 				}
 			}
 		}
@@ -236,15 +207,6 @@ public class GenericPokemon {
 		}else {
 			this.setForm("None");
 		}
-	}
-
-	private void populateNameFromQuery(PokemonFormGeneration generationResult) {
-		this.setName(
-				Execution.formatPokemonFormsIdentifier(generationResult.getPokemonForm().getIdentifier()));
-		//TODO: IDs >= 10000 are different forms of the same Pokemon, including Mega Evolutions.
-		//			Figure out a way to match these with actual National Dex numbers, as in the
-		//			game Pokemon with different forms share the same National Dex number.
-		this.setNationalDex(String.valueOf(generationResult.getPokemonForm().getId()));
 	}
 
 	public String toJsonString() {

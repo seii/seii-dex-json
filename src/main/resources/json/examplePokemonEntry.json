@@ -53,8 +53,16 @@
       "baseSteps": "test"
     },
     "locations" : {
-      "game1": "blah",
-      "game2": "blah"
+      "game1": {
+      	"area1" : {
+      		"method1" : "chance1"
+      	}
+      },
+      "game2": {
+      	"area2" : {
+      		"method2" : "chance2"
+      	}
+      }
     }
   },
   "001 - Something (Mega)": {
@@ -110,7 +118,16 @@
       "baseSteps": "unknown"
     },
     "locations" : {
-      "game1": "unknown"
+      "game1": {
+      	"area1" : {
+      		"method1" : "chance1"
+      	}
+      },
+      "game2": {
+      	"area2" : {
+      		"method2" : "chance2"
+      	}
+      }
     }
   }
 }

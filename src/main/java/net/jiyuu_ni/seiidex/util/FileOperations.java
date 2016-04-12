@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class FileOperations {
 	    logger.debug("Exiting " + methodName);
 	}
 	
-	public static <T extends GenericPokemon> void createJSONFileFromDTOList(File fileToCreate, ArrayList<T> dtoFile) {
+	public static <T extends GenericPokemon> void createJSONFileFromDTOList(File fileToCreate, HashMap<String, T> dtoFile) {
 		String methodName = "createJSONFileFromDTOList";
 		logger.debug("Entering method " + methodName);
 		

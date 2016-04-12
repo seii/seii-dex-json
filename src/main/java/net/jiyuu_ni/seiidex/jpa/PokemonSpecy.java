@@ -11,7 +11,10 @@ import java.util.List;
  */
 @Entity
 @Table(name="pokemon_species")
-@NamedQuery(name="PokemonSpecy.findAll", query="SELECT p FROM PokemonSpecy p")
+@NamedQueries({
+	@NamedQuery(name="PokemonSpecy.findAllByEvolvesFromId", query="SELECT p FROM PokemonSpecy p WHERE p.pokemonSpecy.id = :evolvesFrom ORDER BY p.id"),
+	@NamedQuery(name="PokemonSpecy.findAll", query="SELECT p FROM PokemonSpecy p")
+})
 public class PokemonSpecy implements Serializable {
 	private static final long serialVersionUID = 1L;
 

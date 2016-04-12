@@ -22,19 +22,29 @@ import net.jiyuu_ni.seiidex.util.FileOperations;
 public class PokemonEvolutionDTO {
 	private Logger logger = LoggerFactory.getLogger(PokemonEvolutionDTO.class);
 	
-	//If evolvable, what Pokemon does this one evolve into? (Multiple evolutions possible)
-	private HashMap<String, String> evolvesInto;
+	//What NationalDex ID does the evolution have?
+	private String nationalDex;
+	//What is the name of the evolved form?
+	private String name;
 	//Method by which Pokemon evolves
 	private String method;
 	//Details of evolution method
 	private String methodExplanation;
 
-	public HashMap<String, String> getEvolvesInto() {
-		return evolvesInto;
+	public String getNationalDex() {
+		return nationalDex;
 	}
 
-	public void setEvolvesInto(HashMap<String, String> evolvesInto) {
-		this.evolvesInto = evolvesInto;
+	public void setNationalDex(String nationalDex) {
+		this.nationalDex = nationalDex;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -67,31 +77,14 @@ public class PokemonEvolutionDTO {
 		
 		this.setMethodExplanation(parseLevelUpReason(queryResult));
 		
-		this.setEvolvesInto(parseEvolvesInto(queryResult));
-		
-		logger.info("Exiting method " + methodName);
-	}
-	
-	private HashMap<String, String> parseEvolvesInto(PokemonEvolution evolution) {
-		String methodName = "parseEvolvesInto";
-		logger.info("Entering method " + methodName);
-		
-		HashMap<String, String> result = null;
-		
-		if(evolution != null) {
-			result = new HashMap<String, String>(1);
+		if(queryResult != null) {
 			
-			String nationalDexId = String.valueOf(evolution.getPokemonSpecy1().getId());
-			String pokemonSpecies = FileOperations.parseDashSeparatedString(
-					evolution.getPokemonSpecy1().getIdentifier());
-			
-			result.put("id", nationalDexId);
-			result.put("name", pokemonSpecies);
+			this.setNationalDex(String.valueOf(queryResult.getPokemonSpecy1().getId()));
+			this.setName(FileOperations.parseDashSeparatedString(
+					queryResult.getPokemonSpecy1().getIdentifier()));
 		}
 		
 		logger.info("Exiting method " + methodName);
-		
-		return result;
 	}
 
 	private String parseLevelUpReason(PokemonEvolution evolution) {
