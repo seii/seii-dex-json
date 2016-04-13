@@ -152,9 +152,9 @@ public class Execution {
 					LinkedHashMap<String, Gen6Pokemon> gen6PokeList = new LinkedHashMap<String, Gen6Pokemon>(1);
 					
 					//Populate each Pokemon within this single generation
-					//for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);
+					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					/*for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
 									+ " from Generation " + i);

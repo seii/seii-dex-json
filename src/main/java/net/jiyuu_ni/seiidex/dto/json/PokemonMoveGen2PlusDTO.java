@@ -106,8 +106,8 @@ public class PokemonMoveGen2PlusDTO {
 			
 			while(tempMatcher.find()) {
 				String typeString = tempMatcher.group("type");
-				prose = tempMatcher.replaceFirst(typeString.substring(0, 1)
-						.toUpperCase() + typeString.substring(1));
+				typeString = FileOperations.parseDashSeparatedString(typeString);
+				prose = prose.replaceFirst("\\[\\]\\{\\w*:(?<type>\\w*)\\}", typeString);
 			}
 			
 			tempPattern = Pattern.compile("\\[(\\w*\\s*\\w*)\\]\\{\\w*:(?<effect>\\w*-*\\w*)\\}");
@@ -116,7 +116,7 @@ public class PokemonMoveGen2PlusDTO {
 			while(tempMatcher.find()) {
 				String effectString = tempMatcher.group("effect");
 				effectString = FileOperations.parseDashSeparatedString(effectString);
-				prose = tempMatcher.replaceFirst(effectString);
+				prose = prose.replaceFirst("\\[(\\w*\\s*\\w*)\\]\\{\\w*:(?<effect>\\w*-*\\w*)\\}", effectString);
 			}
 		}
 		
