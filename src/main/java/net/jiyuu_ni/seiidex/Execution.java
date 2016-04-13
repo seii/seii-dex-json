@@ -26,7 +26,7 @@ import net.jiyuu_ni.seiidex.dto.json.GenericPokemon;
 import net.jiyuu_ni.seiidex.dto.json.PokemonAbilitiesDTO;
 import net.jiyuu_ni.seiidex.dto.json.PokemonBreedingDTO;
 import net.jiyuu_ni.seiidex.dto.json.PokemonEffortValuesDTO;
-import net.jiyuu_ni.seiidex.dto.json.PokemonMovesGen2PlusDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonMoveListGen2PlusDTO;
 import net.jiyuu_ni.seiidex.dto.json.PokemonStatsGen2PlusDTO;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
@@ -70,7 +70,7 @@ public class Execution {
 
 	private static void populateJSONFileList(LinkedList<File> jsonFileList) {
 		String methodName = "populateJSONFileList";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		for(int i = 1; i < DexProperties.TOTAL_POKEMON_GENERATIONS + 1; i++) {
 			String outputFileName = DexProperties.JSON_RESOURCE_DIRECTORY +
@@ -80,12 +80,12 @@ public class Execution {
 			jsonFileList.add(pokemonJsonFile);
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 	}
 
 	private static void populateJSONDTOs(EntityManager em, int generationNumber, LinkedList<File> jsonFileList, ArrayList<HashMap<String, ? extends GenericPokemon>> generationList) {
 		String methodName = "populateJSONDTOs";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		//Iterate over each generation
 		for(int i = 1; i < jsonFileList.size() + 1; i++) {
@@ -185,7 +185,7 @@ public class Execution {
 			}
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 	}
 	
 	//TODO: Automate this from example JSON files
@@ -198,7 +198,7 @@ public class Execution {
 	
 	public static String formatPokemonFormsIdentifier(String identifier) {
 		String methodName = "formatPokemonFormsIdentifier";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		String transformedString = null;
 		
@@ -226,7 +226,7 @@ public class Execution {
 			transformedString += ")";
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 		
 		return transformedString;
 	}

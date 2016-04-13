@@ -1,11 +1,12 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
-
-import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
-import net.jiyuu_ni.seiidex.jpa.PokemonStat;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,13 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.VersionGroup;
+import net.jiyuu_ni.seiidex.util.FileOperations;
+
 public class Gen6Pokemon extends GenericPokemon {
+	private static final int THIS_GEN = 6;
+	
 	private Logger logger = LoggerFactory.getLogger(Gen6Pokemon.class);
 	
 	//Is this a Mega Evolution?
@@ -25,7 +32,7 @@ public class Gen6Pokemon extends GenericPokemon {
 	//Effort Values (EVs)
 	private PokemonEffortValuesDTO effortValues;
 	//Move set (for Generation 2 and later)
-	private PokemonMovesGen2PlusDTO moves;
+	private Map<String, PokemonMoveListGen2PlusDTO> moves;
 	//Breeding statistics
 	private PokemonBreedingDTO breeding;
 	
@@ -39,7 +46,7 @@ public class Gen6Pokemon extends GenericPokemon {
 	public Gen6Pokemon() {
 		super();
 		isMega = false;
-		form = "none";
+		form = "None";
 	}
 	
 	public boolean isMega() {
@@ -74,11 +81,11 @@ public class Gen6Pokemon extends GenericPokemon {
 		this.effortValues = effortValues;
 	}
 
-	public PokemonMovesGen2PlusDTO getMoves() {
+	public Map<String, PokemonMoveListGen2PlusDTO> getMoves() {
 		return moves;
 	}
 
-	public void setMoves(PokemonMovesGen2PlusDTO moves) {
+	public void setMoves(Map<String, PokemonMoveListGen2PlusDTO> moves) {
 		this.moves = moves;
 	}
 
@@ -101,7 +108,58 @@ public class Gen6Pokemon extends GenericPokemon {
 		
 		populateEffortValuesFromQuery(formGen);
 		
+		populateMovesFromQuery(formGen, em);
+	}
+
+	private void populateMovesFromQuery(PokemonFormGeneration formGen, EntityManager em) {
+		Query versionGroupQuery = em.createNamedQuery("VersionGroup.findAllByGenerationId")
+				.setParameter("genId", THIS_GEN);
+		List<VersionGroup> versionGroupList = versionGroupQuery.getResultList();
 		
+		Map<String, PokemonMoveListGen2PlusDTO> pokeMovesList =
+				new TreeMap<String, PokemonMoveListGen2PlusDTO>(new Comparator<String>() {
+	        @Override
+	        public int compare(String first, String second) {
+	        	int result = first.compareTo(second);
+	        	
+	        	if(result == 0) {
+	        		result = 1;
+	        	}
+	        	
+	        	return result;
+	        }
+	    });
+		
+		for(VersionGroup groupObj : versionGroupList) {
+			//Turn "black-2-white-2" into "Black 2 White 2"
+			String groupName = FileOperations.parseDashSeparatedString(groupObj.getIdentifier());
+			
+			if(groupName.contains(" 2")) {
+				//Turn "Black 2 White 2" into "Black-2 White-2"
+				groupName = groupName.replace(" 2", "-2");
+			}
+			
+			if(groupName.contains(" ")) {
+				if(groupName.contains("Omega Ruby ")) {
+					groupName = groupName.replace("Omega Ruby ", "Omega Ruby/");
+				}else {
+					//Turn "Black-2 White-2" into "Black-2/White-2"
+					groupName = groupName.replace(" ", "/");
+				}
+			}
+			
+			if(groupName.contains("-")) {
+				//Turn "Black-2/White-2" into "Black 2/White 2"
+				groupName = groupName.replace("-", " ");
+			}
+			
+			PokemonMoveListGen2PlusDTO pokeMoves = new PokemonMoveListGen2PlusDTO();
+			pokeMoves.populateAllFields(formGen, groupObj, em);
+			
+			pokeMovesList.put(groupName, pokeMoves);
+		}
+		
+		this.setMoves(pokeMovesList);
 	}
 
 	private void populateEffortValuesFromQuery(PokemonFormGeneration formGen) {

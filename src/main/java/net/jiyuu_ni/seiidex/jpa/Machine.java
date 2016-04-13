@@ -10,7 +10,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="machines")
-@NamedQuery(name="Machine.findAll", query="SELECT m FROM Machine m")
+@NamedQueries({
+	@NamedQuery(name="Machine.findAllByVersionGroupIdAndMoveId", query="SELECT m FROM Machine m WHERE m.versionGroup = :versionGroup AND m.move.id = :moveId ORDER BY m.move.id"),
+	@NamedQuery(name="Machine.findAll", query="SELECT m FROM Machine m")
+})
 public class Machine implements Serializable {
 	private static final long serialVersionUID = 1L;
 

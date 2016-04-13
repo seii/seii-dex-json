@@ -28,22 +28,42 @@
       "blah": "test"
     },
     "moves": {
-      "levelUp": {
-        "1": "blah",
-        "5": "blah"
-      },
-      "machines": [
-        "moveName1",
-        "moveName2"
-      ],
-      "egg": [
-        "moveName1",
-        "moveName2"
-      ],
-      "tutor": [
-        "moveName1",
-        "moveName2"
-      ]
+    	"game1" : {
+	      "levelUp": {
+	        "1": "blah",
+	        "5": "blah"
+	      },
+	      "machines": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "egg": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "tutor": [
+	        "moveName1",
+	        "moveName2"
+	      ]
+		},
+		"game2" : {
+	      "levelUp": {
+	        "1": "blah",
+	        "5": "blah"
+	      },
+	      "machines": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "egg": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "tutor": [
+	        "moveName1",
+	        "moveName2"
+	      ]
+		}
     },
     "breeding": {
       "eggGroup": [

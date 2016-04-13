@@ -16,4 +16,6 @@ public class DexProperties {
 	public static final String DTO_PACKAGE_NAME = "net.jiyuu_ni.seiidex.dto";
 	
 	public static final int TOTAL_POKEMON_GENERATIONS = 6;
+	
+	public static final int ENGLISH_LANGUAGE_ID = 9;
 }

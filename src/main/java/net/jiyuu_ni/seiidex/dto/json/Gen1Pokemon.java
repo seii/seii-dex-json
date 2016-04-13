@@ -18,7 +18,7 @@ public class Gen1Pokemon extends GenericPokemon {
 	//Effort Values (EVs)
 	private PokemonEffortValuesDTO effortValues;
 	//Move set (for Generation 2 and later)
-	private PokemonMovesGen2PlusDTO moves;
+	private PokemonMoveListGen2PlusDTO moves;
 	//Breeding statistics
 	private PokemonBreedingDTO breeding;
 	

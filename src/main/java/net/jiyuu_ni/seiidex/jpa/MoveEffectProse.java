@@ -10,7 +10,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="move_effect_prose")
-@NamedQuery(name="MoveEffectProse.findAll", query="SELECT m FROM MoveEffectProse m")
+@NamedQueries({
+	@NamedQuery(name="MoveEffectProse.findAllByPK", query="SELECT m FROM MoveEffectProse m where m.id = :pkObj"),
+	@NamedQuery(name="MoveEffectProse.findAll", query="SELECT m FROM MoveEffectProse m")
+})
 public class MoveEffectProse implements Serializable {
 	private static final long serialVersionUID = 1L;
 

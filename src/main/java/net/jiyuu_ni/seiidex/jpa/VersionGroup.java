@@ -11,7 +11,10 @@ import java.util.List;
  */
 @Entity
 @Table(name="version_groups")
-@NamedQuery(name="VersionGroup.findAll", query="SELECT v FROM VersionGroup v")
+@NamedQueries({
+	@NamedQuery(name="VersionGroup.findAllByGenerationId", query="SELECT v FROM VersionGroup v WHERE v.generation.id = :genId ORDER BY v.id"),
+	@NamedQuery(name="VersionGroup.findAll", query="SELECT v FROM VersionGroup v")
+})
 public class VersionGroup implements Serializable {
 	private static final long serialVersionUID = 1L;
 
