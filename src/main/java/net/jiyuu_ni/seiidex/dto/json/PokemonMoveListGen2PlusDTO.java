@@ -72,10 +72,26 @@ public class PokemonMoveListGen2PlusDTO {
 				new TreeMap<String, PokemonMoveGen2PlusDTO>(new Comparator<String>() {
 			        @Override
 			        public int compare(String first, String second) {
-			        	int result = first.compareTo(second);
+			        	int result;
+			        	
+			        	if(Integer.parseInt(first.substring(0, first.indexOf("-"))) >
+			        			Integer.parseInt(second.substring(0, second.indexOf("-")))) {
+			        		result = 1;
+			        	}else if(Integer.parseInt(first.substring(0, first.indexOf("-"))) <
+			        			Integer.parseInt(second.substring(0, second.indexOf("-")))) {
+			        		result = -1;
+			        	}else {
+			        		result = 0;
+			        	}
 			        	
 			        	if(result == 0) {
-			        		result = 1;
+			        		if(Integer.parseInt(first.substring(first.indexOf("-") + 1)) >
+			        			Integer.parseInt(second.substring(second.indexOf("-") + 1))) {
+			        			result = 1;
+			        		}else if(Integer.parseInt(first.substring(first.indexOf("-") + 1)) <
+			        			Integer.parseInt(second.substring(second.indexOf("-") + 1))) {
+			        			result = -1;
+			        		}
 			        	}
 			        	
 			        	return result;
@@ -117,7 +133,15 @@ public class PokemonMoveListGen2PlusDTO {
 						//Level up
 						PokemonMoveGen2PlusDTO levelUpMove = new PokemonMoveGen2PlusDTO();
 						levelUpMove.populateAllFields(moveObj, em);
-						levelUpMap.put(moveObj.getId().getLevel() + "", levelUpMove);
+						int startingSuffix = 0;
+						String moveLevel = moveObj.getId().getLevel() + "-" + startingSuffix;
+						
+						while(levelUpMap.containsKey(moveLevel)) {
+							startingSuffix++;
+							moveLevel = moveObj.getId().getLevel() + "-" + startingSuffix;
+						}
+						
+						levelUpMap.put(moveLevel, levelUpMove);
 						break;
 					}
 					case 2 : {

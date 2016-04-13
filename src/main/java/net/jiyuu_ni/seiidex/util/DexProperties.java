@@ -17,5 +17,11 @@ public class DexProperties {
 	
 	public static final int TOTAL_POKEMON_GENERATIONS = 6;
 	
+	//As listed in Vee-kun's database
 	public static final int ENGLISH_LANGUAGE_ID = 9;
+	
+	//Gleaned from http://bulbapedia.bulbagarden.net/wiki/Egg_cycle
+	public static final int BREEDING_STEP_MULTIPLER_GEN_2_3 = 256;
+	public static final int BREEDING_STEP_MULTIPLER_GEN_4 = 255;
+	public static final int BREEDING_STEP_MULTIPLER_GEN_5_6 = 257;
 }

@@ -98,21 +98,35 @@ public class PokemonMoveGen2PlusDTO {
 		String methodName = "parseLevelUpReasons";
 		logger.debug("Entering method " + methodName);
 		
-		//TODO: FIX HORRIFIC PATTERN MATCHING
-		if(prose.matches("((?s).*)\\[\\]\\{\\w*:(\\w*)\\}(.*)")) {
-			String startPiece = prose.substring(0, prose.indexOf("[]{"));
-			Pattern tempPattern = Pattern.compile("\\[\\]\\{\\w*:(?<test>\\w*)\\}");
+		while(prose.contains("]{")) {
+			
+			//Oh, you mean I actually need to type the <brackets> for a named capture?
+			Pattern tempPattern = Pattern.compile("\\[\\]\\{\\w*:(?<type>\\w*)\\}");
 			Matcher tempMatcher = tempPattern.matcher(prose);
-			if(tempMatcher.find()) {
-				String something = tempMatcher.group("test");
-				logger.info(something);
+			
+			while(tempMatcher.find()) {
+				String typeString = tempMatcher.group("type");
+				prose = tempMatcher.replaceFirst(typeString.substring(0, 1)
+						.toUpperCase() + typeString.substring(1));
 			}
-			String middlePiece = tempMatcher.group("\2");
-			logger.info(middlePiece);
+			
+			tempPattern = Pattern.compile("\\[(\\w*\\s*\\w*)\\]\\{\\w*:(?<effect>\\w*-*\\w*)\\}");
+			tempMatcher = tempPattern.matcher(prose);
+			
+			while(tempMatcher.find()) {
+				String effectString = tempMatcher.group("effect");
+				effectString = FileOperations.parseDashSeparatedString(effectString);
+				prose = tempMatcher.replaceFirst(effectString);
+			}
 		}
 		
-		if(prose.contains("[]{")) {
-			String preString = prose.substring(0,prose.indexOf("[]{"));
+		if(prose.contains("$effect_chance%")) {
+			Pattern tempPattern = Pattern.compile("(?<chance>\\$effect_chance)");
+			Matcher tempMatcher = tempPattern.matcher(prose);
+			
+			while(tempMatcher.find()) {
+				prose = tempMatcher.replaceAll(chancePercent + "");
+			}
 		}
 		
 		logger.debug("Exiting method " + methodName);

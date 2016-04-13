@@ -8,15 +8,16 @@ import java.util.TreeMap;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import net.jiyuu_ni.seiidex.jpa.Pokemon;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.VersionGroup;
+import net.jiyuu_ni.seiidex.util.FileOperations;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
-import net.jiyuu_ni.seiidex.jpa.VersionGroup;
-import net.jiyuu_ni.seiidex.util.FileOperations;
 
 public class Gen6Pokemon extends GenericPokemon {
 	private static final int THIS_GEN = 6;
@@ -109,6 +110,14 @@ public class Gen6Pokemon extends GenericPokemon {
 		populateEffortValuesFromQuery(formGen);
 		
 		populateMovesFromQuery(formGen, em);
+		
+		populateBreedingFromQuery(formGen);
+	}
+	
+	private void populateBreedingFromQuery(PokemonFormGeneration formGen) {
+		PokemonBreedingDTO pokeBreeding = new PokemonBreedingDTO();
+		pokeBreeding.populateAllFields(formGen);
+		this.setBreeding(pokeBreeding);
 	}
 
 	private void populateMovesFromQuery(PokemonFormGeneration formGen, EntityManager em) {
@@ -141,6 +150,7 @@ public class Gen6Pokemon extends GenericPokemon {
 			
 			if(groupName.contains(" ")) {
 				if(groupName.contains("Omega Ruby ")) {
+					//Turn "Omega Ruby Alpha Sapphire" into "Omega Ruby/Alpha Sapphire"
 					groupName = groupName.replace("Omega Ruby ", "Omega Ruby/");
 				}else {
 					//Turn "Black-2 White-2" into "Black-2/White-2"

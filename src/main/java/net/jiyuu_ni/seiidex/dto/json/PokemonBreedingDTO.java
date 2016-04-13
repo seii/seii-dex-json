@@ -2,6 +2,15 @@ package net.jiyuu_ni.seiidex.dto.json;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import net.jiyuu_ni.seiidex.jpa.EggGroup;
+import net.jiyuu_ni.seiidex.jpa.Pokemon;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.util.DexProperties;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,21 +22,21 @@ public class PokemonBreedingDTO {
 	private Logger logger = LoggerFactory.getLogger(PokemonBreedingDTO.class);
 	
 	//Egg groups
-	private ArrayList<String> eggGroups;
+	private List<String> eggGroups;
 	//How many base steps does it take to hatch this species' egg?
 	private String baseSteps;
 	
 	/**
 	 * @return the eggGroups
 	 */
-	public ArrayList<String> getEggGroups() {
+	public List<String> getEggGroups() {
 		return eggGroups;
 	}
 
 	/**
 	 * @param eggGroups the eggGroups to set
 	 */
-	public void setEggGroups(ArrayList<String> eggGroups) {
+	public void setEggGroups(List<String> eggGroups) {
 		this.eggGroups = eggGroups;
 	}
 
@@ -43,6 +52,24 @@ public class PokemonBreedingDTO {
 	 */
 	public void setBaseSteps(String baseSteps) {
 		this.baseSteps = baseSteps;
+	}
+	
+	public void populateAllFields(PokemonFormGeneration formGen) {
+		Pokemon onePoke = formGen.getPokemonForm().getPokemon();
+		List<EggGroup> eggGroupList = onePoke.getPokemonSpecy().getEggGroups();
+		
+		List<String> tempEggGroups = new ArrayList<String>(1);
+		
+		for(EggGroup pokeEgg : eggGroupList) {
+			tempEggGroups.add(FileOperations.parseDashSeparatedString(pokeEgg.getIdentifier()));
+		}
+		
+		this.setEggGroups(tempEggGroups);
+		
+		int minSteps = (onePoke.getPokemonSpecy().getHatchCounter() + 1) *
+				DexProperties.BREEDING_STEP_MULTIPLER_GEN_5_6;
+		
+		this.setBaseSteps(minSteps + "");
 	}
 
 	public String toJsonString() {
