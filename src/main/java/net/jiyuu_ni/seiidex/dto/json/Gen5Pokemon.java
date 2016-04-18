@@ -111,7 +111,8 @@ public class Gen5Pokemon extends GenericPokemon {
 		
 		populateEffortValuesFromQuery(formGen);
 		
-		populateMovesFromQuery(formGen, em);
+		//TODO: Including moves causes the JSON file size to skyrocket. Find a different approach.
+		//populateMovesFromQuery(formGen, em);
 		
 		populateBreedingFromQuery(formGen);
 		

@@ -56,7 +56,7 @@ public class Execution {
 				populateJSONDTOs(em, jsonFileList.size(), jsonFileList, generationList);
 				
 				for(int i = 0; i < jsonFileList.size(); i++) {
-					FileOperations.createJSONFileFromDTOList(jsonFileList.get(i), generationList.get(i));
+					FileOperations.createJSONFileFromPokeDTOList(jsonFileList.get(i), generationList.get(i));
 				}
 				
 				em.close();
@@ -123,13 +123,46 @@ public class Execution {
 					break;
 				}
 				case 4: {
-					logger.info("Populating Pokemon " + " from Generation " + i);
+					LinkedHashMap<String, Gen4Pokemon> gen4PokeList = new LinkedHashMap<String, Gen4Pokemon>(1);
 					
-					HashMap<String, Gen4Pokemon> gen4PokeList = new HashMap<String, Gen4Pokemon>(1);
-					//TODO: Populate
+					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+					//	use it as a starting query for obtaining information
+					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+							.setParameter("genId", generationNumber);
+					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+					
+					//Populate each Pokemon within this single generation
+					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					/*for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
+						
+						logger.info("Populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+									+ " from Generation " + i);
+						
+						Gen4Pokemon gen4Poke = new Gen4Pokemon();
+						gen4Poke.populateAllFields(onePoke, em);
+						
+						String headerFormat = gen4Poke.getNationalDex() + " - " + gen4Poke.getName();
+						
+						if(gen4Poke.getForm() == null || gen4Poke.getForm().equals("")) {
+							headerFormat = headerFormat.concat(" (" + gen4Poke.getForm() + ")");
+						}
+						
+						//No Mega Evolutions exist in Generation 4
+						if(gen4Poke.isMega()) {
+							logger.info("Skipping " + gen4Poke.getName() +
+									" from Generation " + i + ": No Megas in this Generation");
+						}else {
+							gen4PokeList.put(headerFormat , gen4Poke);
+							
+							logger.info("Finished populating Pokemon " +
+									gen4Poke.getName()
+									+ " from Generation " + i);
+						}
+					}
+					
 					generationList.add(gen4PokeList);
-					
-					logger.info("Finished populating Pokemon " + " from Generation " + i);
 					break;
 				}
 				case 5: {
@@ -220,14 +253,6 @@ public class Execution {
 		
 		logger.debug("Exiting method " + methodName);
 	}
-	
-	//TODO: Automate this from example JSON files
-	/*public static <T extends GenericPokemon> void createJSONDTOs(
-			LinkedList<File> filesToCreate, LinkedList<ArrayList<T>> generationList) {
-		for(int i = 0; i < filesToCreate.size(); i++) {
-			FileOperations.createJSONFileFromDTOList(filesToCreate.get(i), generationList.get(i));
-		}
-	}*/
 	
 	public static String formatPokemonFormsIdentifier(String identifier) {
 		String methodName = "formatPokemonFormsIdentifier";
