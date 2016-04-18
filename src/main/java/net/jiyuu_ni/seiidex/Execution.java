@@ -113,13 +113,46 @@ public class Execution {
 			//Use iteration as generation ID to trigger correct population method
 			switch(i) {
 				case 1: {
-					logger.info("Populating Pokemon " + " from Generation " + i);
+					LinkedHashMap<String, Gen1Pokemon> gen1PokeList = new LinkedHashMap<String, Gen1Pokemon>(1);
 					
-					HashMap<String, Gen1Pokemon> gen1PokeList = new HashMap<String, Gen1Pokemon>(1);
-					//TODO: Populate
+					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+					//	use it as a starting query for obtaining information
+					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+							.setParameter("genId", i);
+					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+					
+					//Populate each Pokemon within this single generation
+					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					/*for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
+						
+						logger.info("Populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+									+ " from Generation " + i);
+						
+						Gen1Pokemon gen1Poke = new Gen1Pokemon();
+						gen1Poke.populateAllFields(onePoke, em);
+						
+						String headerFormat = gen1Poke.getNationalDex() + " - " + gen1Poke.getName();
+						
+						if(gen1Poke.getForm() == null || gen1Poke.getForm().equals("")) {
+							headerFormat = headerFormat.concat(" (" + gen1Poke.getForm() + ")");
+						}
+						
+						//No Mega Evolutions exist in Generation 1
+						if(gen1Poke.isMega()) {
+							logger.info("Skipping " + gen1Poke.getName() +
+									" from Generation " + i + ": No Megas in this Generation");
+						}else {
+							gen1PokeList.put(headerFormat , gen1Poke);
+							
+							logger.info("Finished populating Pokemon " +
+									gen1Poke.getName()
+									+ " from Generation " + i);
+						}
+					}
+					
 					generationList.add(gen1PokeList);
-					
-					logger.info("Finished populating Pokemon " + " from Generation " + i);
 					break;
 				}
 				case 2: {
