@@ -23,7 +23,7 @@ import net.jiyuu_ni.seiidex.dto.json.Gen4Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen5Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen6Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.GenericPokemon;
-import net.jiyuu_ni.seiidex.dto.json.PokemonMoveGen2PlusDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonMoveDTO;
 import net.jiyuu_ni.seiidex.jpa.Move;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
@@ -53,7 +53,7 @@ public class Execution {
 			    //	the total number of generations
 				populateJSONDTOs(em, jsonFileList, generationList);
 				
-				LinkedHashMap<String, PokemonMoveGen2PlusDTO> moveList = new LinkedHashMap<>();
+				LinkedHashMap<String, PokemonMoveDTO> moveList = new LinkedHashMap<>();
 				
 				//Generate moves list for this generation
 				Query moveQuery = em.createNamedQuery("Move.findAll");
@@ -62,7 +62,7 @@ public class Execution {
 				for(Move moveObj : moveQueryResults) {
 					int moveId = moveObj.getId();
 					
-					PokemonMoveGen2PlusDTO oneMove = new PokemonMoveGen2PlusDTO();
+					PokemonMoveDTO oneMove = new PokemonMoveDTO();
 					oneMove.populateAllFields(moveObj, em);
 					
 					moveList.put(moveId + "", oneMove);
@@ -123,13 +123,46 @@ public class Execution {
 					break;
 				}
 				case 2: {
-					logger.info("Populating Pokemon " + " from Generation " + i);
+					LinkedHashMap<String, Gen2Pokemon> gen2PokeList = new LinkedHashMap<String, Gen2Pokemon>(1);
 					
-					HashMap<String, Gen2Pokemon> gen2PokeList = new HashMap<String, Gen2Pokemon>(1);
-					//TODO: Populate
+					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+					//	use it as a starting query for obtaining information
+					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+							.setParameter("genId", i);
+					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+					
+					//Populate each Pokemon within this single generation
+					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					/*for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
+						
+						logger.info("Populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+									+ " from Generation " + i);
+						
+						Gen2Pokemon gen2Poke = new Gen2Pokemon();
+						gen2Poke.populateAllFields(onePoke, em);
+						
+						String headerFormat = gen2Poke.getNationalDex() + " - " + gen2Poke.getName();
+						
+						if(gen2Poke.getForm() == null || gen2Poke.getForm().equals("")) {
+							headerFormat = headerFormat.concat(" (" + gen2Poke.getForm() + ")");
+						}
+						
+						//No Mega Evolutions exist in Generation 2
+						if(gen2Poke.isMega()) {
+							logger.info("Skipping " + gen2Poke.getName() +
+									" from Generation " + i + ": No Megas in this Generation");
+						}else {
+							gen2PokeList.put(headerFormat , gen2Poke);
+							
+							logger.info("Finished populating Pokemon " +
+									gen2Poke.getName()
+									+ " from Generation " + i);
+						}
+					}
+					
 					generationList.add(gen2PokeList);
-					
-					logger.info("Finished populating Pokemon " + " from Generation " + i);
 					break;
 				}
 				case 3: {

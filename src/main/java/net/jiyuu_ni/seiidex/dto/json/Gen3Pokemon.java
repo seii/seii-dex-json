@@ -32,7 +32,7 @@ public class Gen3Pokemon extends GenericPokemon {
 	//Effort Values (EVs)
 	private PokemonEffortValuesDTO effortValues;
 	//Move set (for Generation 2 and later)
-	private Map<String, PokemonMoveListGen2PlusDTO> moves;
+	private Map<String, PokemonMoveListDTO> moves;
 	//Breeding statistics
 	private PokemonBreedingDTO breeding;
 	
@@ -81,11 +81,11 @@ public class Gen3Pokemon extends GenericPokemon {
 		this.effortValues = effortValues;
 	}
 
-	public Map<String, PokemonMoveListGen2PlusDTO> getMoves() {
+	public Map<String, PokemonMoveListDTO> getMoves() {
 		return moves;
 	}
 
-	public void setMoves(Map<String, PokemonMoveListGen2PlusDTO> moves) {
+	public void setMoves(Map<String, PokemonMoveListDTO> moves) {
 		this.moves = moves;
 	}
 
@@ -137,8 +137,8 @@ public class Gen3Pokemon extends GenericPokemon {
 				.setParameter("genId", THIS_GEN);
 		List<VersionGroup> versionGroupList = versionGroupQuery.getResultList();
 		
-		Map<String, PokemonMoveListGen2PlusDTO> pokeMovesList =
-				new TreeMap<String, PokemonMoveListGen2PlusDTO>(new Comparator<String>() {
+		Map<String, PokemonMoveListDTO> pokeMovesList =
+				new TreeMap<String, PokemonMoveListDTO>(new Comparator<String>() {
 	        @Override
 	        public int compare(String first, String second) {
 	        	int result = first.compareTo(second);
@@ -176,7 +176,7 @@ public class Gen3Pokemon extends GenericPokemon {
 				groupName = groupName.replace("-", " ");
 			}
 			
-			PokemonMoveListGen2PlusDTO pokeMoves = new PokemonMoveListGen2PlusDTO();
+			PokemonMoveListDTO pokeMoves = new PokemonMoveListDTO();
 			pokeMoves.populateAllFields(formGen, groupObj, em);
 			
 			pokeMovesList.put(groupName, pokeMoves);

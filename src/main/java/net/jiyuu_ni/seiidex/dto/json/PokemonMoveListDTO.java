@@ -20,8 +20,8 @@ import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.jpa.PokemonMove;
 import net.jiyuu_ni.seiidex.jpa.VersionGroup;
 
-public class PokemonMoveListGen2PlusDTO {
-	private Logger logger = LoggerFactory.getLogger(PokemonMoveListGen2PlusDTO.class);
+public class PokemonMoveListDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonMoveListDTO.class);
 	
 	//Moves learned by leveling up
 	private Map<String, String> levelUpMoves;

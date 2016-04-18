@@ -19,8 +19,8 @@ import net.jiyuu_ni.seiidex.jpa.MoveEffectProsePK;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
 
-public class PokemonMoveGen2PlusDTO {
-	private Logger logger = LoggerFactory.getLogger(PokemonMoveGen2PlusDTO.class);
+public class PokemonMoveDTO {
+	private Logger logger = LoggerFactory.getLogger(PokemonMoveDTO.class);
 	
 	private String moveName;
 	private String movePower;
