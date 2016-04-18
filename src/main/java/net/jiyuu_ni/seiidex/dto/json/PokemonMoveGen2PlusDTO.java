@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.jiyuu_ni.seiidex.jpa.Move;
 import net.jiyuu_ni.seiidex.jpa.MoveEffectProse;
 import net.jiyuu_ni.seiidex.jpa.MoveEffectProsePK;
-import net.jiyuu_ni.seiidex.jpa.PokemonMove;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
 
@@ -68,18 +68,18 @@ public class PokemonMoveGen2PlusDTO {
 		this.moveEffect = moveEffect;
 	}
 
-	public void populateAllFields(PokemonMove pokeMove, EntityManager em) {
+	public void populateAllFields(Move pokeMove, EntityManager em) {
 		String methodName = "populateAllFields";
 		logger.debug("Entering " + methodName);
 		
-		this.setMoveName(FileOperations.parseDashSeparatedString(pokeMove.getMove().getIdentifier()));
-		this.setMovePower(pokeMove.getMove().getPower() + "");
-		this.setMoveType(FileOperations.parseDashSeparatedString(pokeMove.getMove().getType().getIdentifier()));
-		this.setMovePP(pokeMove.getMove().getPp() + "");
+		this.setMoveName(FileOperations.parseDashSeparatedString(pokeMove.getIdentifier()));
+		this.setMovePower(pokeMove.getPower() + "");
+		this.setMoveType(FileOperations.parseDashSeparatedString(pokeMove.getType().getIdentifier()));
+		this.setMovePP(pokeMove.getPp() + "");
 		
 		MoveEffectProsePK prosePK = new MoveEffectProsePK();
 		prosePK.setLocalLanguageId(DexProperties.ENGLISH_LANGUAGE_ID);
-		prosePK.setMoveEffectId(pokeMove.getMove().getMoveEffect().getId());
+		prosePK.setMoveEffectId(pokeMove.getMoveEffect().getId());
 		
 		Query moveEffectProseQuery = em.createNamedQuery("MoveEffectProse.findAllByPK")
 				.setParameter("pkObj", prosePK);
@@ -93,7 +93,7 @@ public class PokemonMoveGen2PlusDTO {
 		}
 		
 		if(pokeProse != null) {
-			this.setMoveEffect(parseMoveEffectProse(pokeProse.getShortEffect(), pokeMove.getMove().getEffectChance()));
+			this.setMoveEffect(parseMoveEffectProse(pokeProse.getShortEffect(), pokeMove.getEffectChance()));
 		}
 		
 		logger.debug("Exiting " + methodName);

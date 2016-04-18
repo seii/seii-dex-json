@@ -23,11 +23,8 @@ import net.jiyuu_ni.seiidex.dto.json.Gen4Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen5Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.Gen6Pokemon;
 import net.jiyuu_ni.seiidex.dto.json.GenericPokemon;
-import net.jiyuu_ni.seiidex.dto.json.PokemonAbilitiesDTO;
-import net.jiyuu_ni.seiidex.dto.json.PokemonBreedingDTO;
-import net.jiyuu_ni.seiidex.dto.json.PokemonEffortValuesDTO;
-import net.jiyuu_ni.seiidex.dto.json.PokemonMoveListGen2PlusDTO;
-import net.jiyuu_ni.seiidex.dto.json.PokemonStatsGen2PlusDTO;
+import net.jiyuu_ni.seiidex.dto.json.PokemonMoveGen2PlusDTO;
+import net.jiyuu_ni.seiidex.jpa.Move;
 import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
@@ -51,12 +48,35 @@ public class Execution {
 				EntityManagerFactory entityManagerFactory =  Persistence.createEntityManagerFactory("seii-dex-json");
 			    EntityManager em = entityManagerFactory.createEntityManager();
 			
-			    //The size of the file list is used as the number of generations, because generating the list itself
-			    //	uses the DexProperties constant for how many generations exist
-				populateJSONDTOs(em, jsonFileList.size(), jsonFileList, generationList);
+			    //The DexProperties constant for how many generations exist is used to generate
+			    //	the file list, so it's safe to just pass in the list without specifying
+			    //	the total number of generations
+				populateJSONDTOs(em, jsonFileList, generationList);
 				
+				LinkedHashMap<String, PokemonMoveGen2PlusDTO> moveList = new LinkedHashMap<>();
+				
+				//Generate moves list for this generation
+				Query moveQuery = em.createNamedQuery("Move.findAll");
+				List<Move> moveQueryResults = moveQuery.getResultList();
+				
+				for(Move moveObj : moveQueryResults) {
+					int moveId = moveObj.getId();
+					
+					PokemonMoveGen2PlusDTO oneMove = new PokemonMoveGen2PlusDTO();
+					oneMove.populateAllFields(moveObj, em);
+					
+					moveList.put(moveId + "", oneMove);
+				}
+				
+				File movesFile = new File(DexProperties.JSON_RESOURCE_DIRECTORY + DexProperties.JSON_MOVES_FILE_NAME
+						+ DexProperties.JSON_EXTENSION);
+				
+				//Write out Moves JSON file
+				FileOperations.createJSONFileFromDTOMap(movesFile, moveList);
+				
+				//Write out Pokemon JSON files
 				for(int i = 0; i < jsonFileList.size(); i++) {
-					FileOperations.createJSONFileFromPokeDTOList(jsonFileList.get(i), generationList.get(i));
+					FileOperations.createJSONFileFromDTOMap(jsonFileList.get(i), generationList.get(i));
 				}
 				
 				em.close();
@@ -83,7 +103,7 @@ public class Execution {
 		logger.debug("Exiting method " + methodName);
 	}
 
-	private static void populateJSONDTOs(EntityManager em, int generationNumber, LinkedList<File> jsonFileList, ArrayList<HashMap<String, ? extends GenericPokemon>> generationList) {
+	private static void populateJSONDTOs(EntityManager em, LinkedList<File> jsonFileList, ArrayList<HashMap<String, ? extends GenericPokemon>> generationList) {
 		String methodName = "populateJSONDTOs";
 		logger.debug("Entering method " + methodName);
 		
@@ -113,13 +133,46 @@ public class Execution {
 					break;
 				}
 				case 3: {
-					logger.info("Populating Pokemon " + " from Generation " + i);
+					LinkedHashMap<String, Gen3Pokemon> gen3PokeList = new LinkedHashMap<String, Gen3Pokemon>(1);
 					
-					HashMap<String, Gen3Pokemon> gen3PokeList = new HashMap<String, Gen3Pokemon>(1);
-					//TODO: Populate
+					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+					//	use it as a starting query for obtaining information
+					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+							.setParameter("genId", i);
+					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+					
+					//Populate each Pokemon within this single generation
+					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					/*for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
+						
+						logger.info("Populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+									+ " from Generation " + i);
+						
+						Gen3Pokemon gen3Poke = new Gen3Pokemon();
+						gen3Poke.populateAllFields(onePoke, em);
+						
+						String headerFormat = gen3Poke.getNationalDex() + " - " + gen3Poke.getName();
+						
+						if(gen3Poke.getForm() == null || gen3Poke.getForm().equals("")) {
+							headerFormat = headerFormat.concat(" (" + gen3Poke.getForm() + ")");
+						}
+						
+						//No Mega Evolutions exist in Generation 3
+						if(gen3Poke.isMega()) {
+							logger.info("Skipping " + gen3Poke.getName() +
+									" from Generation " + i + ": No Megas in this Generation");
+						}else {
+							gen3PokeList.put(headerFormat , gen3Poke);
+							
+							logger.info("Finished populating Pokemon " +
+									gen3Poke.getName()
+									+ " from Generation " + i);
+						}
+					}
+					
 					generationList.add(gen3PokeList);
-					
-					logger.info("Finished populating Pokemon " + " from Generation " + i);
 					break;
 				}
 				case 4: {
@@ -128,7 +181,7 @@ public class Execution {
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
 					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
-							.setParameter("genId", generationNumber);
+							.setParameter("genId", i);
 					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
 					
 					//Populate each Pokemon within this single generation
@@ -171,7 +224,7 @@ public class Execution {
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
 					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
-							.setParameter("genId", generationNumber);
+							.setParameter("genId", i);
 					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
 					
 					//Populate each Pokemon within this single generation
@@ -214,7 +267,7 @@ public class Execution {
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
 					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
-							.setParameter("genId", generationNumber);
+							.setParameter("genId", i);
 					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
 					
 					//Populate each Pokemon within this single generation

@@ -42,31 +42,8 @@ public class FileOperations {
 	    logger.debug("Exiting " + methodName);
 	}
 	
-	public static <T extends GenericPokemon> void createJSONFileFromPokeDTOList(File fileToCreate, HashMap<String, T> dtoFile) {
-		String methodName = "createJSONFileFromPokeDTOList";
-		logger.debug("Entering method " + methodName);
-		
-		try {
-			PrintWriter out = new PrintWriter(new OutputStreamWriter(
-	        		new FileOutputStream(fileToCreate), StandardCharsets.UTF_8));
-			out.print("");
-			
-			JsonFactory jsonFactory = new JsonFactory();
-			JsonParser jsonParser = jsonFactory.createParser(fileToCreate);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			//In order to produce cleaner JSON, don't include null properties
-			mapper.setSerializationInclusion(Include.NON_NULL);
-			mapper.writeValue(fileToCreate, dtoFile);
-		} catch (IOException e) {
-			logger.info(e.getLocalizedMessage());
-		}
-		
-		logger.debug("Exiting method " + methodName);
-	}
-	
-	public static <T> void createJSONFileFromNonPokeDTOList(File fileToCreate, HashMap<String, T> dtoFile) {
-		String methodName = "createJSONFileFromNonPokeDTOList";
+	public static <T> void createJSONFileFromDTOMap(File fileToCreate, HashMap<String, T> dtoFile) {
+		String methodName = "createJSONFileFromDTOMap";
 		logger.debug("Entering method " + methodName);
 		
 		try {

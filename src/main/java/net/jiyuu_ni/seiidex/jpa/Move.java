@@ -11,7 +11,10 @@ import java.util.List;
  */
 @Entity
 @Table(name="moves")
-@NamedQuery(name="Move.findAll", query="SELECT m FROM Move m")
+@NamedQueries({
+	@NamedQuery(name="Move.findAllByGenerationId", query="SELECT m FROM Move m WHERE m.generation.id = :genId ORDER BY m.id"),
+	@NamedQuery(name="Move.findAll", query="SELECT m FROM Move m")
+})
 public class Move implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -24,53 +24,53 @@ public class PokemonMoveListGen2PlusDTO {
 	private Logger logger = LoggerFactory.getLogger(PokemonMoveListGen2PlusDTO.class);
 	
 	//Moves learned by leveling up
-	private Map<String, PokemonMoveGen2PlusDTO> levelUpMoves;
+	private Map<String, String> levelUpMoves;
 	//Moves learned by Technical or Hidden Machines
-	private Map<String, PokemonMoveGen2PlusDTO> machineMoves;
+	private Map<String, String> machineMoves;
 	//Moves learned by breeding ("egg moves")
-	private ArrayList<PokemonMoveGen2PlusDTO> eggMoves;
+	private ArrayList<String> eggMoves;
 	//Moves learned from a Move Tutor
-	private ArrayList<PokemonMoveGen2PlusDTO> tutorMoves;
+	private ArrayList<String> tutorMoves;
 	//Moves learned by changing Form
-	private ArrayList<PokemonMoveGen2PlusDTO> formChangeMoves;
+	private ArrayList<String> formChangeMoves;
 
-	public Map<String, PokemonMoveGen2PlusDTO> getLevelUpMoves() {
+	public Map<String, String> getLevelUpMoves() {
 		return levelUpMoves;
 	}
 
-	public void setLevelUpMoves(Map<String, PokemonMoveGen2PlusDTO> levelUpMoves) {
+	public void setLevelUpMoves(Map<String, String> levelUpMoves) {
 		this.levelUpMoves = levelUpMoves;
 	}
 
-	public Map<String, PokemonMoveGen2PlusDTO> getMachineMoves() {
+	public Map<String, String> getMachineMoves() {
 		return machineMoves;
 	}
 
-	public void setMachineMoves(Map<String, PokemonMoveGen2PlusDTO> machineMoves) {
+	public void setMachineMoves(Map<String, String> machineMoves) {
 		this.machineMoves = machineMoves;
 	}
 
-	public ArrayList<PokemonMoveGen2PlusDTO> getEggMoves() {
+	public ArrayList<String> getEggMoves() {
 		return eggMoves;
 	}
 
-	public void setEggMoves(ArrayList<PokemonMoveGen2PlusDTO> eggMoves) {
+	public void setEggMoves(ArrayList<String> eggMoves) {
 		this.eggMoves = eggMoves;
 	}
 
-	public ArrayList<PokemonMoveGen2PlusDTO> getTutorMoves() {
+	public ArrayList<String> getTutorMoves() {
 		return tutorMoves;
 	}
 
-	public void setTutorMoves(ArrayList<PokemonMoveGen2PlusDTO> tutorMoves) {
+	public void setTutorMoves(ArrayList<String> tutorMoves) {
 		this.tutorMoves = tutorMoves;
 	}
-	
-	public ArrayList<PokemonMoveGen2PlusDTO> getFormChangeMoves() {
+
+	public ArrayList<String> getFormChangeMoves() {
 		return formChangeMoves;
 	}
 
-	public void setFormChangeMoves(ArrayList<PokemonMoveGen2PlusDTO> formChangeMoves) {
+	public void setFormChangeMoves(ArrayList<String> formChangeMoves) {
 		this.formChangeMoves = formChangeMoves;
 	}
 
@@ -81,8 +81,8 @@ public class PokemonMoveListGen2PlusDTO {
 		List<PokemonMove> moveList = formGen.getPokemonForm().getPokemon().getPokemonMoves();
 		
 		//Use a Comparator to order the map by level in ascending order
-		Map<String, PokemonMoveGen2PlusDTO> levelUpMap =
-				new TreeMap<String, PokemonMoveGen2PlusDTO>(new Comparator<String>() {
+		Map<String, String> levelUpMap =
+				new TreeMap<String, String>(new Comparator<String>() {
 			        @Override
 			        public int compare(String first, String second) {
 			        	int result;
@@ -112,8 +112,8 @@ public class PokemonMoveListGen2PlusDTO {
 			    });
 		
 		//use a Comparator to order the map by TM number in ascending order
-		Map<String, PokemonMoveGen2PlusDTO> machineMap =
-				new TreeMap<String, PokemonMoveGen2PlusDTO>(new Comparator<String>() {
+		Map<String, String> machineMap =
+				new TreeMap<String, String>(new Comparator<String>() {
 			        @Override
 			        public int compare(String first, String second) {
 			        	int result;
@@ -132,9 +132,9 @@ public class PokemonMoveListGen2PlusDTO {
 			        }
 			    });
 		
-		ArrayList<PokemonMoveGen2PlusDTO> eggList = new ArrayList<PokemonMoveGen2PlusDTO>(1);
-		ArrayList<PokemonMoveGen2PlusDTO> tutorList = new ArrayList<PokemonMoveGen2PlusDTO>(1);
-		ArrayList<PokemonMoveGen2PlusDTO> formList = new ArrayList<PokemonMoveGen2PlusDTO>(1);
+		ArrayList<String> eggList = new ArrayList<String>(1);
+		ArrayList<String> tutorList = new ArrayList<String>(1);
+		ArrayList<String> formList = new ArrayList<String>(1);
 		
 		for(PokemonMove moveObj : moveList) {
 			//Moves with an ID above 10000 are for outside games like Shadow and XD, and
@@ -145,8 +145,6 @@ public class PokemonMoveListGen2PlusDTO {
 				switch(moveType) {
 					case 1 : {
 						//Level up
-						PokemonMoveGen2PlusDTO levelUpMove = new PokemonMoveGen2PlusDTO();
-						levelUpMove.populateAllFields(moveObj, em);
 						int startingSuffix = 0;
 						String moveLevel = moveObj.getId().getLevel() + "-" + startingSuffix;
 						
@@ -155,21 +153,17 @@ public class PokemonMoveListGen2PlusDTO {
 							moveLevel = moveObj.getId().getLevel() + "-" + startingSuffix;
 						}
 						
-						levelUpMap.put(moveLevel, levelUpMove);
+						levelUpMap.put(moveLevel, moveObj.getMove().getId() + "");
 						break;
 					}
 					case 2 : {
 						//Egg
-						PokemonMoveGen2PlusDTO eggMove = new PokemonMoveGen2PlusDTO();
-						eggMove.populateAllFields(moveObj, em);
-						eggList.add(eggMove);
+						eggList.add(moveObj.getMove().getId() + "");
 						break;
 					}
 					case 3 : {
 						//Tutor
-						PokemonMoveGen2PlusDTO tutorMove = new PokemonMoveGen2PlusDTO();
-						tutorMove.populateAllFields(moveObj, em);
-						tutorList.add(tutorMove);
+						tutorList.add(moveObj.getMove().getId() + "");
 						break;
 					}
 					case 4 : {
@@ -187,12 +181,10 @@ public class PokemonMoveListGen2PlusDTO {
 							pokeMachine = machineObj;
 						}
 						
-						PokemonMoveGen2PlusDTO machineMove = new PokemonMoveGen2PlusDTO();
-						machineMove.populateAllFields(moveObj, em);
-						
 						if(pokeMachine != null) {
 							if(!machineMap.containsKey("TM " + pokeMachine.getId().getMachineNumber())) {
-								machineMap.put("TM " + pokeMachine.getId().getMachineNumber(), machineMove);
+								machineMap.put("TM " + pokeMachine.getId().getMachineNumber(),
+										moveObj.getMove().getId() + "");
 							}
 						}
 						
@@ -201,18 +193,12 @@ public class PokemonMoveListGen2PlusDTO {
 					case 6 : {
 						//If a Pichu's parent (either) is holding a Light Ball
 						//Really just another type of Egg move, so treat it accordingly
-						PokemonMoveGen2PlusDTO eggMove = new PokemonMoveGen2PlusDTO();
-						eggMove.populateAllFields(moveObj, em);
-						eggList.add(eggMove);
+						eggList.add(moveObj.getMove().getId() + "");
 						break;
 					}
 					case 10 : {
 						//Form change
-						
-						PokemonMoveGen2PlusDTO formChangeMove = new PokemonMoveGen2PlusDTO();
-						formChangeMove.populateAllFields(moveObj, em);
-						
-						formList.add(formChangeMove);
+						formList.add(moveObj.getMove().getId() + "");
 						break;
 					}
 					default : {
