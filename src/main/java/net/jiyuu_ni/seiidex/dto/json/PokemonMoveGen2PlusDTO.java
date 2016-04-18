@@ -69,6 +69,9 @@ public class PokemonMoveGen2PlusDTO {
 	}
 
 	public void populateAllFields(PokemonMove pokeMove, EntityManager em) {
+		String methodName = "populateAllFields";
+		logger.debug("Entering " + methodName);
+		
 		this.setMoveName(FileOperations.parseDashSeparatedString(pokeMove.getMove().getIdentifier()));
 		this.setMovePower(pokeMove.getMove().getPower() + "");
 		this.setMoveType(FileOperations.parseDashSeparatedString(pokeMove.getMove().getType().getIdentifier()));
@@ -92,10 +95,12 @@ public class PokemonMoveGen2PlusDTO {
 		if(pokeProse != null) {
 			this.setMoveEffect(parseMoveEffectProse(pokeProse.getShortEffect(), pokeMove.getMove().getEffectChance()));
 		}
+		
+		logger.debug("Exiting " + methodName);
 	}
 	
 	private String parseMoveEffectProse(String prose, Integer chancePercent) {
-		String methodName = "parseLevelUpReasons";
+		String methodName = "parseMoveEffectProse";
 		logger.debug("Entering method " + methodName);
 		
 		while(prose.contains("]{")) {
@@ -135,6 +140,9 @@ public class PokemonMoveGen2PlusDTO {
 	}
 
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -143,6 +151,8 @@ public class PokemonMoveGen2PlusDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}

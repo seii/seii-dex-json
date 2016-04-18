@@ -106,6 +106,9 @@ public class GenericPokemon {
 	}
 
 	public void populateAllFields(PokemonFormGeneration generationResult, EntityManager em) {
+		String methodName = "populatAllFields";
+		logger.debug("Entering " + methodName);
+		
 		this.setName(Execution.formatPokemonFormsIdentifier(generationResult.getPokemonForm().getIdentifier()));
 		
 		String speciesId = String.format("%03d",
@@ -127,15 +130,24 @@ public class GenericPokemon {
 		
 		//TODO: Be really nit-picky and figure out how to implement this
 		//populateGameDifferencesFromQuery();
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	private void populateGameDifferencesFromQuery() {
+		String methodName = "populateGameDifferencesFromQuery";
+		logger.debug("Entering " + methodName);
+		
 		//TODO: Populate this correctly
 		HashMap<String, String> pokeGameDifferences = new HashMap<String, String>(1);
 		this.setGameDifferenceList(pokeGameDifferences);
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	private void populateLocationsFromQuery(EntityManager em, PokemonFormGeneration generationResult) {
+		String methodName = "populateLocationsFromQuery";
+		logger.debug("Entering " + methodName);
 		
 		HashMap<String, HashMap<String, HashMap<String, String>>> pokeLocationList =
 				new HashMap<String, HashMap<String, HashMap<String, String>>>(1);
@@ -170,10 +182,14 @@ public class GenericPokemon {
 		}
 		
 		this.setLocations(pokeLocationList);
+		logger.debug("Exiting " + methodName);
 	}
 
 	private HashMap<String, HashMap<String, String>> populateAreaMap(
 			EntityManager em, List<Encounter> encounterList) {
+		String methodName = "populateAreaMap";
+		logger.debug("Entering " + methodName);
+		
 		HashMap<String, HashMap<String, String>> areaMap =
 				new HashMap<String, HashMap<String, String>>(1);
 
@@ -199,11 +215,17 @@ public class GenericPokemon {
 			
 			areaMap.put(areaName, encounterMap);
 		}
+		
+		logger.debug("Exiting " + methodName);
+		
 		return areaMap;
 	}
 
 	private HashMap<String, String> populateLocationMap(Encounter encounterObj,
 									HashMap<String, String> dupeDetect) {
+		String methodName = "populateLocationMap";
+		logger.debug("Entering " + methodName);
+		
 		HashMap<String, String> encounterMap = new HashMap<String, String>(1);
 		
 		List<EncounterMethodProse> encounterMethodList = encounterObj.getEncounterSlot()
@@ -243,11 +265,17 @@ public class GenericPokemon {
 		}
 		
 		encounterMap.put(encounterCondition, encounterChance);
+		
+		logger.debug("Exiting " + methodName);
+		
 		return encounterMap;
 	}
 
 	private void populateEvolutionsFromQuery(EntityManager em,
 			PokemonFormGeneration formGen) {
+		String methodName = "populateEvolutionsFromQuery";
+		logger.debug("Entering " + methodName);
+		
 		ArrayList<PokemonEvolutionDTO> evolveList = new ArrayList<PokemonEvolutionDTO>(1);
 		
 		Query testEvolveQuery = em.createNamedQuery("PokemonSpecy.findAllByEvolvesFromId")
@@ -263,24 +291,38 @@ public class GenericPokemon {
 		}
 		
 		this.setEvolution(evolveList);
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	private void populateTypesFromQuery(PokemonFormGeneration generationResult) {
+		String methodName = "populateTypesFromQuery";
+		logger.debug("Entering " + methodName);
+		
 		PokemonTypeDTO pokeType = new PokemonTypeDTO();
 		pokeType.populateAllFields(generationResult);
 		this.setTypes(pokeType);
+		logger.debug("Exiting " + methodName);
 	}
 
 	private void populateFormFromQuery(PokemonFormGeneration generationResult) {
+		String methodName = "populateFormFromQuery";
+		logger.debug("Entering " + methodName);
+		
 		if(generationResult.getPokemonForm().getFormIdentifier() != null) {
 			this.setForm(Execution.formatPokemonFormsIdentifier(
 					generationResult.getPokemonForm().getFormIdentifier()).replace("(", "").replace(")", ""));
 		}else {
 			this.setForm("None");
 		}
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -289,6 +331,8 @@ public class GenericPokemon {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}

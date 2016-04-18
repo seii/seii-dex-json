@@ -90,12 +90,6 @@ public class Execution {
 		//Iterate over each generation
 		for(int i = 1; i < jsonFileList.size() + 1; i++) {
 			
-			//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
-			//	use it as a starting query for obtaining information
-			Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
-					.setParameter("genId", generationNumber);
-			List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
-			
 			//Use iteration as generation ID to trigger correct population method
 			switch(i) {
 				case 1: {
@@ -139,17 +133,56 @@ public class Execution {
 					break;
 				}
 				case 5: {
-					logger.info("Populating Pokemon " + " from Generation " + i);
+					LinkedHashMap<String, Gen5Pokemon> gen5PokeList = new LinkedHashMap<String, Gen5Pokemon>(1);
 					
-					HashMap<String, Gen5Pokemon> gen5PokeList = new HashMap<String, Gen5Pokemon>(1);
-					//TODO: Populate
+					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+					//	use it as a starting query for obtaining information
+					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+							.setParameter("genId", generationNumber);
+					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
+					
+					//Populate each Pokemon within this single generation
+					for(PokemonFormGeneration onePoke : singleGenPokeList) {
+					/*for(int j = 0; j < 12; j++) {
+						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
+						
+						logger.info("Populating Pokemon " +
+								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
+									+ " from Generation " + i);
+						
+						Gen5Pokemon gen5Poke = new Gen5Pokemon();
+						gen5Poke.populateAllFields(onePoke, em);
+						
+						String headerFormat = gen5Poke.getNationalDex() + " - " + gen5Poke.getName();
+						
+						if(gen5Poke.getForm() == null || gen5Poke.getForm().equals("")) {
+							headerFormat = headerFormat.concat(" (" + gen5Poke.getForm() + ")");
+						}
+						
+						//No Mega Evolutions exist in Generation 5
+						if(gen5Poke.isMega()) {
+							logger.info("Skipping " + gen5Poke.getName() +
+									" from Generation " + i + ": No Megas in this Generation");
+						}else {
+							gen5PokeList.put(headerFormat , gen5Poke);
+							
+							logger.info("Finished populating Pokemon " +
+									gen5Poke.getName()
+									+ " from Generation " + i);
+						}
+					}
+					
 					generationList.add(gen5PokeList);
-					
-					logger.info("Finished populating Pokemon " + " from Generation " + i);
 					break;
 				}
 				case 6: {
 					LinkedHashMap<String, Gen6Pokemon> gen6PokeList = new LinkedHashMap<String, Gen6Pokemon>(1);
+					
+					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
+					//	use it as a starting query for obtaining information
+					Query pokeQuery = em.createNamedQuery("PokemonFormGeneration.findAllByGenerationId")
+							.setParameter("genId", generationNumber);
+					List<PokemonFormGeneration> singleGenPokeList = pokeQuery.getResultList();
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {

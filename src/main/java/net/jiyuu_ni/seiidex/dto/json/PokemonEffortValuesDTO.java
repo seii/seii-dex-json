@@ -107,6 +107,9 @@ public class PokemonEffortValuesDTO {
 	}
 	
 	public void populateAllFields(PokemonFormGeneration formGen) {
+		String methodName = "populateAllFields";
+		logger.debug("Entering " + methodName);
+		
 		List<PokemonStat> pokeStatList = formGen.getPokemonForm().getPokemon().getPokemonStats();
 		
 		for(PokemonStat statObj : pokeStatList) {
@@ -114,46 +117,51 @@ public class PokemonEffortValuesDTO {
 			
 			if(statObj.getEffort() > 0) {
 				switch(statId) {
-				case 1: {
-					//HP
-					this.setHp(String.valueOf(statObj.getEffort()));
-					break;
+					case 1: {
+						//HP
+						this.setHp(String.valueOf(statObj.getEffort()));
+						break;
+					}
+					case 2: {
+						//Attack
+						this.setAttack(String.valueOf(statObj.getEffort()));
+						break;
+					}
+					case 3: {
+						//Defense
+						this.setDefense(String.valueOf(statObj.getEffort()));
+						break;
+					}
+					case 4: {
+						//Special Attack
+						this.setSpecialAttack(String.valueOf(statObj.getEffort()));
+						break;
+					}
+					case 5: {
+						//Special Defense
+						this.setSpecialDefense(String.valueOf(statObj.getEffort()));
+						break;
+					}
+					case 6: {
+						//Speed
+						this.setSpeed(String.valueOf(statObj.getEffort()));
+						break;
+					}
+					default: {
+						logger.error("Somehow a Pokemon effort value was outside the range of 1 - 6!");
+						break;
+					}
 				}
-				case 2: {
-					//Attack
-					this.setAttack(String.valueOf(statObj.getEffort()));
-					break;
-				}
-				case 3: {
-					//Defense
-					this.setDefense(String.valueOf(statObj.getEffort()));
-					break;
-				}
-				case 4: {
-					//Special Attack
-					this.setSpecialAttack(String.valueOf(statObj.getEffort()));
-					break;
-				}
-				case 5: {
-					//Special Defense
-					this.setSpecialDefense(String.valueOf(statObj.getEffort()));
-					break;
-				}
-				case 6: {
-					//Speed
-					this.setSpeed(String.valueOf(statObj.getEffort()));
-					break;
-				}
-				default: {
-					logger.error("Somehow a Pokemon effort value was outside the range of 1 - 6!");
-					break;
-				}
-			}
 			}
 		}
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -162,6 +170,8 @@ public class PokemonEffortValuesDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}

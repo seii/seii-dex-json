@@ -1,7 +1,5 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
-import java.util.HashMap;
-
 import javax.persistence.EntityManager;
 
 import org.slf4j.Logger;
@@ -71,7 +69,7 @@ public class PokemonEvolutionDTO {
 	
 	public void populateAllFields(EntityManager em, PokemonEvolution queryResult) {
 		String methodName = "populateAllFields";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		this.setMethod(FileOperations.parseDashSeparatedString(queryResult.getEvolutionTrigger().getIdentifier()));
 		
@@ -84,17 +82,18 @@ public class PokemonEvolutionDTO {
 					queryResult.getPokemonSpecy1().getIdentifier()));
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 	}
 
 	private String parseLevelUpReason(PokemonEvolution evolution) {
 		String methodName = "parseLevelUpReasons";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		String result = null;
 		
 		if(evolution.getEvolutionTrigger().getId() == 1) {
 			//Level-up of one kind or another
+			//NOTE: Basically? ...evolution is complicated.
 			int pokeMinLevel = evolution.getMinimumLevel();
 			Gender pokeGender = evolution.getGender();
 			Location pokeLocation = evolution.getLocation();
@@ -228,7 +227,7 @@ public class PokemonEvolutionDTO {
 					" (less than 6 Pokemon) while evolving Nincada";
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 		
 		return result;
 	}

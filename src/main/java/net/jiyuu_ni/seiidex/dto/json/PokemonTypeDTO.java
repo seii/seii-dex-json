@@ -46,7 +46,7 @@ public class PokemonTypeDTO {
 	
 	public void populateAllFields(PokemonFormGeneration generationResult) {
 		String methodName = "populateAllFields";
-		logger.info("Entering method " + methodName);
+		logger.debug("Entering method " + methodName);
 		
 		//Check whether there's one or two types to this Pokemon
 		if(generationResult.getPokemonForm().getPokemon().getPokemonTypes().size() > 1) {
@@ -59,11 +59,11 @@ public class PokemonTypeDTO {
 					.get(0).getType().getTypeNames().get(6).getName());
 		}
 		
-		logger.info("Exiting method " + methodName);
+		logger.debug("Exiting method " + methodName);
 	}
 	
 	public String toJsonString() {
-		String methodName = "populateAllFields";
+		String methodName = "toJsonString";
 		logger.debug("Entering method " + methodName);
 		
 		ObjectMapper mapper = new ObjectMapper();

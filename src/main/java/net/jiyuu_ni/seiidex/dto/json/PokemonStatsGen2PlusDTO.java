@@ -107,6 +107,9 @@ public class PokemonStatsGen2PlusDTO {
 	}
 	
 	public void populateAllFields(PokemonFormGeneration formGen) {
+		String methodName = "populateAllFields";
+		logger.debug("Entering " + methodName);
+		
 		List<PokemonStat> pokeStatList = formGen.getPokemonForm().getPokemon().getPokemonStats();
 		
 		for(PokemonStat statObj : pokeStatList) {
@@ -149,9 +152,14 @@ public class PokemonStatsGen2PlusDTO {
 				}
 			}
 		}
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -160,6 +168,8 @@ public class PokemonStatsGen2PlusDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}

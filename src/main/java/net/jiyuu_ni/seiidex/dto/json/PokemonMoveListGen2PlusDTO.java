@@ -31,6 +31,8 @@ public class PokemonMoveListGen2PlusDTO {
 	private ArrayList<PokemonMoveGen2PlusDTO> eggMoves;
 	//Moves learned from a Move Tutor
 	private ArrayList<PokemonMoveGen2PlusDTO> tutorMoves;
+	//Moves learned by changing Form
+	private ArrayList<PokemonMoveGen2PlusDTO> formChangeMoves;
 
 	public Map<String, PokemonMoveGen2PlusDTO> getLevelUpMoves() {
 		return levelUpMoves;
@@ -64,7 +66,18 @@ public class PokemonMoveListGen2PlusDTO {
 		this.tutorMoves = tutorMoves;
 	}
 	
+	public ArrayList<PokemonMoveGen2PlusDTO> getFormChangeMoves() {
+		return formChangeMoves;
+	}
+
+	public void setFormChangeMoves(ArrayList<PokemonMoveGen2PlusDTO> formChangeMoves) {
+		this.formChangeMoves = formChangeMoves;
+	}
+
 	public void populateAllFields(PokemonFormGeneration formGen, VersionGroup versionGroup, EntityManager em) {
+		String methodName = "populateAllFields";
+		logger.debug("Entering " + methodName);
+		
 		List<PokemonMove> moveList = formGen.getPokemonForm().getPokemon().getPokemonMoves();
 		
 		//Use a Comparator to order the map by level in ascending order
@@ -121,6 +134,7 @@ public class PokemonMoveListGen2PlusDTO {
 		
 		ArrayList<PokemonMoveGen2PlusDTO> eggList = new ArrayList<PokemonMoveGen2PlusDTO>(1);
 		ArrayList<PokemonMoveGen2PlusDTO> tutorList = new ArrayList<PokemonMoveGen2PlusDTO>(1);
+		ArrayList<PokemonMoveGen2PlusDTO> formList = new ArrayList<PokemonMoveGen2PlusDTO>(1);
 		
 		for(PokemonMove moveObj : moveList) {
 			//Moves with an ID above 10000 are for outside games like Shadow and XD, and
@@ -184,6 +198,23 @@ public class PokemonMoveListGen2PlusDTO {
 						
 						break;
 					}
+					case 6 : {
+						//If a Pichu's parent (either) is holding a Light Ball
+						//Really just another type of Egg move, so treat it accordingly
+						PokemonMoveGen2PlusDTO eggMove = new PokemonMoveGen2PlusDTO();
+						eggMove.populateAllFields(moveObj, em);
+						eggList.add(eggMove);
+						break;
+					}
+					case 10 : {
+						//Form change
+						
+						PokemonMoveGen2PlusDTO formChangeMove = new PokemonMoveGen2PlusDTO();
+						formChangeMove.populateAllFields(moveObj, em);
+						
+						formList.add(formChangeMove);
+						break;
+					}
 					default : {
 						logger.error("Somehow a Pokemon move was outside the range of 1 - 4!");
 						break;
@@ -192,13 +223,35 @@ public class PokemonMoveListGen2PlusDTO {
 			}
 		}
 		
-		this.setLevelUpMoves(levelUpMap);
-		this.setMachineMoves(machineMap);
-		this.setEggMoves(eggList);
-		this.setTutorMoves(tutorList);
+		//Don't set these if they're null or empty. Aside from potential Java errors, the JSON
+		//	will unnecessarily pick up empty values if they're not null
+		if(levelUpMap != null && !levelUpMap.isEmpty()) {
+			this.setLevelUpMoves(levelUpMap);
+		}
+		
+		if(machineMap != null && !machineMap.isEmpty()) {
+			this.setMachineMoves(machineMap);
+		}
+		
+		if(eggList != null && !eggList.isEmpty()) {
+			this.setEggMoves(eggList);
+		}
+		
+		if(tutorList != null && !tutorList.isEmpty()) {
+			this.setTutorMoves(tutorList);
+		}
+		
+		if(formList != null && !formList.isEmpty()) {
+			this.setFormChangeMoves(formList);
+		}
+		
+		logger.debug("Exiting " + methodName);
 	}
 
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -207,6 +260,8 @@ public class PokemonMoveListGen2PlusDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}

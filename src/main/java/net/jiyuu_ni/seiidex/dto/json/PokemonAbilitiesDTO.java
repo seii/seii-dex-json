@@ -2,17 +2,15 @@ package net.jiyuu_ni.seiidex.dto.json;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import net.jiyuu_ni.seiidex.jpa.PokemonAbility;
-import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
-import net.jiyuu_ni.seiidex.util.FileOperations;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.jiyuu_ni.seiidex.jpa.PokemonAbility;
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.util.FileOperations;
 
 public class PokemonAbilitiesDTO {
 	private Logger logger = LoggerFactory.getLogger(PokemonAbilitiesDTO.class);
@@ -67,6 +65,9 @@ public class PokemonAbilitiesDTO {
 	}
 	
 	public void populateAllFields(PokemonFormGeneration formGen) {
+		String methodName = "populateAllFields";
+		logger.debug("Entering " + methodName);
+		
 		List<PokemonAbility> abilitiesList = formGen.getPokemonForm()
 				.getPokemon().getPokemonAbilities();
 		
@@ -86,9 +87,14 @@ public class PokemonAbilitiesDTO {
 				}
 			}
 		}
+		
+		logger.debug("Exiting " + methodName);
 	}
 	
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -97,6 +103,8 @@ public class PokemonAbilitiesDTO {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}
