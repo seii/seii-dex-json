@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.slf4j.Logger;
@@ -19,12 +19,20 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.jiyuu_ni.seiidex.dto.json.GenericPokemon;
-
+/**
+ * This class encompasses operations performed on actual files in the filesystem.
+ * @author seii
+ *
+ */
 public class FileOperations {
 	
 	private static Logger logger = LoggerFactory.getLogger(FileOperations.class);
 
+	/**
+	 * List files recursively from a given starting point.
+	 * (This method is pulled from Stack Overflow, but I could not find it again to give proper credit.)
+	 * @param files List of <pre>File</pre> objects to be used as starting points
+	 */
 	public static void listFiles(File[] files) {
 		
 		String methodName = "listFiles";
@@ -42,7 +50,12 @@ public class FileOperations {
 	    logger.debug("Exiting " + methodName);
 	}
 	
-	public static <T> void createJSONFileFromDTOMap(File fileToCreate, HashMap<String, T> dtoFile) {
+	/**
+	 * This class will create a JSON file on the local filesystem from the given <pre>Map</pre> of DTO files
+	 * @param fileToCreate <pre>File</pre> object to write to filesystem
+	 * @param dtoFile <pre>Map</pre> of DTO files to pass into JSON mapper
+	 */
+	public static <T> void createJSONFileFromDTOMap(File fileToCreate, Map<String, T> dtoFile) {
 		String methodName = "createJSONFileFromDTOMap";
 		logger.debug("Entering method " + methodName);
 		
@@ -65,6 +78,11 @@ public class FileOperations {
 		logger.debug("Exiting method " + methodName);
 	}
 	
+	/**
+	 * Convert a file name (e.g. "file_name") to camel case (e.g. "FileName")
+	 * @param inputString Name of file to convert
+	 * @return Converted filename, as a <pre>String</pre>
+	 */
 	public static String convertFileNameToCamelCase(String inputString) {
 		String methodName = "convertFileNameToCamelCase";
 		logger.debug("Entering " + methodName);
@@ -95,6 +113,11 @@ public class FileOperations {
 		return s.toString();
 	}
 	
+	/**
+	 * Convert a hyphen-seperated string to remove hyphens
+	 * @param method String to convert
+	 * @return Converted string
+	 */
 	public static String parseDashSeparatedString(String method) {
 		String methodName = "parseDashSeparatedString";
 		logger.debug("Entering method " + methodName);

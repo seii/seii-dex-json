@@ -2,11 +2,12 @@ package net.jiyuu_ni.seiidex;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,6 +30,12 @@ import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
 import net.jiyuu_ni.seiidex.util.DexProperties;
 import net.jiyuu_ni.seiidex.util.FileOperations;
 
+/**
+ * The Execution class handles what it says - executing the necessary methods to parse data from the JPA
+ * connection into JSON data fit for consumption by apps.
+ * @author seii
+ *
+ */
 public class Execution {
 	
 	private static Logger logger = LoggerFactory.getLogger(Execution.class);
@@ -39,7 +46,7 @@ public class Execution {
 			
 			//Using LinkedList guarantees that the order will be respected
 			LinkedList<File> jsonFileList = new LinkedList<File>();
-			ArrayList<HashMap<String, ? extends GenericPokemon>> generationList = new ArrayList<>();
+			ArrayList<Map<String, ? extends GenericPokemon>> generationList = new ArrayList<>();
 			
 			populateJSONFileList(jsonFileList);
 			
@@ -88,6 +95,11 @@ public class Execution {
 		}
 	}
 
+	/**
+	 * Populates the list of which JSON files should be written by checking the <pre>DexProperties</pre> constants
+	 * to determine how many generations of Pokemon should be accounted for.
+	 * @param jsonFileList List of files expected to be written to filesystem
+	 */
 	private static void populateJSONFileList(LinkedList<File> jsonFileList) {
 		String methodName = "populateJSONFileList";
 		logger.debug("Entering method " + methodName);
@@ -103,7 +115,13 @@ public class Execution {
 		logger.debug("Exiting method " + methodName);
 	}
 
-	private static void populateJSONDTOs(EntityManager em, LinkedList<File> jsonFileList, ArrayList<HashMap<String, ? extends GenericPokemon>> generationList) {
+	/**
+	 * Populates JSON DTOs for each JSON file set to be written
+	 * @param em EntityManager with a JPA connection to the database
+	 * @param jsonFileList List of files expected to be written to filesystem
+	 * @param generationList List where each Generation of Pokemon should be stored after population
+	 */
+	private static void populateJSONDTOs(EntityManager em, LinkedList<File> jsonFileList, ArrayList<Map<String, ? extends GenericPokemon>> generationList) {
 		String methodName = "populateJSONDTOs";
 		logger.debug("Entering method " + methodName);
 		
@@ -113,7 +131,9 @@ public class Execution {
 			//Use iteration as generation ID to trigger correct population method
 			switch(i) {
 				case 1: {
-					LinkedHashMap<String, Gen1Pokemon> gen1PokeList = new LinkedHashMap<String, Gen1Pokemon>(1);
+					//Using a TreeMap automatically lines up "### - Name (Form)" right after "### - Name"
+					//	when the "###" is the same, which is exactly what's needed for an accurate JSON file later
+					Map<String, Gen1Pokemon> gen1PokeList = new TreeMap<String, Gen1Pokemon>();
 					
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
@@ -123,8 +143,6 @@ public class Execution {
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					/*for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
@@ -156,7 +174,9 @@ public class Execution {
 					break;
 				}
 				case 2: {
-					LinkedHashMap<String, Gen2Pokemon> gen2PokeList = new LinkedHashMap<String, Gen2Pokemon>(1);
+					//Using a TreeMap automatically lines up "### - Name (Form)" right after "### - Name"
+					//	when the "###" is the same, which is exactly what's needed for an accurate JSON file later
+					Map<String, Gen2Pokemon> gen2PokeList = new TreeMap<String, Gen2Pokemon>();
 					
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
@@ -166,8 +186,6 @@ public class Execution {
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					/*for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
@@ -199,7 +217,9 @@ public class Execution {
 					break;
 				}
 				case 3: {
-					LinkedHashMap<String, Gen3Pokemon> gen3PokeList = new LinkedHashMap<String, Gen3Pokemon>(1);
+					//Using a TreeMap automatically lines up "### - Name (Form)" right after "### - Name"
+					//	when the "###" is the same, which is exactly what's needed for an accurate JSON file later
+					Map<String, Gen3Pokemon> gen3PokeList = new TreeMap<String, Gen3Pokemon>();
 					
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
@@ -209,8 +229,6 @@ public class Execution {
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					/*for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
@@ -242,7 +260,9 @@ public class Execution {
 					break;
 				}
 				case 4: {
-					LinkedHashMap<String, Gen4Pokemon> gen4PokeList = new LinkedHashMap<String, Gen4Pokemon>(1);
+					//Using a TreeMap automatically lines up "### - Name (Form)" right after "### - Name"
+					//	when the "###" is the same, which is exactly what's needed for an accurate JSON file later
+					Map<String, Gen4Pokemon> gen4PokeList = new TreeMap<String, Gen4Pokemon>();
 					
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
@@ -252,8 +272,6 @@ public class Execution {
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					/*for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
@@ -285,7 +303,9 @@ public class Execution {
 					break;
 				}
 				case 5: {
-					LinkedHashMap<String, Gen5Pokemon> gen5PokeList = new LinkedHashMap<String, Gen5Pokemon>(1);
+					//Using a TreeMap automatically lines up "### - Name (Form)" right after "### - Name"
+					//	when the "###" is the same, which is exactly what's needed for an accurate JSON file later
+					Map<String, Gen5Pokemon> gen5PokeList = new TreeMap<String, Gen5Pokemon>();
 					
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
@@ -295,8 +315,6 @@ public class Execution {
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					/*for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
@@ -328,7 +346,9 @@ public class Execution {
 					break;
 				}
 				case 6: {
-					LinkedHashMap<String, Gen6Pokemon> gen6PokeList = new LinkedHashMap<String, Gen6Pokemon>(1);
+					//Using a TreeMap automatically lines up "### - Name (Form)" right after "### - Name"
+					//	when the "###" is the same, which is exactly what's needed for an accurate JSON file later
+					Map<String, Gen6Pokemon> gen6PokeList = new TreeMap<String, Gen6Pokemon>();
 					
 					//The PokemonFormGeneration table contains a good link to details needed for the DTOs, so
 					//	use it as a starting query for obtaining information
@@ -338,8 +358,6 @@ public class Execution {
 					
 					//Populate each Pokemon within this single generation
 					for(PokemonFormGeneration onePoke : singleGenPokeList) {
-					/*for(int j = 0; j < 12; j++) {
-						PokemonFormGeneration onePoke = singleGenPokeList.get(j);*/
 						logger.info("Populating Pokemon " +
 								formatPokemonFormsIdentifier(onePoke.getPokemonForm().getIdentifier())
 									+ " from Generation " + i);
@@ -373,6 +391,12 @@ public class Execution {
 		logger.debug("Exiting method " + methodName);
 	}
 	
+	/**
+	 * Converts the hyphen-seperated, all lowercase format for Pokemon forms used by Veekun's database into
+	 * a more readable space-seperated and properly cased format. (e.g. Veekun's "attack-form" becomes "(Attack Form)".)
+	 * @param identifier String from Veekun's database
+	 * @return Transformed string in the format "(Properly Cased Pokemon Form)"
+	 */
 	public static String formatPokemonFormsIdentifier(String identifier) {
 		String methodName = "formatPokemonFormsIdentifier";
 		logger.debug("Entering method " + methodName);
