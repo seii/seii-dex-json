@@ -152,29 +152,7 @@ public class Gen2Pokemon extends GenericPokemon {
 	    });
 		
 		for(VersionGroup groupObj : versionGroupList) {
-			//Turn "black-2-white-2" into "Black 2 White 2"
-			String groupName = FileOperations.parseDashSeparatedString(groupObj.getIdentifier());
-			
-			if(groupName.contains(" 2")) {
-				//Turn "Black 2 White 2" into "Black-2 White-2"
-				groupName = groupName.replace(" 2", "-2 ");
-			}
-			
-			if(groupName.contains(" ")) {
-				if(groupName.contains("Omega Ruby ")) {
-					//Turn "Omega Ruby Alpha Sapphire" into "Omega Ruby/Alpha Sapphire"
-					groupName = groupName.replace("Omega Ruby ", "Omega Ruby/");
-				}else {
-					//Turn "Black-2 White-2" into "Black-2/White-2"
-					groupName = groupName.trim();
-					groupName = groupName.replace(" ", "/");
-				}
-			}
-			
-			if(groupName.contains("-")) {
-				//Turn "Black-2/White-2" into "Black 2/White 2"
-				groupName = groupName.replace("-", " ");
-			}
+			String groupName = super.formatGameName(groupObj.getIdentifier());
 			
 			PokemonMoveListDTO pokeMoves = new PokemonMoveListDTO();
 			pokeMoves.populateAllFields(formGen, groupObj, em);

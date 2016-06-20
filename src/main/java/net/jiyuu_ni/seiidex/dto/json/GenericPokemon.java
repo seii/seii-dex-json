@@ -159,12 +159,7 @@ public class GenericPokemon {
 			
 			for(Version versionObj : gameList) {
 				
-				String gameName = versionObj.getIdentifier();
-				
-				//Ensure that "x" becomes "X", etc.
-				if(gameName.length() == 1) {
-					gameName = gameName.toUpperCase();
-				}
+				String gameName = formatGameName(versionObj.getIdentifier());
 				
 				Query queryResult = em.createNamedQuery("Encounter.findAllByVersionIdAndPokeId")
 						.setParameter("versionId", versionObj.getId())
@@ -317,6 +312,36 @@ public class GenericPokemon {
 		}
 		
 		logger.debug("Exiting " + methodName);
+	}
+	
+	protected String formatGameName(String origString) {
+		String transformedString = null;
+		
+		//Turn "black-2-white-2" into "Black 2 White 2"
+		transformedString = FileOperations.parseDashSeparatedString(origString);
+		
+		if(transformedString.contains(" 2")) {
+			//Turn "Black 2 White 2" into "Black-2 White-2"
+			transformedString = transformedString.replace(" 2", "-2 ");
+		}
+		
+		if(transformedString.contains(" ")) {
+			if(transformedString.contains("Omega Ruby ")) {
+				//Turn "Omega Ruby Alpha Sapphire" into "Omega Ruby/Alpha Sapphire"
+				transformedString = transformedString.replace("Omega Ruby ", "Omega Ruby/");
+			}else {
+				//Turn "Black-2 White-2" into "Black-2/White-2"
+				transformedString = transformedString.trim();
+				transformedString = transformedString.replace(" ", "/");
+			}
+		}
+		
+		if(transformedString.contains("-")) {
+			//Turn "Black-2/White-2" into "Black 2/White 2"
+			transformedString = transformedString.replace("-", " ");
+		}
+		
+		return transformedString;
 	}
 
 	public String toJsonString() {
