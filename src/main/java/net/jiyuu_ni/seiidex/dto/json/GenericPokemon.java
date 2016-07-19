@@ -341,6 +341,11 @@ public class GenericPokemon {
 			transformedString = transformedString.replace("-", " ");
 		}
 		
+		if(transformedString.contains("Firered")) {
+			//Turn "Firered/leafgreen" into "FireRed/LeafGreen"
+			transformedString = "FireRed/LeafGreen";
+		}
+		
 		return transformedString;
 	}
 

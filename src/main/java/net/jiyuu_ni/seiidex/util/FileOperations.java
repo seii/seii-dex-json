@@ -71,6 +71,7 @@ public class FileOperations {
 			//In order to produce cleaner JSON, don't include null properties
 			mapper.setSerializationInclusion(Include.NON_NULL);
 			mapper.writeValue(fileToCreate, dtoFile);
+			out.close();
 		} catch (IOException e) {
 			logger.info(e.getLocalizedMessage());
 		}
