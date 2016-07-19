@@ -28,22 +28,42 @@
       "blah": "test"
     },
     "moves": {
-      "levelUp": {
-        "1": "blah",
-        "5": "blah"
-      },
-      "machines": [
-        "moveName1",
-        "moveName2"
-      ],
-      "egg": [
-        "moveName1",
-        "moveName2"
-      ],
-      "tutor": [
-        "moveName1",
-        "moveName2"
-      ]
+    	"game1" : {
+	      "levelUp": {
+	        "1": "blah",
+	        "5": "blah"
+	      },
+	      "machines": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "egg": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "tutor": [
+	        "moveName1",
+	        "moveName2"
+	      ]
+		},
+		"game2" : {
+	      "levelUp": {
+	        "1": "blah",
+	        "5": "blah"
+	      },
+	      "machines": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "egg": [
+	        "moveName1",
+	        "moveName2"
+	      ],
+	      "tutor": [
+	        "moveName1",
+	        "moveName2"
+	      ]
+		}
     },
     "breeding": {
       "eggGroup": [
@@ -53,8 +73,16 @@
       "baseSteps": "test"
     },
     "locations" : {
-      "game1": "blah",
-      "game2": "blah"
+      "game1": {
+      	"area1" : {
+      		"method1" : "chance1"
+      	}
+      },
+      "game2": {
+      	"area2" : {
+      		"method2" : "chance2"
+      	}
+      }
     }
   },
   "001 - Something (Mega)": {
@@ -110,7 +138,16 @@
       "baseSteps": "unknown"
     },
     "locations" : {
-      "game1": "unknown"
+      "game1": {
+      	"area1" : {
+      		"method1" : "chance1"
+      	}
+      },
+      "game2": {
+      	"area2" : {
+      		"method2" : "chance2"
+      	}
+      }
     }
   }
 }

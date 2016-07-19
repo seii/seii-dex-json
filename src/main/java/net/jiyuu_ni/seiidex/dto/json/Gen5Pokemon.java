@@ -1,6 +1,12 @@
 package net.jiyuu_ni.seiidex.dto.json;
 
-import java.util.LinkedHashMap;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,33 +14,27 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Gen5Pokemon {
+import net.jiyuu_ni.seiidex.jpa.PokemonFormGeneration;
+import net.jiyuu_ni.seiidex.jpa.VersionGroup;
+import net.jiyuu_ni.seiidex.util.FileOperations;
+
+public class Gen5Pokemon extends GenericPokemon {
+	private static final int THIS_GEN = 5;
+	
 	private Logger logger = LoggerFactory.getLogger(Gen5Pokemon.class);
 	
-	//National Dex number in three-digit format (e.g. "001" instead of "1")
-	private String nationalDex;
-	//Pokemon name
-	private String name;
 	//Is this a Mega Evolution?
 	private boolean isMega = false;
-	//What form is this Pokemon in? (e.g. Deoxys' different forms)
-	private String form;
-	//Types (e.g. "Grass")
-	private PokemonType types;
-	//Evolution details (can they evolve, how, etc.)
-	private PokemonEvolution evolution;
 	//Abilities (including hidden ability, if one exists)
-	private PokemonAbilities abilities;
+	private PokemonAbilitiesDTO abilities;
 	//Stats (using Generation 2+ system)
-	private PokemonStatsGen2Plus stats;
+	private PokemonStatsGen2PlusDTO stats;
 	//Effort Values (EVs)
-	private PokemonEffortValues effortValues;
+	private PokemonEffortValuesDTO effortValues;
 	//Move set (for Generation 2 and later)
-	private PokemonMovesGen2Plus moves;
+	private Map<String, PokemonMoveListDTO> moves;
 	//Breeding statistics
-	private PokemonBreeding breeding;
-	//Where can this Pokemon be found?
-	private LinkedHashMap<String, String> locations;
+	private PokemonBreedingDTO breeding;
 	
 	/*
 	 * Default constructor
@@ -44,165 +44,164 @@ public class Gen5Pokemon {
 	 * - Pokemon is not in a special form
 	 */
 	public Gen5Pokemon() {
+		super();
 		isMega = false;
-		form = "none";
-	}
-	
-	/**
-	 * @return the nationalDex
-	 */
-	public String getNationalDex() {
-		return nationalDex;
+		form = "None";
 	}
 
-	/**
-	 * @param nationalDex the nationalDex to set
-	 */
-	public void setNationalDex(String nationalDex) {
-		this.nationalDex = nationalDex;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the isMega
-	 */
 	public boolean isMega() {
 		return isMega;
 	}
 
-	/**
-	 * @param isMega the isMega to set
-	 */
 	public void setMega(boolean isMega) {
 		this.isMega = isMega;
 	}
 
-	/**
-	 * @return the types
-	 */
-	public PokemonType getTypes() {
-		return types;
-	}
-
-	/**
-	 * @param types the types to set
-	 */
-	public void setTypes(PokemonType types) {
-		this.types = types;
-	}
-
-	/**
-	 * @return the evolution
-	 */
-	public PokemonEvolution getEvolution() {
-		return evolution;
-	}
-
-	/**
-	 * @param evolution the evolution to set
-	 */
-	public void setEvolution(PokemonEvolution evolution) {
-		this.evolution = evolution;
-	}
-
-	/**
-	 * @return the abilities
-	 */
-	public PokemonAbilities getAbilities() {
+	public PokemonAbilitiesDTO getAbilities() {
 		return abilities;
 	}
 
-	/**
-	 * @param abilities the abilities to set
-	 */
-	public void setAbilities(PokemonAbilities abilities) {
+	public void setAbilities(PokemonAbilitiesDTO abilities) {
 		this.abilities = abilities;
 	}
 
-	/**
-	 * @return the stats
-	 */
-	public PokemonStatsGen2Plus getStats() {
+	public PokemonStatsGen2PlusDTO getStats() {
 		return stats;
 	}
 
-	/**
-	 * @param stats the stats to set
-	 */
-	public void setStats(PokemonStatsGen2Plus stats) {
+	public void setStats(PokemonStatsGen2PlusDTO stats) {
 		this.stats = stats;
 	}
 
-	/**
-	 * @return the effortValues
-	 */
-	public PokemonEffortValues getEffortValues() {
+	public PokemonEffortValuesDTO getEffortValues() {
 		return effortValues;
 	}
 
-	/**
-	 * @param effortValues the effortValues to set
-	 */
-	public void setEffortValues(PokemonEffortValues effortValues) {
+	public void setEffortValues(PokemonEffortValuesDTO effortValues) {
 		this.effortValues = effortValues;
 	}
 
-	/**
-	 * @return the moves
-	 */
-	public PokemonMovesGen2Plus getMoves() {
+	public Map<String, PokemonMoveListDTO> getMoves() {
 		return moves;
 	}
 
-	/**
-	 * @param moves the moves to set
-	 */
-	public void setMoves(PokemonMovesGen2Plus moves) {
+	public void setMoves(Map<String, PokemonMoveListDTO> moves) {
 		this.moves = moves;
 	}
 
-	/**
-	 * @return the breeding
-	 */
-	public PokemonBreeding getBreeding() {
+	public PokemonBreedingDTO getBreeding() {
 		return breeding;
 	}
 
-	/**
-	 * @param breeding the breeding to set
-	 */
-	public void setBreeding(PokemonBreeding breeding) {
+	public void setBreeding(PokemonBreedingDTO breeding) {
 		this.breeding = breeding;
 	}
-
-	/**
-	 * @return the locations
-	 */
-	public LinkedHashMap<String, String> getLocations() {
-		return locations;
+	
+	public void populateAllFields(PokemonFormGeneration formGen, EntityManager em) {
+		super.populateAllFields(formGen, em);
+		
+		String methodName = "populateAllFields";
+		logger.debug("Entering " + methodName);
+		
+		this.setMega(formGen.getPokemonForm().getIsMega());
+		
+		populateAbilitiesFromQuery(formGen);
+		
+		populateStatsFromQuery(formGen);
+		
+		populateEffortValuesFromQuery(formGen);
+		
+		populateMovesFromQuery(formGen, em);
+		
+		populateBreedingFromQuery(formGen);
+		
+		logger.debug("Exiting " + methodName);
+	}
+	
+	private void populateBreedingFromQuery(PokemonFormGeneration formGen) {
+		String methodName = "populateBreedingFromQuery";
+		logger.debug("Entering " + methodName);
+		
+		PokemonBreedingDTO pokeBreeding = new PokemonBreedingDTO();
+		pokeBreeding.populateAllFields(formGen);
+		this.setBreeding(pokeBreeding);
+		
+		logger.debug("Exiting " + methodName);
 	}
 
-	/**
-	 * @param locations the locations to set
-	 */
-	public void setLocations(LinkedHashMap<String, String> locations) {
-		this.locations = locations;
+	private void populateMovesFromQuery(PokemonFormGeneration formGen, EntityManager em) {
+		String methodName = "populateMovesFromQuery";
+		logger.debug("Entering " + methodName);
+		
+		Query versionGroupQuery = em.createNamedQuery("VersionGroup.findAllByGenerationId")
+				.setParameter("genId", THIS_GEN);
+		List<VersionGroup> versionGroupList = versionGroupQuery.getResultList();
+		
+		Map<String, PokemonMoveListDTO> pokeMovesList =
+				new TreeMap<String, PokemonMoveListDTO>(new Comparator<String>() {
+	        @Override
+	        public int compare(String first, String second) {
+	        	int result = first.compareTo(second);
+	        	
+	        	if(result == 0) {
+	        		result = 1;
+	        	}
+	        	
+	        	return result;
+	        }
+	    });
+		
+		for(VersionGroup groupObj : versionGroupList) {
+			String groupName = super.formatGameName(groupObj.getIdentifier());
+			
+			PokemonMoveListDTO pokeMoves = new PokemonMoveListDTO();
+			pokeMoves.populateAllFields(formGen, groupObj, em);
+			
+			pokeMovesList.put(groupName, pokeMoves);
+		}
+		
+		this.setMoves(pokeMovesList);
+		logger.debug("Exiting " + methodName);
 	}
 
+	private void populateEffortValuesFromQuery(PokemonFormGeneration formGen) {
+		String methodName = "populateEffortValuesFromQuery";
+		logger.debug("Entering " + methodName);
+		
+		PokemonEffortValuesDTO pokeEVs = new PokemonEffortValuesDTO();
+		pokeEVs.populateAllFields(formGen);
+		
+		this.setEffortValues(pokeEVs);
+		logger.debug("Exiting " + methodName);
+	}
+	
+	private void populateStatsFromQuery(PokemonFormGeneration formGen) {
+		String methodName = "populateStatsFromQuery";
+		logger.debug("Entering " + methodName);
+		
+		PokemonStatsGen2PlusDTO pokeStats = new PokemonStatsGen2PlusDTO();
+		pokeStats.populateAllFields(formGen);
+		
+		this.setStats(pokeStats);
+		logger.debug("Exiting " + methodName);
+	}
+
+	private void populateAbilitiesFromQuery(PokemonFormGeneration formGen) {
+		String methodName = "populateAbilitiesFromQuery";
+		logger.debug("Entering " + methodName);
+		
+		PokemonAbilitiesDTO pokeAbilities = new PokemonAbilitiesDTO();
+		pokeAbilities.populateAllFields(formGen);
+		
+		this.setAbilities(pokeAbilities);
+		logger.debug("Exiting " + methodName);
+	}
+	
+	@Override
 	public String toJsonString() {
+		String methodName = "toJsonString";
+		logger.debug("Entering " + methodName);
+		
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
 		
@@ -211,6 +210,8 @@ public class Gen5Pokemon {
 		} catch (JsonProcessingException e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		
+		logger.debug("Exiting " + methodName);
 		
 		return result;
 	}
